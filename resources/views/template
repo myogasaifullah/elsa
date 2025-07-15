@@ -1,0 +1,9 @@
+@extends('layout.header')
+
+@section('title', 'Dashboard')
+
+@include('layout.sidebar')
+
+
+
+@include('layout.footer')
