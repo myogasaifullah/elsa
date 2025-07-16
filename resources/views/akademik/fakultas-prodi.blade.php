@@ -11,6 +11,7 @@
     <nav>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
+          <li class="breadcrumb-item">Akademik</li>
         <li class="breadcrumb-item active">Fakultas-Prodi</li>
       </ol>
     </nav>

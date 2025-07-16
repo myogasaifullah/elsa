@@ -6,28 +6,46 @@
 
 <main id="main" class="main">
 
-    <div class="pagetitle">
-        <h1>Booking Jadwal</h1>
-        <nav>
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
-                <li class="breadcrumb-item">Booking</li>
-                <li class="breadcrumb-item active">Jadwal</li>
-            </ol>
-        </nav>
-    </div><!-- End Page Title -->
+  <div class="pagetitle">
+    <h1>Booking Jadwal</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
+        <li class="breadcrumb-item">Booking</li>
+        <li class="breadcrumb-item active">Jadwal</li>
+      </ol>
+    </nav>
+  </div>
 
-      <!-- Kalender -->
-  <section class="section">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Kalender Jadwal Booking</h5>
-<div id="calendar" style="height: 500px;"></div>
+  <div class="card p-3">
+    <div class="calendar-wrapper">
+      <!-- Sidebar -->
+      <div class="calendar-sidebar">
+        <!-- Mini Calendar -->
+        <div class="card mb-3">
+          <div class="mini-calendar" id="mini-calendar"></div>
+        </div>
+
+        <!-- Filter -->
+        <div class="card p-3">
+          <h6 class="mb-2">Event Filters</h6>
+          <div class="event-filters">
+            <label><input type="checkbox" checked /> Semua</label>
+            <label><input type="checkbox" checked style="accent-color: red;" /> MOOC</label>
+            <label><input type="checkbox" checked style="accent-color: green;" /> Pembelajaran</label>
+            <label><input type="checkbox" checked style="accent-color: orange;" /> Lomba</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Calendar -->
+      <div class="calendar-content">
+        <div id="calendar"></div>
       </div>
     </div>
-  </section>
+  </div>
 
-   <div class="col-12">
+  <div class="col-12">
   <div class="card recent-sales overflow-auto">
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center mb-3">
@@ -204,8 +222,10 @@
   </div>
 </div>
 
-
 </main>
+
+@include('layout.footer')
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -241,4 +261,102 @@
     });
 </script>
 
-@include('layout.footer')
+<!-- ======================== FullCalendar & Datepicker CDN ======================== -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/css/datepicker.min.css" rel="stylesheet" />
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/js/datepicker-full.min.js"></script>
+
+<!-- ======================== Style (bisa pindahkan ke CSS file utama) ======================== -->
+
+<style>
+  .calendar-wrapper {
+    display: flex;
+    gap: 24px;
+  }
+
+  .calendar-sidebar {
+    width: 260px;
+  }
+
+  .calendar-content {
+    width: 900px;
+    /* ubah sesuai kebutuhan */
+  }
+
+  .event-filters label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    gap: 8px;
+  }
+
+  .event-filters input[type="checkbox"] {
+    transform: scale(1.2);
+  }
+
+  .fc {
+    background: white;
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .mini-calendar {
+    padding: 8px 10px;
+  }
+
+  .add-event-btn {
+    width: 100%;
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+</style>
+
+<!-- ======================== Init Script ======================== -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Inisialisasi FullCalendar
+    const calendarEl = document.getElementById('calendar');
+    if (calendarEl) {
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        height: 530, // atur tinggi kalender
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+        },
+        events: [{
+            title: 'Booking Studio 1',
+            start: '2025-07-20T09:00:00',
+            color: '#4ade80'
+          },
+          {
+            title: 'Pembelajaran Multimedia',
+            start: '2025-07-22T13:00:00',
+            end: '2025-07-22T15:00:00',
+            color: '#facc15'
+          },
+          {
+            title: 'Lomba Nasional',
+            start: '2025-07-25',
+            color: '#fb923c'
+          }
+        ]
+      });
+
+      calendar.render();
+    }
+
+    // Inisialisasi Mini Calendar
+    const miniCal = document.getElementById('mini-calendar');
+    if (miniCal) {
+      new Datepicker(miniCal, {
+        calendarInline: true,
+        todayHighlight: true,
+        format: 'yyyy-mm-dd'
+      });
+    }
+  });
+</script>

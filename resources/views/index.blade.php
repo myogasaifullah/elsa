@@ -1,103 +1,129 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>YouTube Clone</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+  <style>
+    body {
+      background-color: #0f0f0f;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+    .navbar {
+      background-color: #212121;
+    }
+    .search-bar {
+      background-color: #121212;
+      border: 1px solid #333;
+      color: #fff;
+    }
+    .search-bar:focus {
+      background-color: #121212;
+      color: #fff;
+    }
+    .filter-bar {
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .filter-btn {
+      background-color: #272727;
+      color: white;
+      border: none;
+      margin-right: 8px;
+    }
+    .filter-btn.active {
+      background-color: white;
+      color: black;
+    }
+    .video-card {
+      background-color: transparent;
+      color: white;
+      margin-bottom: 20px;
+    }
+    .video-thumb {
+      width: 100%;
+      border-radius: 8px;
+    }
+    .video-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+    .video-info {
+      font-size: 12px;
+      color: #aaa;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body>
 
-  <!-- Search Bar -->
-  <div class="w-full p-4 bg-white shadow">
-    <div class="max-w-4xl mx-auto flex items-center gap-4">
-      <input
-        type="text"
-        placeholder="Search"
-        class="w-full px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500"
-      />
-      <button class="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600">
-        🔍
-      </button>
+<!-- Navbar -->
+<nav class="navbar navbar-dark px-3">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">YouTube</a>
+    <form class="d-flex w-50">
+      <input class="form-control me-2 search-bar" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-light" type="submit"><i class="bi bi-search"></i></button>
+    </form>
+    <div>
+      <i class="bi bi-bell-fill text-white me-3"></i>
+      <i class="bi bi-person-circle text-white fs-4"></i>
     </div>
   </div>
+</nav>
 
-  <!-- Video Grid -->
-  <main class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto mt-4">
+<!-- Filter Bar -->
+<div class="px-3 py-2 filter-bar">
+  <button class="btn filter-btn active">Semua</button>
+  <button class="btn filter-btn">Musik</button>
+  <button class="btn filter-btn">Mix</button>
+  <button class="btn filter-btn">Game</button>
+  <button class="btn filter-btn">Live</button>
+  <button class="btn filter-btn">Kartun</button>
+  <button class="btn filter-btn">Musik Rap</button>
+  <button class="btn filter-btn">Baru diupload</button>
+  <button class="btn filter-btn">Ditonton</button>
+  <button class="btn filter-btn">Baru untuk Anda</button>
+</div>
 
-    <!-- Video Card -->
-    <div class="bg-white rounded-lg overflow-hidden shadow hover:shadow-md transition">
-      <img src="https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg" alt="Thumbnail" class="w-full">
-      <div class="p-3">
-        <h3 class="text-sm font-semibold leading-snug mb-1">Never Gonna Give You Up</h3>
-        <p class="text-xs text-gray-600">Rick Astley</p>
-        <p class="text-xs text-gray-500">1.5B views • 14 years ago</p>
+<!-- Video Grid -->
+<div class="container mt-3">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+
+    <!-- Video Card 1 -->
+    <div class="col">
+      <div class="video-card">
+        <img src="https://i.ytimg.com/vi_webp/PRa1w4ycMfM/mqdefault.webp" alt="thumbnail" class="video-thumb">
+        <div class="video-title">Mix - The 1975 - About You</div>
+        <div class="video-info">Yung Kai, Sombrr · Diputar hari ini</div>
       </div>
     </div>
 
-    <div class="bg-white rounded-lg overflow-hidden shadow hover:shadow-md transition">
-      <img src="https://i.ytimg.com/vi/9bZkp7q19f0/hqdefault.jpg" alt="Thumbnail" class="w-full">
-      <div class="p-3">
-        <h3 class="text-sm font-semibold leading-snug mb-1">PSY - GANGNAM STYLE</h3>
-        <p class="text-xs text-gray-600">officialpsy</p>
-        <p class="text-xs text-gray-500">4.9B views • 12 years ago</p>
+    <!-- Video Card 2 -->
+    <div class="col">
+      <div class="video-card">
+        <img src="https://i.ytimg.com/vi_webp/EXAMPLEID/mqdefault.webp" alt="thumbnail" class="video-thumb">
+        <div class="video-title">Kenapa SABAR Bisa Mengubah Takdir? | Ustadz Khalid Basalamah</div>
+        <div class="video-info">Kajian Sunnah Al Hayyin · 9 hari yang lalu</div>
       </div>
     </div>
 
-    <div class="bg-white rounded-lg overflow-hidden shadow hover:shadow-md transition">
-      <img src="https://i.ytimg.com/vi/3JZ_D3ELwOQ/hqdefault.jpg" alt="Thumbnail" class="w-full">
-      <div class="p-3">
-        <h3 class="text-sm font-semibold leading-snug mb-1">Charlie Puth - We Don’t Talk Anymore</h3>
-        <p class="text-xs text-gray-600">Charlie Puth</p>
-        <p class="text-xs text-gray-500">3.3B views • 8 years ago</p>
+    <!-- Video Card 3 -->
+    <div class="col">
+      <div class="video-card">
+        <img src="https://i.ytimg.com/vi_webp/EXAMPLEID2/mqdefault.webp" alt="thumbnail" class="video-thumb">
+        <div class="video-title">Coki & Felix: Pertemuan Bersejarah</div>
+        <div class="video-info">MALAKA · 2,6 jt x · 3 bulan lalu</div>
       </div>
     </div>
 
-    <div class="bg-white rounded-lg overflow-hidden shadow hover:shadow-md transition">
-      <img src="https://i.ytimg.com/vi/tgbNymZ7vqY/hqdefault.jpg" alt="Thumbnail" class="w-full">
-      <div class="p-3">
-        <h3 class="text-sm font-semibold leading-snug mb-1">Twinkle Twinkle Little Star</h3>
-        <p class="text-xs text-gray-600">Kids Channel</p>
-        <p class="text-xs text-gray-500">900M views • 5 years ago</p>
-      </div>
-    </div>
-<div class="bg-white rounded-lg overflow-hidden shadow hover:shadow-md transition">
-      <img src="https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg" alt="Thumbnail" class="w-full">
-      <div class="p-3">
-        <h3 class="text-sm font-semibold leading-snug mb-1">Never Gonna Give You Up</h3>
-        <p class="text-xs text-gray-600">Rick Astley</p>
-        <p class="text-xs text-gray-500">1.5B views • 14 years ago</p>
-      </div>
-    </div>
+    <!-- Tambah video lainnya sesuai kebutuhan -->
+    
+  </div>
+</div>
 
-    <div class="bg-white rounded-lg overflow-hidden shadow hover:shadow-md transition">
-      <img src="https://i.ytimg.com/vi/9bZkp7q19f0/hqdefault.jpg" alt="Thumbnail" class="w-full">
-      <div class="p-3">
-        <h3 class="text-sm font-semibold leading-snug mb-1">PSY - GANGNAM STYLE</h3>
-        <p class="text-xs text-gray-600">officialpsy</p>
-        <p class="text-xs text-gray-500">4.9B views • 12 years ago</p>
-      </div>
-    </div>
-
-    <div class="bg-white rounded-lg overflow-hidden shadow hover:shadow-md transition">
-      <img src="https://i.ytimg.com/vi/3JZ_D3ELwOQ/hqdefault.jpg" alt="Thumbnail" class="w-full">
-      <div class="p-3">
-        <h3 class="text-sm font-semibold leading-snug mb-1">Charlie Puth - We Don’t Talk Anymore</h3>
-        <p class="text-xs text-gray-600">Charlie Puth</p>
-        <p class="text-xs text-gray-500">3.3B views • 8 years ago</p>
-      </div>
-    </div>
-
-    <div class="bg-white rounded-lg overflow-hidden shadow hover:shadow-md transition">
-      <img src="https://i.ytimg.com/vi/tgbNymZ7vqY/hqdefault.jpg" alt="Thumbnail" class="w-full">
-      <div class="p-3">
-        <h3 class="text-sm font-semibold leading-snug mb-1">Twinkle Twinkle Little Star</h3>
-        <p class="text-xs text-gray-600">Kids Channel</p>
-        <p class="text-xs text-gray-500">900M views • 5 years ago</p>
-      </div>
-    </div>
-    <!-- Tambahkan lebih banyak video sesuai kebutuhan -->
-
-  </main>
 </body>
 </html>

@@ -1,36 +1,39 @@
 <script>
-  document.getElementById('formTambahProdi').addEventListener('submit', function(e) {
-    e.preventDefault();
+  const formTambahProdi = document.getElementById('formTambahProdi');
+  if (formTambahProdi) {
+    formTambahProdi.addEventListener('submit', function(e) {
+      e.preventDefault();
 
-    const fakultas = document.getElementById('fakultasProdi').value;
-    const namaProdi = document.getElementById('namaProdi').value;
-    const singkatanProdi = document.getElementById('singkatanProdi').value;
+      const fakultas = document.getElementById('fakultasProdi').value;
+      const namaProdi = document.getElementById('namaProdi').value;
+      const singkatanProdi = document.getElementById('singkatanProdi').value;
 
-    if (!fakultas || !namaProdi || !singkatanProdi) {
-      Swal.fire('Gagal', 'Semua field wajib diisi.', 'error');
-      return;
-    }
+      if (!fakultas || !namaProdi || !singkatanProdi) {
+        Swal.fire('Gagal', 'Semua field wajib diisi.', 'error');
+        return;
+      }
 
-    Swal.fire('Berhasil', 'Program Studi berhasil ditambahkan.', 'success');
+      Swal.fire('Berhasil', 'Program Studi berhasil ditambahkan.', 'success');
 
-    // Reset form dan tutup modal
-    this.reset();
-    const modal = bootstrap.Modal.getInstance(document.getElementById('modalTambahProdi'));
-    modal.hide();
-  });
+      // Reset form dan tutup modal
+      this.reset();
+      const modal = bootstrap.Modal.getInstance(document.getElementById('modalTambahProdi'));
+      modal.hide();
+    });
+  }
 </script>
 
 <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
     <div class="copyright">
-      &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+      &copy; Copyright <strong><span>Elsa</span></strong>. All Rights Reserved
     </div>
     <div class="credits">
       <!-- All the links in the footer should remain intact. -->
       <!-- You can delete the links only if you purchased the pro version. -->
       <!-- Licensing information: https://bootstrapmade.com/license/ -->
       <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      Designed by <a href="https://bootstrapmade.com/">Elsa</a>
     </div>
   </footer><!-- End Footer -->
   
@@ -48,6 +51,29 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+
+  <!-- FullCalendar JS -->
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const calendarEl = document.getElementById('calendar');
+      if (calendarEl) {
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          height: 500,
+          events: [
+            {
+              title: 'Booking Studio 1',
+              start: '2025-07-20',
+              description: 'Jadwal Studio'
+            }
+          ]
+        });
+        calendar.render();
+      }
+    });
+  </script>
 
 </body>
 

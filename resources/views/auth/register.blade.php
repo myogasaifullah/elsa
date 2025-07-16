@@ -65,14 +65,14 @@
 
                   <form class="row g-3 needs-validation" novalidate>
                     <div class="col-12">
-                      <label for="yourName" class="form-label">Your Name</label>
+                      <label for="yourName" class="form-label">Nama Lengkap</label>
                       <input type="text" name="name" class="form-control" id="yourName" required>
                       <div class="invalid-feedback">Please, enter your name!</div>
                     </div>
 
                     <div class="col-12">
-                      <label for="prodi" class="form-label">Program Studi</label>
-                      <input type="prodi" name="prodi" class="form-control" id="prodi" required>
+                      <label for="notelp" class="form-label">Nomor Telpon</label>
+                      <input type="notelp" name="notelp" class="form-control" id="notelp" required>
                       <div class="invalid-feedback">Please enter a valid Program Studi!</div>
                     </div>
 
@@ -108,14 +108,12 @@
     <option value="" disabled selected>Pilih Role</option>
     <option value="mahasiswa">Mahasiswa</option>
     <option value="dosen">Dosen</option>
-    <option value="admin">Admin</option>
-    <option value="staff">Staff</option>
-  </select>
+      </select>
   <div class="invalid-feedback">Silakan pilih Role!</div>
 </div>
 
                     <div class="col-12">
-                      <label for="yourUsername" class="form-label">Username</label>
+                      <label for="yourUsername" class="form-label">Email</label>
                       <div class="input-group has-validation">
                         <span class="input-group-text" id="inputGroupPrepend">@</span>
                         <input type="text" name="username" class="form-control" id="yourUsername" required>

@@ -37,3 +37,15 @@ Route::get('/verifikasi', function () {
 Route::get('/fakultas-prodi', function () {
     return view('akademik/fakultas-prodi');
 });
+
+Route::get('/studio-matkul', function () {
+    return view('akademik/studio-matkul');
+});
+
+Route::get('/jadwal', function () {
+    return view('booking/jadwal');
+});
+
+Route::get('/acc', function () {
+    return view('booking/acc');
+});
