@@ -49,3 +49,7 @@ Route::get('/jadwal', function () {
 Route::get('/acc', function () {
     return view('booking/acc');
 });
+
+Route::get('/laporan', function () {
+    return view('laporan');
+});

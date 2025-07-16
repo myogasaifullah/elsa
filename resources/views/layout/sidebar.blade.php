@@ -67,5 +67,13 @@
       </ul>
     </li>
 
+    <!-- Laporan -->
+    <li class="nav-item">
+      <a class="nav-link {{ Request::is('laporan') ? '' : 'collapsed' }}" href="{{ url('laporan') }}">
+        <i class="bi bi-menu-button-wide"></i>
+        <span>Laporan</span>
+      </a>
+    </li>
+
   </ul>
 </aside><!-- End Sidebar -->
