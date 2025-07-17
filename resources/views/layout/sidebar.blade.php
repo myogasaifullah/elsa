@@ -75,5 +75,13 @@
       </a>
     </li>
 
+    <!-- progres -->
+    <li class="nav-item">
+      <a class="nav-link {{ Request::is('progres') ? '' : 'collapsed' }}" href="{{ url('progres') }}">
+        <i class="bi bi-bar-chart"></i>
+        <span>Progres</span>
+      </a>
+    </li>
+
   </ul>
 </aside><!-- End Sidebar -->

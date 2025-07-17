@@ -17,7 +17,7 @@
     </nav>
   </div>
 
-  <div class="card p-3">
+<div class="card p-3">
     <div class="calendar-wrapper">
       <!-- Sidebar -->
       <div class="calendar-sidebar">
@@ -46,185 +46,237 @@
   </div>
 
   <div class="col-12">
-  <div class="card recent-sales overflow-auto">
-    <div class="card-body">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="card-title mb-0">Booking <span>| Jadwal</span></h5>
-        <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahJadwal">
-          <i class="bi bi-plus-circle"></i> Tambah Jadwal
-        </button>
+    <div class="card recent-sales overflow-auto">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="card-title mb-0">Booking <span>| Jadwal</span></h5>
+          <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahJadwal">
+            <i class="bi bi-plus-circle"></i> Tambah Jadwal
+          </button>
+        </div>
+
+        <table class="table table-borderless datatable">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Tanggal</th>
+              <th scope="col">Jam</th>
+              <th scope="col">Nama</th>
+              <th scope="col">Email</th>
+              <th scope="col">Telpon</th>
+              <th scope="col">Fakultas</th>
+              <th scope="col">Prodi</th>
+              <th scope="col">Jenis Kategori</th>
+              <th scope="col">Dosen</th>
+              <th scope="col">Kategori MOOC</th>
+              <th scope="col">Studio</th>
+              <th scope="col">Mata Kuliah</th>
+              <th scope="col">Status</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>31/05/03</td>
+              <td>12.00</td>
+              <td>Yosa</td>
+              <td>yosa@gmail.com</td>
+              <td>089643920595</td>
+              <td>FTIK</td>
+              <td>IF</td>
+              <td>Lomba</td>
+              <td>Dr. Andi Maulana</td>
+              <td>MOOC Mandiri</td>
+              <td>Studio 1</td>
+              <td>Pemrograman</td>
+              <td>
+                <span class="badge bg-warning text-dark">
+                  <i class="bi bi-hourglass-split me-1"></i> Pending
+                </span>
+              </td>
+              <td>
+                <button class="btn btn-sm btn-primary btn-editJadwal" data-bs-toggle="modal" data-bs-target="#modalEditjadwal">Edit</button>
+                <button class="btn btn-sm btn-danger btn-hapusJadwal">Hapus</button>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td>01/06/03</td>
+              <td>09.00</td>
+              <td>Putri</td>
+              <td>putri@gmail.com</td>
+              <td>082199887766</td>
+              <td>FTIK</td>
+              <td>TS</td>
+              <td>Mooc</td>
+              <td>Dr. Andi Maulana</td>
+              <td>MOOC Mandiri</td>
+              <td>Studio 2</td>
+              <td>Sistem Informasi</td>
+              <td>
+                <span class="badge bg-success">
+                  <i class="bi bi-calendar-check me-1"></i> Schedule
+                </span>
+              </td>
+              <td>
+                <button class="btn btn-sm btn-primary btn-editJadwal" data-bs-toggle="modal" data-bs-target="#modalEditjadwal">Edit</button>
+                <button class="btn btn-sm btn-danger btn-hapusJadwal">Hapus</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-
-      <table class="table table-borderless datatable">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Tanggal</th>
-            <th scope="col">Jam</th>
-            <th scope="col">Nama</th>
-            <th scope="col">Email</th>
-            <th scope="col">Telpon</th>
-            <th scope="col">Fakultas</th>
-            <th scope="col">Prodi</th>
-            <th scope="col">Jenis Kategori</th>
-            <th scope="col">Studio</th>
-            <th scope="col">Mata Kuliah</th>
-            <th scope="col">Status</th> <!-- Status Baru -->
-            <th scope="col">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>31/05/03</td>
-            <td>12.00</td>
-            <td>Yosa</td>
-            <td>yosa@gmail.com</td>
-            <td>089643920595</td>
-            <td>FTIK</td>
-            <td>IF</td>
-            <td>Lomba</td>
-            <td>Studio 1</td>
-            <td>Pemrograman</td>
-            <td>
-              <span class="badge bg-warning text-dark">
-                <i class="bi bi-hourglass-split me-1"></i> Pending
-              </span>
-            </td>
-            <td>
-              <button class="btn btn-sm btn-primary btn-editJadwal" data-bs-toggle="modal" data-bs-target="#modalEditjadwal">Edit</button>
-              <button class="btn btn-sm btn-danger btn-hapusJadwal">Hapus</button>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>01/06/03</td>
-            <td>09.00</td>
-            <td>Putri</td>
-            <td>putri@gmail.com</td>
-            <td>082199887766</td>
-            <td>FTIK</td>
-            <td>TS</td>
-            <td>Mooc</td>
-            <td>Studio 2</td>
-            <td>Sistem Informasi</td>
-            <td>
-              <span class="badge bg-success">
-                <i class="bi bi-calendar-check me-1"></i> Schedule
-              </span>
-            </td>
-            <td>
-              <button class="btn btn-sm btn-primary btn-editJadwal" data-bs-toggle="modal" data-bs-target="#modalEditjadwal">Edit</button>
-              <button class="btn btn-sm btn-danger btn-hapusJadwal">Hapus</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
-</div>
 
-    
-    <div class="modal fade" id="modalTambahjadwal" tabindex="-1" aria-labelledby="modalTambahJadwalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form id="formTambahJadwal">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Tambah Jadwal</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">Tanggal</label>
-                            <input type="text" class="form-control" id="tanggal">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Jam</label>
-                            <input type="text" class="form-control" id="jam">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Jenis Kategori</label>
-                            <select class="form-select" id="jenisKategori">
-                                <option selected disabled>Pilih Kategori</option>
-                                <option value="Mooc">Mooc</option>
-                                <option value="Lomba">Lomba</option>
-                                <option value="Pembelajaran">Pembelajaran</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Studio</label>
-                            <select class="form-select" id="studio">
-                                <option selected disabled>Pilih Studio</option>
-                                <option value="1">Studio 1</option>
-                                <option value="2">Studio 2</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Nama Mata Kuliah</label>
-                            <input type="text" class="form-control" id="namaJadwal" placeholder="Contoh: Pemrograman Web">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                    </div>
-                </form>
+
+  <div class="modal fade" id="modalTambahjadwal" tabindex="-1" aria-labelledby="modalTambahJadwalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="formTambahJadwal">
+          <div class="modal-header">
+            <h5 class="modal-title">Tambah Jadwal</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Tanggal</label>
+              <input type="text" class="form-control" id="tanggal">
             </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="modalEditJadwal" tabindex="-1" aria-labelledby="modalEditJadwalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form id="formEditJadwal">
-        <div class="modal-header">
-          <h5 class="modal-title">Edit Jadwal</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-        </div>
-        <div class="modal-body">
-          <input type="hidden" id="editJadwalId">
-          <div class="mb-3">
-            <label class="form-label">Tanggal</label>
-            <input type="text" class="form-control" id="editTanggal">
+            <div class="mb-3">
+              <label class="form-label">Jam</label>
+              <input type="text" class="form-control" id="jam">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Jenis Kategori</label>
+              <select class="form-select" id="jenisKategori">
+                <option selected disabled>Pilih Kategori</option>
+                <option value="Mooc">Mooc</option>
+                <option value="Lomba">Lomba</option>
+                <option value="Pembelajaran">Pembelajaran</option>
+              </select>
+            </div>
+            <div class="mb-3 d-none" id="kategoriMoocGroup">
+              <label class="form-label">Kategori MOOC</label>
+              <select class="form-select" id="kategoriMooc">
+                <option selected disabled>Pilih Kategori MOOC</option>
+                <option value="MOOC Nasional">MOOC Nasional</option>
+                <option value="MOOC Mandiri">MOOC Mandiri</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Studio</label>
+              <select class="form-select" id="studio">
+                <option selected disabled>Pilih Studio</option>
+                <option value="1">Studio 1</option>
+                <option value="2">Studio 2</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Nama Mata Kuliah</label>
+              <input type="text" class="form-control" id="namaJadwal" placeholder="Contoh: Pemrograman Web">
+            </div>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Jam</label>
-            <input type="text" class="form-control" id="editJam">
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-primary">Simpan</button>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Jenis Kategori</label>
-            <select class="form-select" id="editJenisKategori">
-              <option selected disabled>Pilih Kategori</option>
-              <option value="Mooc">Mooc</option>
-              <option value="Lomba">Lomba</option>
-              <option value="Pembelajaran">Pembelajaran</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Studio</label>
-            <select class="form-select" id="editStudio">
-              <option selected disabled>Pilih Studio</option>
-              <option value="1">Studio 1</option>
-              <option value="2">Studio 2</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Nama Mata Kuliah</label>
-            <input type="text" class="form-control" id="editNamaJadwal" placeholder="Contoh: Pemrograman Web">
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-          <button class="btn btn-primary" type="submit">Simpan Perubahan</button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
-</div>
+
+  <div class="modal fade" id="modalEditJadwal" tabindex="-1" aria-labelledby="modalEditJadwalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="formEditJadwal">
+          <div class="modal-header">
+            <h5 class="modal-title">Edit Jadwal</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+          </div>
+          <div class="modal-body">
+            <input type="hidden" id="editJadwalId">
+            <div class="mb-3">
+              <label class="form-label">Tanggal</label>
+              <input type="text" class="form-control" id="editTanggal">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Jam</label>
+              <input type="text" class="form-control" id="editJam">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Jenis Kategori</label>
+              <select class="form-select" id="editJenisKategori">
+                <option selected disabled>Pilih Kategori</option>
+                <option value="Mooc">Mooc</option>
+                <option value="Lomba">Lomba</option>
+                <option value="Pembelajaran">Pembelajaran</option>
+              </select>
+            </div>
+            <div class="mb-3 d-none" id="editKategoriMoocGroup">
+              <label class="form-label">Kategori MOOC</label>
+              <select class="form-select" id="editKategoriMooc">
+                <option selected disabled>Pilih Kategori MOOC</option>
+                <option value="MOOC Nasional">MOOC Nasional</option>
+                <option value="MOOC Mandiri">MOOC Mandiri</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Studio</label>
+              <select class="form-select" id="editStudio">
+                <option selected disabled>Pilih Studio</option>
+                <option value="1">Studio 1</option>
+                <option value="2">Studio 2</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Nama Mata Kuliah</label>
+              <input type="text" class="form-control" id="editNamaJadwal" placeholder="Contoh: Pemrograman Web">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+            <button class="btn btn-primary" type="submit">Simpan Perubahan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
 </main>
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const jenisKategori = document.getElementById('jenisKategori');
+    const kategoriMoocGroup = document.getElementById('kategoriMoocGroup');
+
+    const editJenisKategori = document.getElementById('editJenisKategori');
+    const editKategoriMoocGroup = document.getElementById('editKategoriMoocGroup');
+
+    // Tambah Jadwal
+    jenisKategori.addEventListener('change', function () {
+        if (this.value === 'Mooc') {
+            kategoriMoocGroup.classList.remove('d-none');
+        } else {
+            kategoriMoocGroup.classList.add('d-none');
+        }
+    });
+
+    // Edit Jadwal
+    editJenisKategori.addEventListener('change', function () {
+        if (this.value === 'Mooc') {
+            editKategoriMoocGroup.classList.remove('d-none');
+        } else {
+            editKategoriMoocGroup.classList.add('d-none');
+        }
+    });
+});
+</script>
+
+
 @include('layout.footer')
+
 
 
 <script>

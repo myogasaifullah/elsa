@@ -53,3 +53,7 @@ Route::get('/acc', function () {
 Route::get('/laporan', function () {
     return view('laporan');
 });
+
+Route::get('/progres', function () {
+    return view('progres');
+});
