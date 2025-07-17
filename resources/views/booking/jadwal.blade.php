@@ -17,7 +17,7 @@
     </nav>
   </div>
 
-<div class="card p-3">
+  <div class="card p-3">
     <div class="calendar-wrapper">
       <!-- Sidebar -->
       <div class="calendar-sidebar">
@@ -71,6 +71,7 @@
               <th scope="col">Kategori MOOC</th>
               <th scope="col">Studio</th>
               <th scope="col">Mata Kuliah</th>
+              <th scope="col">Judul Course</th>
               <th scope="col">Status</th>
               <th scope="col">Action</th>
             </tr>
@@ -90,6 +91,7 @@
               <td>MOOC Mandiri</td>
               <td>Studio 1</td>
               <td>Pemrograman</td>
+              <td>Methamorz</td>
               <td>
                 <span class="badge bg-warning text-dark">
                   <i class="bi bi-hourglass-split me-1"></i> Pending
@@ -114,6 +116,7 @@
               <td>MOOC Mandiri</td>
               <td>Studio 2</td>
               <td>Sistem Informasi</td>
+              <td>Methamorz</td>
               <td>
                 <span class="badge bg-success">
                   <i class="bi bi-calendar-check me-1"></i> Schedule
@@ -177,6 +180,10 @@
               <label class="form-label">Nama Mata Kuliah</label>
               <input type="text" class="form-control" id="namaJadwal" placeholder="Contoh: Pemrograman Web">
             </div>
+            <div class="mb-3">
+              <label class="form-label">Judul Course</label>
+              <input type="text" class="form-control" id="judul">
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -234,6 +241,10 @@
               <label class="form-label">Nama Mata Kuliah</label>
               <input type="text" class="form-control" id="editNamaJadwal" placeholder="Contoh: Pemrograman Web">
             </div>
+            <div class="mb-3">
+              <label class="form-label">Judul Course</label>
+              <input type="text" class="form-control" id="editJudul">
+            </div>
           </div>
           <div class="modal-footer">
             <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -247,7 +258,7 @@
 </main>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', function() {
     const jenisKategori = document.getElementById('jenisKategori');
     const kategoriMoocGroup = document.getElementById('kategoriMoocGroup');
 
@@ -255,23 +266,23 @@ document.addEventListener('DOMContentLoaded', function () {
     const editKategoriMoocGroup = document.getElementById('editKategoriMoocGroup');
 
     // Tambah Jadwal
-    jenisKategori.addEventListener('change', function () {
-        if (this.value === 'Mooc') {
-            kategoriMoocGroup.classList.remove('d-none');
-        } else {
-            kategoriMoocGroup.classList.add('d-none');
-        }
+    jenisKategori.addEventListener('change', function() {
+      if (this.value === 'Mooc') {
+        kategoriMoocGroup.classList.remove('d-none');
+      } else {
+        kategoriMoocGroup.classList.add('d-none');
+      }
     });
 
     // Edit Jadwal
-    editJenisKategori.addEventListener('change', function () {
-        if (this.value === 'Mooc') {
-            editKategoriMoocGroup.classList.remove('d-none');
-        } else {
-            editKategoriMoocGroup.classList.add('d-none');
-        }
+    editJenisKategori.addEventListener('change', function() {
+      if (this.value === 'Mooc') {
+        editKategoriMoocGroup.classList.remove('d-none');
+      } else {
+        editKategoriMoocGroup.classList.add('d-none');
+      }
     });
-});
+  });
 </script>
 
 
@@ -280,37 +291,37 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Tombol Edit
-        document.querySelectorAll('.btn-editJadwal').forEach(btn => {
-            btn.addEventListener('click', function() {
-                // Simulasi isi data ke modal edit
-                document.getElementById('editFakultasJadwal').value = 'FTIK';
-                document.getElementById('editProdiJadwal').value = 'IF';
-                document.getElementById('editNamaJadwal').value = 'Algoritma dan Pemrograman';
-                new bootstrap.Modal(document.getElementById('modalEditJadwal')).show();
-            });
-        });
-
-        // Tombol Hapus
-        document.querySelectorAll('.btn-hapusJadwal').forEach(btn => {
-            btn.addEventListener('click', function() {
-                Swal.fire({
-                    title: 'Hapus Mata Kuliah?',
-                    text: 'Data mata kuliah akan dihapus permanen.',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Ya, Hapus',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire('Dihapus!', 'Data mata kuliah telah dihapus.', 'success');
-                        // Tambahkan logika hapus di sini (AJAX atau hapus baris)
-                    }
-                });
-            });
-        });
+  document.addEventListener('DOMContentLoaded', function() {
+    // Tombol Edit
+    document.querySelectorAll('.btn-editJadwal').forEach(btn => {
+      btn.addEventListener('click', function() {
+        // Simulasi isi data ke modal edit
+        document.getElementById('editFakultasJadwal').value = 'FTIK';
+        document.getElementById('editProdiJadwal').value = 'IF';
+        document.getElementById('editNamaJadwal').value = 'Algoritma dan Pemrograman';
+        new bootstrap.Modal(document.getElementById('modalEditJadwal')).show();
+      });
     });
+
+    // Tombol Hapus
+    document.querySelectorAll('.btn-hapusJadwal').forEach(btn => {
+      btn.addEventListener('click', function() {
+        Swal.fire({
+          title: 'Hapus Booking?',
+          text: 'Data Booking akan dihapus permanen.',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Ya, Hapus',
+          cancelButtonText: 'Batal'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire('Dihapus!', 'Data Booking telah dihapus.', 'success');
+            // Tambahkan logika hapus di sini (AJAX atau hapus baris)
+          }
+        });
+      });
+    });
+  });
 </script>
 
 <!-- ======================== FullCalendar & Datepicker CDN ======================== -->

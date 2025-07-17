@@ -38,6 +38,10 @@ Route::get('/fakultas-prodi', function () {
     return view('akademik/fakultas-prodi');
 });
 
+Route::get('/dosen-mooc', function () {
+    return view('akademik/dosen-mooc');
+});
+
 Route::get('/studio-matkul', function () {
     return view('akademik/studio-matkul');
 });

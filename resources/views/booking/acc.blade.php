@@ -40,6 +40,7 @@
               <th>Kategori MOOC</th>
               <th>Studio</th>
               <th>Mata Kuliah</th>
+              <th>Judul Course</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
@@ -60,6 +61,7 @@
               <td>MOOC Mandiri</td>
               <td>Studio 1</td>
               <td>Jaringan Komputer</td>
+              <td>Methamorz</td>
               <td>
                 <span class="badge bg-warning text-dark">
                   <i class="bi bi-hourglass-split me-1"></i> Pending
@@ -100,7 +102,7 @@
         }).then((result) => {
           if (result.isConfirmed) {
             const row = btn.closest("tr");
-            const statusCell = row.querySelector("td:nth-child(14)"); // Kolom Status
+            const statusCell = row.querySelector("td:nth-child(15)"); // Kolom Status
             statusCell.innerHTML = `<span class="badge bg-success"><i class="bi bi-calendar-check me-1"></i> Schedule</span>`;
             btn.parentElement.innerHTML = `<span class="text-success"><i class="bi bi-check-circle"></i> Disetujui</span>`;
             Swal.fire('Berhasil!', 'Booking telah disetujui.', 'success');
@@ -122,7 +124,7 @@
         }).then((result) => {
           if (result.isConfirmed) {
             const row = btn.closest("tr");
-            const statusCell = row.querySelector("td:nth-child(14)"); // Kolom Status
+            const statusCell = row.querySelector("td:nth-child(15)"); // Kolom Status
             statusCell.innerHTML = `<span class="badge bg-danger"><i class="bi bi-x-octagon me-1"></i> Ditolak</span>`;
             btn.parentElement.innerHTML = `<span class="text-danger"><i class="bi bi-x-circle"></i> Ditolak</span>`;
             Swal.fire('Ditolak!', 'Booking telah ditolak.', 'error');

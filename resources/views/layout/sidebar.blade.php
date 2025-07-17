@@ -31,13 +31,18 @@
 
     <!-- Akademik -->
     <li class="nav-item">
-      <a class="nav-link {{ Request::is('fakultas-prodi', 'studio-matkul') ? '' : 'collapsed' }}" data-bs-target="#akademik-nav" data-bs-toggle="collapse" href="#">
+      <a class="nav-link {{ Request::is('fakultas-prodi', 'studio-matkul', 'dosen-mooc') ? '' : 'collapsed' }}" data-bs-target="#akademik-nav" data-bs-toggle="collapse" href="#">
         <i class="bi bi-layout-text-window-reverse"></i><span>Akademik</span><i class="bi bi-chevron-down ms-auto"></i>
       </a>
-      <ul id="akademik-nav" class="nav-content collapse {{ Request::is('fakultas-prodi', 'studio-matkul') ? 'show' : '' }}" data-bs-parent="#sidebar-nav">
+      <ul id="akademik-nav" class="nav-content collapse {{ Request::is('fakultas-prodi', 'studio-matkul', 'dosen-mooc') ? 'show' : '' }}" data-bs-parent="#sidebar-nav">
         <li>
           <a href="{{ url('fakultas-prodi') }}" class="{{ Request::is('fakultas-prodi') ? 'active' : '' }}">
             <i class="bi bi-circle"></i><span>Fakultas-Prodi</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ url('dosen-mooc') }}" class="{{ Request::is('dosen-mooc') ? 'active' : '' }}">
+            <i class="bi bi-circle"></i><span>Dosen-Mooc</span>
           </a>
         </li>
         <li>
