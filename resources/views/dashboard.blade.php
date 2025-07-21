@@ -384,6 +384,55 @@
           </div>
         </div>
 
+        <!-- log aktifitas -->
+         <div class="col-12">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Log Aktivitas</h5>
+
+      <table class="table datatable">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Waktu</th>
+            <th>Nama Pengguna</th>
+            <th>Role</th>
+            <th>IP Address</th>
+            <th>Aktivitas</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>17/07/2025 14:21</td>
+            <td>Admin Fakultas</td>
+            <td>Super Admin</td>
+            <td>192.168.1.1</td>
+            <td>Menambahkan data MOOC</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>17/07/2025 15:03</td>
+            <td>Editor Prodi</td>
+            <td>Editor</td>
+            <td>192.168.1.2</td>
+            <td>Mengedit profil dosen</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>17/07/2025 16:10</td>
+            <td>Mahasiswa</td>
+            <td>User</td>
+            <td>192.168.1.3</td>
+            <td>Login ke sistem</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+
         <!-- Budget Report -->
         <div class="col-lg-6">
           <div class="card">
