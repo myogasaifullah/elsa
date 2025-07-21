@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('index');
+    return view('dashboard');
 });
 
 Route::get('/dashboard', function () {
@@ -60,4 +60,8 @@ Route::get('/laporan', function () {
 
 Route::get('/progres', function () {
     return view('progres');
+});
+
+Route::get('/template', function () {
+    return view('template');
 });

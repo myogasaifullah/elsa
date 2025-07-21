@@ -1,3 +1,4 @@
+
 <!-- ======= Sidebar ======= -->
 <aside id="sidebar" class="sidebar">
   <ul class="sidebar-nav" id="sidebar-nav">
@@ -88,5 +89,14 @@
       </a>
     </li>
 
+    <!-- progres -->
+    <li class="nav-item">
+      <a class="nav-link {{ Request::is('template') ? '' : 'collapsed' }}" href="{{ url('template') }}">
+        <i class="bi bi-question-circle"></i>
+        <span>Template</span>
+      </a>
+    </li>
+
   </ul>
 </aside><!-- End Sidebar -->
+
