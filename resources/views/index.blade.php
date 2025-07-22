@@ -1,1103 +1,505 @@
 @extends('layout.index')
 
 
-<main class="main">
-  <div class="container">
-    <div class="pagetitle">
-      <h1>Daftar Video Publikasi</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-          <li class="breadcrumb-item active">Video</li>
-        </ol>
-      </nav>
-    </div><!-- End Page Title -->
-
-    <section class="section">
-
-      <div class="row">
-
-        <!-- Table Video Berdasarkan Kategori -->
-        <div class="col-12">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Daftar Video</h5>
-
-              <table class="table datatable">
-                <thead>
-                  <tr>
-                    <th>Judul</th>
-                    <th>Kategori</th>
-                    <th>Dosen</th>
-                    <th>Fakultas</th>
-                    <th>Prodi</th>
-                    <th>Mata Kuliah</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!-- Data dummy, ganti dengan loop dari database -->
-                  <tr>
-                    <td>Video Promosi TI</td>
-                    <td>Marketing</td>
-                    <td>Dr. Budi</td>
-                    <td>FTI</td>
-                    <td>Teknik Informatika</td>
-                    <td>Pemrograman Web</td>
-                    <td><span class="badge bg-success">Published</span></td>
-                  </tr>
-                  <tr>
-                    <td>Lomba Hackathon 2024</td>
-                    <td>Lomba</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td><span class="badge bg-success">Published</span></td>
-                  </tr>
-                </tbody>
-              </table>
+    <div class="youtube">
+      <div class="div">
+        <div class="overlap">
+          <div class="cards">
+            <div class="overlap-group">
+              <div class="background"></div>
+              <div class="element">
+                <div class="div-2">
+                  <div class="div-3">
+                    <p class="video-title">The Batman Teaser Trailer (2021) | Movieclips Trailers</p>
+                    <div class="text">
+                      <div class="overlap-group-2">
+                        <div class="flexcontainer">
+                          <p class="text-i">
+                            <span class="text-wrapper">Movieclips Trailers<br /></span>
+                          </p>
+                          <p class="text-i"><span class="text-wrapper">10M views&nbsp;&nbsp; 3 years ago</span></p>
+                        </div>
+                        <div class="ellipse"></div>
+                        <div class="icon-check">
+                          <div class="group"><img class="vector" src="img/vector-4.svg" /></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <img class="PP" src="img/PP-14.png" />
+                  <div class="time-wrapper">
+                    <div class="time">
+                      <div class="div-wrapper"><div class="time-2">2:33</div></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="div-2">
+                  <div class="div-3">
+                    <p class="p">4 Pieces by Yiruma | Relaxing Piano [15min]</p>
+                    <div class="text-2">
+                      <div class="overlap-group-3">
+                        <div class="flexcontainer-i">
+                          <p class="text-i">
+                            <span class="text-wrapper">Jacob&#39;s Piano<br /></span>
+                          </p>
+                          <p class="text-i"><span class="text-wrapper">63M views&nbsp;&nbsp; 4 years ago</span></p>
+                        </div>
+                        <div class="ellipse"></div>
+                      </div>
+                      <img class="icon-song" src="img/song.png" />
+                    </div>
+                  </div>
+                  <img class="PP" src="img/PP-6.png" />
+                  <div class="overlap-2">
+                    <div class="overlap-wrapper">
+                      <div class="overlap-3"><div class="time-3">15:10</div></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="div-2">
+                  <div class="div-3">
+                    <p class="video-title">Organization Admin Settings: Dashboard overview [1/7]</p>
+                    <div class="div-4">
+                      <div class="group-wrapper">
+                        <div class="overlap-group-wrapper">
+                          <div class="div-4">
+                            <div class="flexcontainer-2">
+                              <p class="text-i">
+                                <span class="text-wrapper">Figma<br /></span>
+                              </p>
+                              <p class="text-i"><span class="text-wrapper">16K views&nbsp;&nbsp; 2 months ago</span></p>
+                            </div>
+                            <div class="ellipse-2"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <img class="PP" src="img/PP-12.png" />
+                  <div class="overlap-4">
+                    <div class="time-4"><div class="time-5">1:00</div></div>
+                  </div>
+                </div>
+                <div class="card-music">
+                  <div class="video-title-2">Zack Hemsey - &#34;Redemption&#34;</div>
+                  <div class="text-3">
+                    <div class="overlap-group-2">
+                      <div class="flexcontainer">
+                        <p class="text-i">
+                          <span class="text-wrapper">Zack Hemsey<br /></span>
+                        </p>
+                        <p class="text-i"><span class="text-wrapper">21M views&nbsp;&nbsp; 9 years ago</span></p>
+                      </div>
+                      <div class="ellipse"></div>
+                      <img class="img" src="img/song-5.svg" />
+                    </div>
+                  </div>
+                  <img class="PP-2" src="img/PP-7.png" />
+                  <div class="overlap-5">
+                    <div class="time">
+                      <div class="div-wrapper"><div class="time-2">3:10</div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="element-2">
+                <div class="div-2">
+                  <div class="div-3">
+                    <p class="video-title">Who Am I - No System Is Safe Official Trailer #1 (2014) - Tom...</p>
+                    <div class="text">
+                      <div class="overlap-group-2">
+                        <div class="flexcontainer">
+                          <p class="text-i">
+                            <span class="text-wrapper">Movieclips Trailers<br /></span>
+                          </p>
+                          <p class="text-i"><span class="text-wrapper">64M views&nbsp;&nbsp; 6 years ago</span></p>
+                        </div>
+                        <div class="ellipse"></div>
+                        <div class="icon-check"><div class="group-2"></div></div>
+                      </div>
+                    </div>
+                  </div>
+                  <img class="PP" src="img/PP-10.png" />
+                  <div class="overlap-6">
+                    <div class="time">
+                      <div class="div-wrapper"><div class="time-2">2:03</div></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="div-2">
+                  <div class="div-3">
+                    <p class="p">Interstellar Main Theme - Hans Zimmer ( Epic instrumental/piano...</p>
+                    <div class="text-2">
+                      <div class="overlap-group-4">
+                        <div class="flexcontainer-i">
+                          <p class="text-i">
+                            <span class="text-wrapper">Jacob&#39;s Piano<br /></span>
+                          </p>
+                          <p class="text-i"><span class="text-wrapper">11M views&nbsp;&nbsp; 5 years ago</span></p>
+                        </div>
+                        <img class="icon-song-2" src="img/song-2.svg" />
+                        <div class="ellipse"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <img class="PP" src="img/PP-5.png" />
+                  <div class="overlap-7">
+                    <div class="overlap-wrapper">
+                      <div class="overlap-3"><div class="time-3">10:13</div></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="div-2">
+                  <div class="div-3">
+                    <p class="video-title">Figma Tutorial: Device Frames and Scrolling</p>
+                    <div class="div-4">
+                      <div class="group-wrapper">
+                        <div class="overlap-group-wrapper">
+                          <div class="div-4">
+                            <div class="flexcontainer-2">
+                              <p class="text-i">
+                                <span class="text-wrapper">Figma<br /></span>
+                              </p>
+                              <p class="text-i"><span class="text-wrapper">90K views&nbsp;&nbsp; 1 months ago</span></p>
+                            </div>
+                            <div class="ellipse-2"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <img class="PP" src="img/PP-9.png" />
+                  <div class="overlap-8">
+                    <div class="time-4"><div class="time-5">7:11</div></div>
+                  </div>
+                </div>
+                <div class="div-2">
+                  <div class="div-3">
+                    <p class="video-title">Batman v Superman: Dawn of Justice Official Teaser Trailer #1...</p>
+                    <div class="text">
+                      <div class="overlap-group-2">
+                        <div class="flexcontainer">
+                          <p class="text-i">
+                            <span class="text-wrapper">Movieclips Trailers<br /></span>
+                          </p>
+                          <p class="text-i"><span class="text-wrapper">28M views&nbsp;&nbsp; 6 years ago</span></p>
+                        </div>
+                        <div class="ellipse"></div>
+                        <div class="icon-check"><div class="group-3"></div></div>
+                      </div>
+                    </div>
+                  </div>
+                  <img class="PP" src="img/PP-3.png" />
+                  <div class="overlap-9">
+                    <div class="time">
+                      <div class="div-wrapper"><div class="time-2">2:13</div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="element-3">
+                <div class="div-2">
+                  <div class="div-3">
+                    <p class="video-title">Config Europe 2020 - Keynote, Dylan Field - Embracing the tension betw...</p>
+                    <div class="div-4">
+                      <div class="group-wrapper">
+                        <div class="overlap-group-wrapper">
+                          <div class="div-4">
+                            <div class="flexcontainer-2">
+                              <p class="text-i">
+                                <span class="text-wrapper">Figma<br /></span>
+                              </p>
+                              <p class="text-i"><span class="text-wrapper">27K views&nbsp;&nbsp; 1 months ago</span></p>
+                            </div>
+                            <div class="ellipse-2"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <img class="PP" src="img/PP-11.png" />
+                  <div class="overlap-10">
+                    <div class="time-6"><div class="time-5">24:45</div></div>
+                  </div>
+                </div>
+                <div class="div-2">
+                  <div class="div-3">
+                    <p class="video-title">The Dark Knight Rises (2012) - Batman&#39;s Sacrifice Scene (9/10)...</p>
+                    <div class="text">
+                      <div class="overlap-group-2">
+                        <div class="flexcontainer">
+                          <p class="text-i">
+                            <span class="text-wrapper">Movieclips Trailers<br /></span>
+                          </p>
+                          <p class="text-i"><span class="text-wrapper">10M views&nbsp;&nbsp; 3 years ago</span></p>
+                        </div>
+                        <div class="ellipse"></div>
+                        <div class="icon-check"><div class="group-4"></div></div>
+                      </div>
+                    </div>
+                  </div>
+                  <img class="PP" src="img/PP-4.png" />
+                  <div class="overlap-11">
+                    <div class="time">
+                      <div class="div-wrapper"><div class="time-2">3:03</div></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="div-2">
+                  <div class="div-3">
+                    <p class="video-title">Build it in Figma: Create a Design System — Foundations</p>
+                    <div class="div-4">
+                      <div class="group-wrapper">
+                        <div class="overlap-group-wrapper">
+                          <div class="div-4">
+                            <div class="flexcontainer-2">
+                              <p class="text-i">
+                                <span class="text-wrapper">Figma<br /></span>
+                              </p>
+                              <p class="text-i"><span class="text-wrapper">44K views&nbsp;&nbsp; 4 months ago</span></p>
+                            </div>
+                            <div class="ellipse-2"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <img class="PP" src="img/PP.png" />
+                  <div class="overlap-12">
+                    <div class="time-6"><div class="time-5">54:48</div></div>
+                  </div>
+                </div>
+                <div class="card-music">
+                  <div class="video-title-2">Zack Hemsey - &#34;Vengeance&#34;</div>
+                  <div class="text-3">
+                    <div class="overlap-group-2">
+                      <div class="flexcontainer">
+                        <p class="text-i">
+                          <span class="text-wrapper">Zack Hemsey<br /></span>
+                        </p>
+                        <p class="text-i"><span class="text-wrapper">21M views&nbsp;&nbsp; 9 years ago</span></p>
+                      </div>
+                      <div class="ellipse"></div>
+                      <img class="icon-song-3" src="img/song-4.svg" />
+                    </div>
+                  </div>
+                  <img class="PP" src="img/image.png" />
+                  <div class="overlap-13">
+                    <div class="time">
+                      <div class="div-wrapper"><div class="time-2">7:07</div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="element-4">
+                <div class="card-my-mix">
+                  <div class="overlap-group-5">
+                    <div class="fill"></div>
+                    <div class="element-5">
+                      <img class="icon-play" src="img/play.svg" />
+                      <div class="text-wrapper-2">50+</div>
+                    </div>
+                  </div>
+                  <div class="text-4">
+                    <div class="text-wrapper-3">Hans Zimmer and more</div>
+                    <div class="text-wrapper-4">My Mix</div>
+                  </div>
+                </div>
+                <div class="card-music">
+                  <p class="video-title-2">Zack Hemsey - &#34;The Way&#34;</p>
+                  <div class="text-3">
+                    <div class="overlap-group-2">
+                      <div class="flexcontainer">
+                        <p class="text-i">
+                          <span class="text-wrapper">Zack Hemsey<br /></span>
+                        </p>
+                        <p class="text-i"><span class="text-wrapper">64M views&nbsp;&nbsp; 9 years ago</span></p>
+                      </div>
+                      <div class="ellipse"></div>
+                      <img class="icon-song-3" src="img/song.svg" />
+                    </div>
+                  </div>
+                  <img class="PP" src="img/PP-2.png" />
+                  <div class="overlap-14">
+                    <div class="time">
+                      <div class="div-wrapper"><div class="time-2">7:07</div></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="div-2">
+                  <div class="div-3">
+                    <p class="video-title">Build it in Figma: Create a design system — Components</p>
+                    <div class="div-4">
+                      <div class="group-wrapper">
+                        <div class="overlap-group-wrapper">
+                          <div class="div-4">
+                            <div class="flexcontainer-2">
+                              <p class="text-i">
+                                <span class="text-wrapper">Figma<br /></span>
+                              </p>
+                              <p class="text-i"><span class="text-wrapper">16K views&nbsp;&nbsp; 2 months ago</span></p>
+                            </div>
+                            <div class="ellipse-2"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <img class="PP" src="img/PP-13.png" />
+                  <div class="overlap-15">
+                    <div class="time-6"><div class="time-5">54:48</div></div>
+                  </div>
+                </div>
+                <div class="div-2">
+                  <div class="div-3">
+                    <p class="p">4 Beautiful Soundtracks | Relaxing Piano [10min]</p>
+                    <div class="text-2">
+                      <div class="overlap-group-4">
+                        <div class="flexcontainer-i">
+                          <p class="text-i">
+                            <span class="text-wrapper">Jacob&#39;s Piano<br /></span>
+                          </p>
+                          <p class="text-i"><span class="text-wrapper">63M views&nbsp;&nbsp; 4 years ago</span></p>
+                        </div>
+                        <img class="icon-song-2" src="img/song-3.svg" />
+                        <div class="ellipse"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <img class="PP" src="img/PP-8.png" />
+                  <div class="overlap-16">
+                    <div class="overlap-wrapper">
+                      <div class="overlap-3"><div class="time-3">10:13</div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="sidebar">
+            <div class="text-wrapper-5">© 2020 Google LLC</div>
+            <img class="line" src="img/line-5.svg" />
+            <div class="element-step">
+              <div class="div-5">
+                <img class="img-2" src="img/settings.svg" />
+                <div class="text-wrapper-6">Settings</div>
+              </div>
+              <div class="div-5">
+                <img class="img-2" src="img/report.svg" />
+                <div class="text-wrapper-6">Report history</div>
+              </div>
+              <div class="div-5">
+                <img class="img-2" src="img/help.svg" />
+                <div class="text-wrapper-6">Help</div>
+              </div>
+              <div class="div-5">
+                <img class="img-2" src="img/feedback.svg" />
+                <div class="text-wrapper-6">Send feedback</div>
+              </div>
+            </div>
+            <img class="line-2" src="img/line-4.svg" />
+            <div class="element-step-2">
+              <div class="div-5">
+                <img class="img-2" src="img/youtube.svg" />
+                <div class="text-wrapper-7">YouTube Premium</div>
+              </div>
+              <div class="div-5">
+                <img class="img-2" src="img/gaming.svg" />
+                <div class="text-wrapper-6">Gaming</div>
+              </div>
+              <div class="div-5">
+                <img class="img-2" src="img/live.svg" />
+                <div class="text-wrapper-6">Live</div>
+              </div>
+            </div>
+            <img class="line-3" src="img/line-3.svg" />
+            <div class="text-wrapper-8">MORE FROME YOUTUBE</div>
+            <div class="subscription">
+              <div class="div-5">
+                <div class="text-wrapper-6">Oktay Candan</div>
+                <img class="img-2" src="img/ferdi-cildiz-3.png" />
+              </div>
+              <div class="div-5">
+                <div class="text-wrapper-6">Arnold Morrison</div>
+                <img class="img-3" src="img/profile-photo-2.png" />
+              </div>
+              <div class="div-5">
+                <div class="text-wrapper-6">Hudson Snyder</div>
+                <img class="img-3" src="img/ferdi-cildiz.png" />
+              </div>
+              <div class="div-5">
+                <div class="text-wrapper-6">Thomas Burns</div>
+                <img class="img-3" src="img/ferdi-cildiz-2.png" />
+              </div>
+              <div class="div-5">
+                <img class="img-2" src="img/browse-channels.svg" />
+                <div class="text-wrapper-9">Browse channels</div>
+              </div>
+            </div>
+            <div class="text-wrapper-10">SUBSCRIPTION</div>
+            <div class="element-step-3">
+              <img class="line-4" src="img/line-2.svg" />
+              <div class="element-step-4">
+                <div class="div-5">
+                  <img class="img-2" src="img/image.svg" />
+                  <div class="text-wrapper-11">Library</div>
+                </div>
+                <div class="div-5">
+                  <img class="img-2" src="img/default-2.svg" />
+                  <div class="text-wrapper-11">History</div>
+                </div>
+                <div class="div-5">
+                  <img class="img-2" src="img/default.svg" />
+                  <div class="text-wrapper-11">Your videos</div>
+                </div>
+                <div class="div-5">
+                  <img class="img-2" src="img/default-5.svg" />
+                  <div class="text-wrapper-11">Watch later</div>
+                </div>
+                <div class="div-5">
+                  <img class="img-2" src="img/default-6.svg" />
+                  <div class="text-wrapper-11">Liked videos</div>
+                </div>
+              </div>
+            </div>
+            <div class="element-step-5">
+              <img class="line-5" src="img/line-1.svg" />
+              <div class="element-step-6">
+                <div class="sidebar-home">
+                  <img class="img-2" src="img/selected.svg" />
+                  <div class="text-wrapper-12">Home</div>
+                </div>
+                <div class="div-5">
+                  <img class="img-2" src="img/default-7.svg" />
+                  <div class="text-wrapper-13">Trending</div>
+                </div>
+                <div class="div-5">
+                  <img class="img-2" src="img/default-3.svg" />
+                  <div class="text-wrapper-11">Subscriptions</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Line Chart</h5>
-
-              <!-- Line Chart -->
-              <canvas id="lineChart" style="max-height: 400px;"></canvas>
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  new Chart(document.querySelector('#lineChart'), {
-                    type: 'line',
-                    data: {
-                      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                      datasets: [{
-                        label: 'Line Chart',
-                        data: [65, 59, 80, 81, 56, 55, 40],
-                        fill: false,
-                        borderColor: 'rgb(75, 192, 192)',
-                        tension: 0.1
-                      }]
-                    },
-                    options: {
-                      scales: {
-                        y: {
-                          beginAtZero: true
-                        }
-                      }
-                    }
-                  });
-                });
-              </script>
-              <!-- End Line CHart -->
-
+        <div class="navbar">
+          <img class="logo" src="img/logo.png" />
+          <div class="search-bar">
+            <div class="overlap-group-6">
+              <div class="rectangle"></div>
+              <div class="icon-search"><div class="group-5"></div></div>
+              <div class="rectangle-2"></div>
+              <div class="text-wrapper-14">Search</div>
             </div>
           </div>
-        </div>
-
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Bar CHart</h5>
-
-              <!-- Bar Chart -->
-              <canvas id="barChart" style="max-height: 400px;"></canvas>
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  new Chart(document.querySelector('#barChart'), {
-                    type: 'bar',
-                    data: {
-                      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                      datasets: [{
-                        label: 'Bar Chart',
-                        data: [65, 59, 80, 81, 56, 55, 40],
-                        backgroundColor: [
-                          'rgba(255, 99, 132, 0.2)',
-                          'rgba(255, 159, 64, 0.2)',
-                          'rgba(255, 205, 86, 0.2)',
-                          'rgba(75, 192, 192, 0.2)',
-                          'rgba(54, 162, 235, 0.2)',
-                          'rgba(153, 102, 255, 0.2)',
-                          'rgba(201, 203, 207, 0.2)'
-                        ],
-                        borderColor: [
-                          'rgb(255, 99, 132)',
-                          'rgb(255, 159, 64)',
-                          'rgb(255, 205, 86)',
-                          'rgb(75, 192, 192)',
-                          'rgb(54, 162, 235)',
-                          'rgb(153, 102, 255)',
-                          'rgb(201, 203, 207)'
-                        ],
-                        borderWidth: 1
-                      }]
-                    },
-                    options: {
-                      scales: {
-                        y: {
-                          beginAtZero: true
-                        }
-                      }
-                    }
-                  });
-                });
-              </script>
-              <!-- End Bar CHart -->
-
-            </div>
+          <img class="profile-photo" src="img/profile-photo.png" />
+          <div class="navbar-2">
+            <img class="img-4" src="img/create.svg" />
+            <img class="img-4" src="img/chocolate.svg" />
+            <img class="img-4" src="img/default-4.svg" />
           </div>
         </div>
+      </div>
+    </div>
+ 
 
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Pie Chart</h5>
-
-              <!-- Pie Chart -->
-              <canvas id="pieChart" style="max-height: 400px;"></canvas>
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  new Chart(document.querySelector('#pieChart'), {
-                    type: 'pie',
-                    data: {
-                      labels: [
-                        'Red',
-                        'Blue',
-                        'Yellow'
-                      ],
-                      datasets: [{
-                        label: 'My First Dataset',
-                        data: [300, 50, 100],
-                        backgroundColor: [
-                          'rgb(255, 99, 132)',
-                          'rgb(54, 162, 235)',
-                          'rgb(255, 205, 86)'
-                        ],
-                        hoverOffset: 4
-                      }]
-                    }
-                  });
-                });
-              </script>
-              <!-- End Pie CHart -->
-
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Doughnut Chart</h5>
-
-              <!-- Doughnut Chart -->
-              <canvas id="doughnutChart" style="max-height: 400px;"></canvas>
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  new Chart(document.querySelector('#doughnutChart'), {
-                    type: 'doughnut',
-                    data: {
-                      labels: [
-                        'Red',
-                        'Blue',
-                        'Yellow'
-                      ],
-                      datasets: [{
-                        label: 'My First Dataset',
-                        data: [300, 50, 100],
-                        backgroundColor: [
-                          'rgb(255, 99, 132)',
-                          'rgb(54, 162, 235)',
-                          'rgb(255, 205, 86)'
-                        ],
-                        hoverOffset: 4
-                      }]
-                    }
-                  });
-                });
-              </script>
-              <!-- End Doughnut CHart -->
-
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Radar Chart</h5>
-
-              <!-- Radar Chart -->
-              <canvas id="radarChart" style="max-height: 400px;"></canvas>
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  new Chart(document.querySelector('#radarChart'), {
-                    type: 'radar',
-                    data: {
-                      labels: [
-                        'Eating',
-                        'Drinking',
-                        'Sleeping',
-                        'Designing',
-                        'Coding',
-                        'Cycling',
-                        'Running'
-                      ],
-                      datasets: [{
-                        label: 'First Dataset',
-                        data: [65, 59, 90, 81, 56, 55, 40],
-                        fill: true,
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgb(255, 99, 132)',
-                        pointBackgroundColor: 'rgb(255, 99, 132)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgb(255, 99, 132)'
-                      }, {
-                        label: 'Second Dataset',
-                        data: [28, 48, 40, 19, 96, 27, 100],
-                        fill: true,
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        borderColor: 'rgb(54, 162, 235)',
-                        pointBackgroundColor: 'rgb(54, 162, 235)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgb(54, 162, 235)'
-                      }]
-                    },
-                    options: {
-                      elements: {
-                        line: {
-                          borderWidth: 3
-                        }
-                      }
-                    }
-                  });
-                });
-              </script>
-              <!-- End Radar CHart -->
-
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Polar Area Chart</h5>
-
-              <!-- Polar Area Chart -->
-              <canvas id="polarAreaChart" style="max-height: 400px;"></canvas>
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  new Chart(document.querySelector('#polarAreaChart'), {
-                    type: 'polarArea',
-                    data: {
-                      labels: [
-                        'Red',
-                        'Green',
-                        'Yellow',
-                        'Grey',
-                        'Blue'
-                      ],
-                      datasets: [{
-                        label: 'My First Dataset',
-                        data: [11, 16, 7, 3, 14],
-                        backgroundColor: [
-                          'rgb(255, 99, 132)',
-                          'rgb(75, 192, 192)',
-                          'rgb(255, 205, 86)',
-                          'rgb(201, 203, 207)',
-                          'rgb(54, 162, 235)'
-                        ]
-                      }]
-                    }
-                  });
-                });
-              </script>
-              <!-- End Polar Area Chart -->
-
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Stacked Bar Chart</h5>
-
-              <!-- Stacked Bar Chart -->
-              <canvas id="stakedBarChart" style="max-height: 400px;"></canvas>
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  new Chart(document.querySelector('#stakedBarChart'), {
-                    type: 'bar',
-                    data: {
-                      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                      datasets: [{
-                          label: 'Dataset 1',
-                          data: [-75, -15, 18, 48, 74],
-                          backgroundColor: 'rgb(255, 99, 132)',
-                        },
-                        {
-                          label: 'Dataset 2',
-                          data: [-11, -1, 12, 62, 95],
-                          backgroundColor: 'rgb(75, 192, 192)',
-                        },
-                        {
-                          label: 'Dataset 3',
-                          data: [-44, -5, 22, 35, 62],
-                          backgroundColor: 'rgb(255, 205, 86)',
-                        },
-                      ]
-                    },
-                    options: {
-                      plugins: {
-                        title: {
-                          display: true,
-                          text: 'Chart.js Bar Chart - Stacked'
-                        },
-                      },
-                      responsive: true,
-                      scales: {
-                        x: {
-                          stacked: true,
-                        },
-                        y: {
-                          stacked: true
-                        }
-                      }
-                    }
-                  });
-                });
-              </script>
-              <!-- End Stacked Bar Chart -->
-
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Bubble Chart</h5>
-
-              <!-- Bubble Chart -->
-              <canvas id="bubbleChart" style="max-height: 400px;"></canvas>
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  new Chart(document.querySelector('#bubbleChart'), {
-                    type: 'bubble',
-                    data: {
-                      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                      datasets: [{
-                          label: 'Dataset 1',
-                          data: [{
-                              x: 20,
-                              y: 30,
-                              r: 15
-                            },
-                            {
-                              x: 40,
-                              y: 10,
-                              r: 10
-                            },
-                            {
-                              x: 15,
-                              y: 37,
-                              r: 12
-                            },
-                            {
-                              x: 32,
-                              y: 42,
-                              r: 33
-                            }
-                          ],
-                          borderColor: 'rgb(255, 99, 132)',
-                          backgroundColor: 'rgba(255, 99, 132, 0.5)'
-                        },
-                        {
-                          label: 'Dataset 2',
-                          data: [{
-                              x: 40,
-                              y: 25,
-                              r: 22
-                            },
-                            {
-                              x: 24,
-                              y: 47,
-                              r: 11
-                            },
-                            {
-                              x: 65,
-                              y: 11,
-                              r: 14
-                            },
-                            {
-                              x: 11,
-                              y: 55,
-                              r: 8
-                            }
-                          ],
-                          borderColor: 'rgb(75, 192, 192)',
-                          backgroundColor: 'rgba(75, 192, 192, 0.5)'
-                        }
-                      ]
-                    },
-                    options: {
-                      responsive: true,
-                      plugins: {
-                        legend: {
-                          position: 'top',
-                        },
-                        title: {
-                          display: true,
-                          text: 'Chart.js Bubble Chart'
-                        }
-                      }
-                    }
-                  });
-                });
-              </script>
-              <!-- End Bubble Chart -->
-
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Area Chart</h5>
-
-              <!-- Area Chart -->
-              <div id="areaChart"></div>
-
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  const series = {
-                    "monthDataSeries1": {
-                      "prices": [
-                        8107.85,
-                        8128.0,
-                        8122.9,
-                        8165.5,
-                        8340.7,
-                        8423.7,
-                        8423.5,
-                        8514.3,
-                        8481.85,
-                        8487.7,
-                        8506.9,
-                        8626.2,
-                        8668.95,
-                        8602.3,
-                        8607.55,
-                        8512.9,
-                        8496.25,
-                        8600.65,
-                        8881.1,
-                        9340.85
-                      ],
-                      "dates": [
-                        "13 Nov 2017",
-                        "14 Nov 2017",
-                        "15 Nov 2017",
-                        "16 Nov 2017",
-                        "17 Nov 2017",
-                        "20 Nov 2017",
-                        "21 Nov 2017",
-                        "22 Nov 2017",
-                        "23 Nov 2017",
-                        "24 Nov 2017",
-                        "27 Nov 2017",
-                        "28 Nov 2017",
-                        "29 Nov 2017",
-                        "30 Nov 2017",
-                        "01 Dec 2017",
-                        "04 Dec 2017",
-                        "05 Dec 2017",
-                        "06 Dec 2017",
-                        "07 Dec 2017",
-                        "08 Dec 2017"
-                      ]
-                    },
-                    "monthDataSeries2": {
-                      "prices": [
-                        8423.7,
-                        8423.5,
-                        8514.3,
-                        8481.85,
-                        8487.7,
-                        8506.9,
-                        8626.2,
-                        8668.95,
-                        8602.3,
-                        8607.55,
-                        8512.9,
-                        8496.25,
-                        8600.65,
-                        8881.1,
-                        9040.85,
-                        8340.7,
-                        8165.5,
-                        8122.9,
-                        8107.85,
-                        8128.0
-                      ],
-                      "dates": [
-                        "13 Nov 2017",
-                        "14 Nov 2017",
-                        "15 Nov 2017",
-                        "16 Nov 2017",
-                        "17 Nov 2017",
-                        "20 Nov 2017",
-                        "21 Nov 2017",
-                        "22 Nov 2017",
-                        "23 Nov 2017",
-                        "24 Nov 2017",
-                        "27 Nov 2017",
-                        "28 Nov 2017",
-                        "29 Nov 2017",
-                        "30 Nov 2017",
-                        "01 Dec 2017",
-                        "04 Dec 2017",
-                        "05 Dec 2017",
-                        "06 Dec 2017",
-                        "07 Dec 2017",
-                        "08 Dec 2017"
-                      ]
-                    },
-                    "monthDataSeries3": {
-                      "prices": [
-                        7114.25,
-                        7126.6,
-                        7116.95,
-                        7203.7,
-                        7233.75,
-                        7451.0,
-                        7381.15,
-                        7348.95,
-                        7347.75,
-                        7311.25,
-                        7266.4,
-                        7253.25,
-                        7215.45,
-                        7266.35,
-                        7315.25,
-                        7237.2,
-                        7191.4,
-                        7238.95,
-                        7222.6,
-                        7217.9,
-                        7359.3,
-                        7371.55,
-                        7371.15,
-                        7469.2,
-                        7429.25,
-                        7434.65,
-                        7451.1,
-                        7475.25,
-                        7566.25,
-                        7556.8,
-                        7525.55,
-                        7555.45,
-                        7560.9,
-                        7490.7,
-                        7527.6,
-                        7551.9,
-                        7514.85,
-                        7577.95,
-                        7592.3,
-                        7621.95,
-                        7707.95,
-                        7859.1,
-                        7815.7,
-                        7739.0,
-                        7778.7,
-                        7839.45,
-                        7756.45,
-                        7669.2,
-                        7580.45,
-                        7452.85,
-                        7617.25,
-                        7701.6,
-                        7606.8,
-                        7620.05,
-                        7513.85,
-                        7498.45,
-                        7575.45,
-                        7601.95,
-                        7589.1,
-                        7525.85,
-                        7569.5,
-                        7702.5,
-                        7812.7,
-                        7803.75,
-                        7816.3,
-                        7851.15,
-                        7912.2,
-                        7972.8,
-                        8145.0,
-                        8161.1,
-                        8121.05,
-                        8071.25,
-                        8088.2,
-                        8154.45,
-                        8148.3,
-                        8122.05,
-                        8132.65,
-                        8074.55,
-                        7952.8,
-                        7885.55,
-                        7733.9,
-                        7897.15,
-                        7973.15,
-                        7888.5,
-                        7842.8,
-                        7838.4,
-                        7909.85,
-                        7892.75,
-                        7897.75,
-                        7820.05,
-                        7904.4,
-                        7872.2,
-                        7847.5,
-                        7849.55,
-                        7789.6,
-                        7736.35,
-                        7819.4,
-                        7875.35,
-                        7871.8,
-                        8076.5,
-                        8114.8,
-                        8193.55,
-                        8217.1,
-                        8235.05,
-                        8215.3,
-                        8216.4,
-                        8301.55,
-                        8235.25,
-                        8229.75,
-                        8201.95,
-                        8164.95,
-                        8107.85,
-                        8128.0,
-                        8122.9,
-                        8165.5,
-                        8340.7,
-                        8423.7,
-                        8423.5,
-                        8514.3,
-                        8481.85,
-                        8487.7,
-                        8506.9,
-                        8626.2
-                      ],
-                      "dates": [
-                        "02 Jun 2017",
-                        "05 Jun 2017",
-                        "06 Jun 2017",
-                        "07 Jun 2017",
-                        "08 Jun 2017",
-                        "09 Jun 2017",
-                        "12 Jun 2017",
-                        "13 Jun 2017",
-                        "14 Jun 2017",
-                        "15 Jun 2017",
-                        "16 Jun 2017",
-                        "19 Jun 2017",
-                        "20 Jun 2017",
-                        "21 Jun 2017",
-                        "22 Jun 2017",
-                        "23 Jun 2017",
-                        "27 Jun 2017",
-                        "28 Jun 2017",
-                        "29 Jun 2017",
-                        "30 Jun 2017",
-                        "03 Jul 2017",
-                        "04 Jul 2017",
-                        "05 Jul 2017",
-                        "06 Jul 2017",
-                        "07 Jul 2017",
-                        "10 Jul 2017",
-                        "11 Jul 2017",
-                        "12 Jul 2017",
-                        "13 Jul 2017",
-                        "14 Jul 2017",
-                        "17 Jul 2017",
-                        "18 Jul 2017",
-                        "19 Jul 2017",
-                        "20 Jul 2017",
-                        "21 Jul 2017",
-                        "24 Jul 2017",
-                        "25 Jul 2017",
-                        "26 Jul 2017",
-                        "27 Jul 2017",
-                        "28 Jul 2017",
-                        "31 Jul 2017",
-                        "01 Aug 2017",
-                        "02 Aug 2017",
-                        "03 Aug 2017",
-                        "04 Aug 2017",
-                        "07 Aug 2017",
-                        "08 Aug 2017",
-                        "09 Aug 2017",
-                        "10 Aug 2017",
-                        "11 Aug 2017",
-                        "14 Aug 2017",
-                        "16 Aug 2017",
-                        "17 Aug 2017",
-                        "18 Aug 2017",
-                        "21 Aug 2017",
-                        "22 Aug 2017",
-                        "23 Aug 2017",
-                        "24 Aug 2017",
-                        "28 Aug 2017",
-                        "29 Aug 2017",
-                        "30 Aug 2017",
-                        "31 Aug 2017",
-                        "01 Sep 2017",
-                        "04 Sep 2017",
-                        "05 Sep 2017",
-                        "06 Sep 2017",
-                        "07 Sep 2017",
-                        "08 Sep 2017",
-                        "11 Sep 2017",
-                        "12 Sep 2017",
-                        "13 Sep 2017",
-                        "14 Sep 2017",
-                        "15 Sep 2017",
-                        "18 Sep 2017",
-                        "19 Sep 2017",
-                        "20 Sep 2017",
-                        "21 Sep 2017",
-                        "22 Sep 2017",
-                        "25 Sep 2017",
-                        "26 Sep 2017",
-                        "27 Sep 2017",
-                        "28 Sep 2017",
-                        "29 Sep 2017",
-                        "03 Oct 2017",
-                        "04 Oct 2017",
-                        "05 Oct 2017",
-                        "06 Oct 2017",
-                        "09 Oct 2017",
-                        "10 Oct 2017",
-                        "11 Oct 2017",
-                        "12 Oct 2017",
-                        "13 Oct 2017",
-                        "16 Oct 2017",
-                        "17 Oct 2017",
-                        "18 Oct 2017",
-                        "19 Oct 2017",
-                        "23 Oct 2017",
-                        "24 Oct 2017",
-                        "25 Oct 2017",
-                        "26 Oct 2017",
-                        "27 Oct 2017",
-                        "30 Oct 2017",
-                        "31 Oct 2017",
-                        "01 Nov 2017",
-                        "02 Nov 2017",
-                        "03 Nov 2017",
-                        "06 Nov 2017",
-                        "07 Nov 2017",
-                        "08 Nov 2017",
-                        "09 Nov 2017",
-                        "10 Nov 2017",
-                        "13 Nov 2017",
-                        "14 Nov 2017",
-                        "15 Nov 2017",
-                        "16 Nov 2017",
-                        "17 Nov 2017",
-                        "20 Nov 2017",
-                        "21 Nov 2017",
-                        "22 Nov 2017",
-                        "23 Nov 2017",
-                        "24 Nov 2017",
-                        "27 Nov 2017",
-                        "28 Nov 2017"
-                      ]
-                    }
-                  }
-                  new ApexCharts(document.querySelector("#areaChart"), {
-                    series: [{
-                      name: "STOCK ABC",
-                      data: series.monthDataSeries1.prices
-                    }],
-                    chart: {
-                      type: 'area',
-                      height: 350,
-                      zoom: {
-                        enabled: false
-                      }
-                    },
-                    dataLabels: {
-                      enabled: false
-                    },
-                    stroke: {
-                      curve: 'straight'
-                    },
-                    subtitle: {
-                      text: 'Price Movements',
-                      align: 'left'
-                    },
-                    labels: series.monthDataSeries1.dates,
-                    xaxis: {
-                      type: 'datetime',
-                    },
-                    yaxis: {
-                      opposite: true
-                    },
-                    legend: {
-                      horizontalAlign: 'left'
-                    }
-                  }).render();
-                });
-              </script>
-              <!-- End Area Chart -->
-
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Column Chart</h5>
-
-              <!-- Column Chart -->
-              <div id="columnChart"></div>
-
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  new ApexCharts(document.querySelector("#columnChart"), {
-                    series: [{
-                      name: 'Net Profit',
-                      data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
-                    }, {
-                      name: 'Revenue',
-                      data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
-                    }, {
-                      name: 'Free Cash Flow',
-                      data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
-                    }],
-                    chart: {
-                      type: 'bar',
-                      height: 350
-                    },
-                    plotOptions: {
-                      bar: {
-                        horizontal: false,
-                        columnWidth: '55%',
-                        endingShape: 'rounded'
-                      },
-                    },
-                    dataLabels: {
-                      enabled: false
-                    },
-                    stroke: {
-                      show: true,
-                      width: 2,
-                      colors: ['transparent']
-                    },
-                    xaxis: {
-                      categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
-                    },
-                    yaxis: {
-                      title: {
-                        text: '$ (thousands)'
-                      }
-                    },
-                    fill: {
-                      opacity: 1
-                    },
-                    tooltip: {
-                      y: {
-                        formatter: function(val) {
-                          return "$ " + val + " thousands"
-                        }
-                      }
-                    }
-                  }).render();
-                });
-              </script>
-              <!-- End Column Chart -->
-
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Donut Chart</h5>
-
-              <!-- Donut Chart -->
-              <div id="donutChart"></div>
-
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  new ApexCharts(document.querySelector("#donutChart"), {
-                    series: [44, 55, 13, 43, 22],
-                    chart: {
-                      height: 350,
-                      type: 'donut',
-                      toolbar: {
-                        show: true
-                      }
-                    },
-                    labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
-                  }).render();
-                });
-              </script>
-              <!-- End Donut Chart -->
-
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Radial Bar Chart</h5>
-
-              <!-- Radial Bar Chart -->
-              <div id="radialBarChart"></div>
-
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  new ApexCharts(document.querySelector("#radialBarChart"), {
-                    series: [44, 55, 67, 83],
-                    chart: {
-                      height: 350,
-                      type: 'radialBar',
-                      toolbar: {
-                        show: true
-                      }
-                    },
-                    plotOptions: {
-                      radialBar: {
-                        dataLabels: {
-                          name: {
-                            fontSize: '22px',
-                          },
-                          value: {
-                            fontSize: '16px',
-                          },
-                          total: {
-                            show: true,
-                            label: 'Total',
-                            formatter: function(w) {
-                              // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
-                              return 249
-                            }
-                          }
-                        }
-                      }
-                    },
-                    labels: ['Apples', 'Oranges', 'Bananas', 'Berries'],
-                  }).render();
-                });
-              </script>
-              <!-- End Radial Bar Chart -->
-
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Vertical Bar Chart</h5>
-
-              <!-- Vertical Bar Chart -->
-              <div id="verticalBarChart" style="min-height: 400px;" class="echart"></div>
-
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  echarts.init(document.querySelector("#verticalBarChart")).setOption({
-                    title: {
-                      text: 'World Population'
-                    },
-                    tooltip: {
-                      trigger: 'axis',
-                      axisPointer: {
-                        type: 'shadow'
-                      }
-                    },
-                    legend: {},
-                    grid: {
-                      left: '3%',
-                      right: '4%',
-                      bottom: '3%',
-                      containLabel: true
-                    },
-                    xAxis: {
-                      type: 'value',
-                      boundaryGap: [0, 0.01]
-                    },
-                    yAxis: {
-                      type: 'category',
-                      data: ['Brazil', 'Indonesia', 'USA', 'India', 'China', 'World']
-                    },
-                    series: [{
-                        name: '2011',
-                        type: 'bar',
-                        data: [18203, 23489, 29034, 104970, 131744, 630230]
-                      },
-                      {
-                        name: '2012',
-                        type: 'bar',
-                        data: [19325, 23438, 31000, 121594, 134141, 681807]
-                      }
-                    ]
-                  });
-                });
-              </script>
-              <!-- End Vertical Bar Chart -->
-
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Candle Stick Chart</h5>
-
-              <!-- Candle Stick Chart -->
-              <div id="candleStickChart" style="min-height: 400px;" class="echart"></div>
-
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  echarts.init(document.querySelector("#candleStickChart")).setOption({
-                    xAxis: {
-                      data: ['2017-10-24', '2017-10-25', '2017-10-26', '2017-10-27']
-                    },
-                    yAxis: {},
-                    series: [{
-                      type: 'candlestick',
-                      data: [
-                        [20, 34, 10, 38],
-                        [40, 35, 30, 50],
-                        [31, 38, 33, 44],
-                        [38, 15, 5, 42]
-                      ]
-                    }]
-                  });
-                });
-              </script>
-              <!-- End Candle Stick Chart -->
-
-            </div>
-          </div>
-        </div>
-
-    </section>
-
-    @include('layout.foot')
+@include('layout.foot')
