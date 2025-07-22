@@ -65,3 +65,7 @@ Route::get('/progres', function () {
 Route::get('/template', function () {
     return view('template');
 });
+
+Route::get('/editor', function () {
+    return view('editor');
+});

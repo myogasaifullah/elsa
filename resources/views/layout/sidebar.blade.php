@@ -97,6 +97,14 @@
       </a>
     </li>
 
+    <!-- progres -->
+    <li class="nav-item">
+      <a class="nav-link {{ Request::is('editor') ? '' : 'collapsed' }}" href="{{ url('editor') }}">
+        <i class="bi bi-card-list"></i>
+        <span>Editor</span>
+      </a>
+    </li>
+    
   </ul>
 </aside><!-- End Sidebar -->
 
