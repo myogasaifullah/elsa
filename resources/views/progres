@@ -1,0 +1,182 @@
+@extends('layout.header')
+
+@section('title', 'Dashboard')
+
+@include('layout.sidebar')
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Progres</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Home</a></li>
+                <li class="breadcrumb-item active">Progres</li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- Progress Table Start -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped" id="progressTable">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Tahap Pekerjaan</th>
+                    <th>Uraian Tugas</th>
+                    <th>Capaian (%)</th>
+                    <th>Input</th>
+                    <th>Catatan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Pra-produksi</td>
+                    <td>"Menerima brief dari dosen/pengampu; Menyusun rencana editing; Memastikan ketersediaan materi (video, audio, slide, dll)"</td>
+                    <td>10</td>
+                    <td>Target publish (date) dan catatan</td>
+                    <td><button class="btn btn-primary" onclick="setCurrentRow(1)"> Catatan</button></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Import dan Organisasi Materi</td>
+                    <td>"Mengimpor footage, audio, dan bahan pendukung ke software; Membuat folder kerja terstruktur (bining)"</td>
+                    <td>5</td>
+                    <td>Catatan</td>
+                    <td><button class="btn btn-primary" onclick="setCurrentRow(2)"> Catatan</button></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Rough Cut</td>
+                    <td>"Memilih bagian-bagian penting video; Menyusun urutan sesuai alur pembelajaran; Menghapus bagian yang tidak diperlukan"</td>
+                    <td>15</td>
+                    <td>Catatan</td>
+                    <td><button class="btn btn-primary" onclick="setCurrentRow(3)"> Catatan</button></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Fine Cut (Cutting Halus)</td>
+                    <td>"Memperhalus transisi antar bagian; Sinkronisasi audio dan video; Koreksi durasi agar efisien"</td>
+                    <td>15</td>
+                    <td>Catatan</td>
+                    <td><button class="btn btn-primary" onclick="setCurrentRow(4)"> Catatan</button></td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Penambahan Elemen Grafis & Visual</td>
+                    <td>"Menambahkan judul, nama narasumber, transisi visual; Menyisipkan gambar, ilustrasi, atau animasi penunjang materi; Menyisipkan bumper opening video"</td>
+                    <td>20</td>
+                    <td>Catatan</td>
+                    <td><button class="btn btn-primary" onclick="setCurrentRow(5)"> Catatan</button></td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>Penyuntingan Audio</td>
+                    <td>"Membersihkan noise; Menyesuaikan level suara (voice over, musik latar); Menambahkan sound effect jika dibutuhkan"</td>
+                    <td>10</td>
+                    <td>Catatan</td>
+                    <td><button class="btn btn-primary" onclick="setCurrentRow(6)"> Catatan</button></td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>Penyisipan Subtitle atau Teks Narasi</td>
+                    <td>"Menambahkan subtitle (bila diperlukan); Menyisipkan poin penting materi dalam bentuk teks visual"</td>
+                    <td>10</td>
+                    <td>Catatan</td>
+                    <td><button class="btn btn-primary" onclick="setCurrentRow(7)"> Catatan</button></td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>Quality Control (QC) dan Revisi</td>
+                    <td>"Menonton ulang hasil edit untuk deteksi kesalahan; Menyesuaikan revisi dari dosen"</td>
+                    <td>5</td>
+                    <td>Catatan</td>
+                    <td><button class="btn btn-primary" onclick="setCurrentRow(8)"> Catatan</button></td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>Export dan Finalisasi</td>
+                    <td>"Mengekspor video dalam format dan resolusi sesuai kebutuhan; Menyimpan arsip kerja"</td>
+                    <td>5</td>
+                    <td>Catatan</td>
+                    <td><button class="btn btn-primary" onclick="setCurrentRow(9)"> Catatan</button></td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>Pasca Produksi</td>
+                    <td>"Editor mengupload video dengan dilengkapi judul, caption, thumbnail, dan elemen lain yang sesuai dengan video"</td>
+                    <td>5</td>
+                    <td>Catatan, link youtube, tanggal publish (date), durasi video (menit)</td>
+                    <td><button class="btn btn-primary" onclick="setCurrentRow(10)"> Catatan</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- Progress Table End -->
+
+    <!-- Modal for Catatan -->
+    <div class="modal fade" id="catatanModal" tabindex="-1" role="dialog" aria-labelledby="catatanModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="catatanModalLabel"> Catatan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="catatanForm">
+                        <div class="form-group">
+                            <label for="catatan">Catatan:</label>
+                            <textarea id="catatan" class="form-control" rows="4"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    <button type="button" id="saveCatatanButton" class="btn btn-primary">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+@include('layout.footer')
+
+@section('scripts')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    let currentRowId = null;
+
+    // Function to store the current row id when the button is clicked
+    function setCurrentRow(rowId) {
+        currentRowId = rowId;
+        $('#catatanModal').modal('show'); // Show the modal manually
+    }
+
+    // JavaScript to handle the modal form submission and update table
+    document.getElementById('saveCatatanButton').addEventListener('click', function() {
+        const catatan = document.getElementById('catatan').value;
+
+        if (catatan.trim() === "") {
+            alert("Catatan tidak boleh kosong");
+            return;
+        }
+
+        // Find the correct row in the table
+        const row = document.querySelector(`#progressTable tr:nth-child(${currentRowId})`);
+
+        // Update the "Catatan" cell in the table
+        const catatanCell = row.cells[5]; // The "Catatan" cell in the current row
+        catatanCell.innerHTML = catatan;
+
+        // Reset the form and close the modal
+        document.getElementById('catatanForm').reset();
+        $('#catatanModal').modal('hide');
+    });
+</script>
+@endsection

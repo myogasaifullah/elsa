@@ -145,11 +145,18 @@
           <div class="modal-body">
             <div class="mb-3">
               <label class="form-label">Tanggal</label>
-              <input type="text" class="form-control" id="tanggal">
+              <input type="date" class="form-control" id="tanggal">
             </div>
             <div class="mb-3">
               <label class="form-label">Jam</label>
-              <input type="text" class="form-control" id="jam">
+              <select class="form-select" id="jam">
+                <option selected disabled>Pilih Jam</option>
+                <option value="09.00 WIB - 11.00 WIB">09.00 WIB - 11.00 WIB</option>
+                <option value="11.00 WIB - 13.00 WIB">11.00 WIB - 13.00 WIB</option>
+                <option value="13.00 WIB - 15.00 WIB">13.00 WIB - 15.00 WIB</option>
+                <option value="15.00 WIB - 17.00 WIB">15.00 WIB - 17.00 WIB</option>
+                <option value="17.00 WIB - 19.00 WIB">17.00 WIB - 19.00 WIB</option>
+              </select>
             </div>
             <div class="mb-3">
               <label class="form-label">Jenis Kategori</label>
@@ -206,11 +213,18 @@
             <input type="hidden" id="editJadwalId">
             <div class="mb-3">
               <label class="form-label">Tanggal</label>
-              <input type="text" class="form-control" id="editTanggal">
+              <input type="date" class="form-control" id="editTanggal">
             </div>
             <div class="mb-3">
               <label class="form-label">Jam</label>
-              <input type="text" class="form-control" id="editJam">
+              <select class="form-select" id="editJam">
+                <option selected disabled>Pilih Jam</option>
+                <option value="09.00 WIB - 11.00 WIB">09.00 WIB - 11.00 WIB</option>
+                <option value="11.00 WIB - 13.00 WIB">11.00 WIB - 13.00 WIB</option>
+                <option value="13.00 WIB - 15.00 WIB">13.00 WIB - 15.00 WIB</option>
+                <option value="15.00 WIB - 17.00 WIB">15.00 WIB - 17.00 WIB</option>
+                <option value="17.00 WIB - 19.00 WIB">17.00 WIB - 19.00 WIB</option>
+              </select>
             </div>
             <div class="mb-3">
               <label class="form-label">Jenis Kategori</label>

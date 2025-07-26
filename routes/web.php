@@ -47,11 +47,15 @@ Route::get('/studio-matkul', function () {
 });
 
 Route::get('/jadwal', function () {
-    return view('booking/jadwal');
+    return view('jadwal');
 });
 
 Route::get('/acc', function () {
     return view('booking/acc');
+});
+
+Route::get('/booking', function () {
+    return view('booking/booking');
 });
 
 Route::get('/laporan', function () {
@@ -60,6 +64,10 @@ Route::get('/laporan', function () {
 
 Route::get('/progres', function () {
     return view('progres');
+});
+
+Route::get('/modal-progres', function () {
+    return view('modal_progres');
 });
 
 Route::get('/template', function () {

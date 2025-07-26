@@ -32,6 +32,8 @@
             <tr>
               <th>#</th>
               <th>Nama Dosen</th>
+              <th>NUPTK</th>
+              <th>Target Video</th>
               <th>Fakultas</th>
               <th>Prodi</th>
               <th>Action</th>
@@ -41,6 +43,8 @@
             <tr>
               <td>1</td>
               <td>Dr. Ahmad Yani</td>
+              <td>1234567890</td>
+              <td>5</td>
               <td>FTIK</td>
               <td>Informatika</td>
               <td>
@@ -105,19 +109,23 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body">
-            <input type="text" class="form-control mb-2" placeholder="Nama Dosen" name="nama_dosen">
+          <input type="text" class="form-control mb-2" placeholder="Nama Dosen" name="nama_dosen">
 
-            <select class="form-select mb-2" name="fakultas_id">
-              <option selected disabled>Pilih Fakultas</option>
-              <option value="1">FTIK</option>
-              <option value="2">FEB</option>
-            </select>
+          <input type="text" class="form-control mb-2" placeholder="NUPTK Dosen" name="nuptk_dosen">
 
-            <select class="form-select" name="prodi_id">
-              <option selected disabled>Pilih Prodi</option>
-              <option value="1">Informatika</option>
-              <option value="2">Teknik Sipil</option>
-            </select>
+          <input type="text" class="form-control mb-2" placeholder="Target Video Dosen" name="target_video_dosen">
+
+          <select class="form-select mb-2" name="fakultas_id">
+            <option selected disabled>Pilih Fakultas</option>
+            <option value="1">FTIK</option>
+            <option value="2">FEB</option>
+          </select>
+
+          <select class="form-select" name="prodi_id">
+            <option selected disabled>Pilih Prodi</option>
+            <option value="1">Informatika</option>
+            <option value="2">Teknik Sipil</option>
+          </select>
           </div>
           <div class="modal-footer">
             <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -168,6 +176,11 @@
         <div class="modal-body">
           <input type="hidden" id="editDosenId">
           <input type="text" class="form-control mb-2" id="editNamaDosen" placeholder="Nama Dosen">
+
+          <input type="text" class="form-control mb-2" id="editNuptkDosen" placeholder="NUPTK Dosen">
+
+          <input type="text" class="form-control mb-2" id="editTargetVideoDosen" placeholder="Target Video Dosen">
+
           <select class="form-select mb-2" id="editFakultasId">
             <option value="1">FTIK</option>
             <option value="2">FEB</option>
