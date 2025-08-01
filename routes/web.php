@@ -6,6 +6,14 @@ Route::get('/', function () {
     return view('index');
 });
 
+Route::get('/v2', function () {
+    return view('v2');
+});
+
+Route::get('/v3', function () {
+    return view('v3');
+});
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 });
