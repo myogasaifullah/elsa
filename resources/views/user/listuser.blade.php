@@ -55,21 +55,46 @@
           </tr>
         </thead>
         <tbody>
+          @foreach($users as $user)
           <tr>
-            <th scope="row">1</th>
-            <td>brandonj</td>
-            <td>brandon@example.com</td>
-            <td>FTIK</td>
-            <td>Informatika</td>
-            <td>081234567890</td>
-            <td>Mahasiswa</td>
-            <td><span class="badge bg-success">Aktif</span></td>
+            <th scope="row">{{ $loop->iteration }}</th>
+            <td>{{ $user->name }}</td>
+            <td>{{ $user->email }}</td>
+            <td>{{ $user->fakultas ? $user->fakultas->nama_fakultas : '-' }}</td>
+            <td>{{ $user->prodi ? $user->prodi->nama_prodi : '-' }}</td>
+            <td>{{ $user->nomor_telepon ?? '-' }}</td>
+            <td>{{ $user->role ?? '-' }}</td>
             <td>
-              <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalEditUser">Edit</button>
-              <button class="btn btn-sm btn-danger btn-hapus">Hapus</button>
+              @if($user->status == 'active')
+                <span class="badge bg-success">Aktif</span>
+              @elseif($user->status == 'pending')
+                <span class="badge bg-warning">Pending</span>
+              @else
+                <span class="badge bg-secondary">{{ $user->status }}</span>
+              @endif
+            </td>
+            <td>
+              <button class="btn btn-sm btn-primary" 
+                      data-bs-toggle="modal" 
+                      data-bs-target="#modalEditUser"
+                      data-user-id="{{ $user->id }}"
+                      data-user-name="{{ $user->name }}"
+                      data-user-email="{{ $user->email }}"
+                      data-user-nomor-telepon="{{ $user->nomor_telepon }}"
+                      data-user-fakultas-id="{{ $user->fakultas_id }}"
+                      data-user-prodi-id="{{ $user->prodi_id }}"
+                      data-user-role="{{ $user->role }}"
+                      data-user-status="{{ $user->status }}">
+                Edit
+              </button>
+              <form action="{{ route('user.destroy', $user) }}" method="POST" class="d-inline">
+                @csrf
+                @method('DELETE')
+                <button type="button" class="btn btn-sm btn-danger btn-hapus">Hapus</button>
+              </form>
             </td>
           </tr>
-          <!-- Tambah data lainnya sesuai contoh di atas -->
+          @endforeach
         </tbody>
 
       </table>
@@ -82,7 +107,7 @@
   <div class="modal fade" id="modalTambahUser" tabindex="-1" aria-labelledby="modalTambahUserLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
-        <form action="" method="POST">
+        <form action="{{ route('user.store') }}" method="POST">
           @csrf
           <div class="modal-header">
             <h5 class="modal-title" id="modalTambahUserLabel">Tambah User Baru</h5>
@@ -92,7 +117,7 @@
             <div class="row g-3">
               <div class="col-md-6">
                 <label for="username" class="form-label">Username</label>
-                <input type="text" name="username" class="form-control" required>
+                <input type="text" name="name" class="form-control" required>
               </div>
               <div class="col-md-6">
                 <label for="email" class="form-label">Email</label>
@@ -100,24 +125,24 @@
               </div>
               <div class="col-md-6">
                 <label for="no_telp" class="form-label">No. Telp</label>
-                <input type="text" name="no_telp" class="form-control" required>
+                <input type="text" name="nomor_telepon" class="form-control" required>
               </div>
               <div class="col-md-6">
                 <label for="fakultas" class="form-label">Fakultas</label>
-                <select name="fakultas" class="form-select" required>
+                <select name="fakultas_id" class="form-select" required>
                   <option value="" disabled selected>- Pilih Fakultas -</option>
-                  <option value="FTIK">FTIK</option>
-                  <option value="FISIP">FISIP</option>
-                  <option value="FEB">FEB</option>
+                  @foreach($fakultas as $fak)
+                  <option value="{{ $fak->id }}">{{ $fak->nama_fakultas }}</option>
+                  @endforeach
                 </select>
               </div>
               <div class="col-md-6">
                 <label for="prodi" class="form-label">Program Studi</label>
-                <select name="prodi" class="form-select" required>
+                <select name="prodi_id" class="form-select" required>
                   <option value="" disabled selected>- Pilih Prodi -</option>
-                  <option value="Informatika">Informatika</option>
-                  <option value="Sistem Informasi">Sistem Informasi</option>
-                  <option value="Manajemen">Manajemen</option>
+                  @foreach($prodis as $prodi)
+                  <option value="{{ $prodi->id }}">{{ $prodi->nama_prodi }}</option>
+                  @endforeach
                 </select>
               </div>
               <div class="col-md-6">
@@ -127,18 +152,23 @@
                   <option value="Admin">Admin</option>
                   <option value="Dosen">Dosen</option>
                   <option value="Mahasiswa">Mahasiswa</option>
+                  <option value="Editor">Editor</option>
                 </select>
               </div>
               <div class="col-md-6">
                 <label for="status" class="form-label">Status</label>
                 <select name="status" class="form-select" required>
-                  <option value="Aktif">Aktif</option>
-                  <option value="Nonaktif">Nonaktif</option>
+                  <option value="active">Aktif</option>
+                  <option value="pending">Pending</option>
                 </select>
               </div>
               <div class="col-md-6">
                 <label for="password" class="form-label">Password</label>
                 <input type="password" name="password" class="form-control" required>
+              </div>
+              <div class="col-md-6">
+                <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
+                <input type="password" name="password_confirmation" class="form-control" required>
               </div>
             </div>
           </div>
@@ -155,7 +185,9 @@
   <div class="modal fade" id="modalEditUser" tabindex="-1" aria-labelledby="modalEditUserLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
-        <form action="#" method="POST">
+        <form id="editUserForm" method="POST">
+          @csrf
+          @method('PUT')
           <div class="modal-header">
             <h5 class="modal-title" id="modalEditUserLabel">Edit Data User</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
@@ -164,48 +196,49 @@
             <div class="row g-3">
               <div class="col-md-6">
                 <label for="edit_username" class="form-label">Username</label>
-                <input type="text" id="edit_username" name="username" class="form-control" value="brandonj" required>
+                <input type="text" id="edit_username" name="name" class="form-control" required>
               </div>
               <div class="col-md-6">
                 <label for="edit_email" class="form-label">Email</label>
-                <input type="email" id="edit_email" name="email" class="form-control" value="brandon@example.com" required>
+                <input type="email" id="edit_email" name="email" class="form-control" required>
               </div>
               <div class="col-md-6">
                 <label for="edit_no_telp" class="form-label">No. Telp</label>
-                <input type="text" id="edit_no_telp" name="no_telp" class="form-control" value="081234567890" required>
+                <input type="text" id="edit_no_telp" name="nomor_telepon" class="form-control" required>
               </div>
               <div class="col-md-6">
                 <label for="edit_fakultas" class="form-label">Fakultas</label>
-                <select id="edit_fakultas" name="fakultas" class="form-select" required>
-                  <option disabled>- Pilih Fakultas -</option>
-                  <option value="FTIK" selected>FTIK</option>
-                  <option value="FISIP">FISIP</option>
-                  <option value="FEB">FEB</option>
+                <select id="edit_fakultas" name="fakultas_id" class="form-select" required>
+                  <option value="" disabled selected>- Pilih Fakultas -</option>
+                  @foreach($fakultas as $fak)
+                  <option value="{{ $fak->id }}">{{ $fak->nama_fakultas }}</option>
+                  @endforeach
                 </select>
               </div>
               <div class="col-md-6">
                 <label for="edit_prodi" class="form-label">Program Studi</label>
-                <select id="edit_prodi" name="prodi" class="form-select" required>
-                  <option disabled>- Pilih Prodi -</option>
-                  <option value="Informatika" selected>Informatika</option>
-                  <option value="Sistem Informasi">Sistem Informasi</option>
-                  <option value="Manajemen">Manajemen</option>
+                <select id="edit_prodi" name="prodi_id" class="form-select" required>
+                  <option value="" disabled selected>- Pilih Prodi -</option>
+                  @foreach($prodis as $prodi)
+                  <option value="{{ $prodi->id }}">{{ $prodi->nama_prodi }}</option>
+                  @endforeach
                 </select>
               </div>
               <div class="col-md-6">
                 <label for="edit_role" class="form-label">Role</label>
                 <select id="edit_role" name="role" class="form-select" required>
-                  <option disabled>- Pilih Role -</option>
+                  <option value="" disabled selected>- Pilih Role -</option>
                   <option value="Admin">Admin</option>
                   <option value="Dosen">Dosen</option>
-                  <option value="Mahasiswa" selected>Mahasiswa</option>
+                  <option value="Mahasiswa">Mahasiswa</option>
+                  <option value="Editor">Editor</option>
                 </select>
               </div>
               <div class="col-md-6">
                 <label for="edit_status" class="form-label">Status</label>
                 <select id="edit_status" name="status" class="form-select" required>
-                  <option value="Aktif" selected>Aktif</option>
-                  <option value="Nonaktif">Nonaktif</option>
+                  <option value="active">Aktif</option>
+                  <option value="pending">Pending</option>
                 </select>
               </div>
               <div class="col-md-6">
@@ -227,6 +260,35 @@
 </main><!-- End #main -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    // Handle edit button click
+    document.querySelectorAll('[data-bs-target="#modalEditUser"]').forEach(btn => {
+      btn.addEventListener('click', function() {
+        // Get user data from button attributes
+        const userId = this.getAttribute('data-user-id');
+        const userName = this.getAttribute('data-user-name');
+        const userEmail = this.getAttribute('data-user-email');
+        const userNomorTelepon = this.getAttribute('data-user-nomor-telepon');
+        const userFakultasId = this.getAttribute('data-user-fakultas-id');
+        const userProdiId = this.getAttribute('data-user-prodi-id');
+        const userRole = this.getAttribute('data-user-role');
+        const userStatus = this.getAttribute('data-user-status');
+        
+        // Populate modal fields
+        document.getElementById('edit_username').value = userName;
+        document.getElementById('edit_email').value = userEmail;
+        document.getElementById('edit_no_telp').value = userNomorTelepon;
+        document.getElementById('edit_fakultas').value = userFakultasId;
+        document.getElementById('edit_prodi').value = userProdiId;
+        document.getElementById('edit_role').value = userRole;
+        document.getElementById('edit_status').value = userStatus;
+        
+        // Set form action
+        const form = document.getElementById('editUserForm');
+        form.action = `/user/${userId}`;
+      });
+    });
+    
+    // Handle delete button click
     document.querySelectorAll('.btn-hapus').forEach(btn => {
       btn.addEventListener('click', function(e) {
         e.preventDefault();
@@ -239,8 +301,8 @@
           cancelButtonText: 'Batal'
         }).then((result) => {
           if (result.isConfirmed) {
-            Swal.fire('Dihapus!', 'Data User telah dihapus.', 'success');
-            // Tambahkan logika hapus di sini (AJAX atau form submit)
+            // Submit the form
+            this.closest('form').submit();
           }
         });
       });

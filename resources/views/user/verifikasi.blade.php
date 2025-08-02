@@ -7,12 +7,12 @@
 <main id="main" class="main">
 
   <div class="pagetitle">
-    <h1>Verifikasi user</h1>
+    <h1>Verifikasi Pengguna</h1>
     <nav>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
         <li class="breadcrumb-item">User</li>
-        <li class="breadcrumb-item active">Verifikasi User</li>
+        <li class="breadcrumb-item active">Verifikasi Pengguna</li>
       </ol>
     </nav>
   </div><!-- End Page Title -->
@@ -20,7 +20,7 @@
   <div class="col-12">
     <div class="card recent-sales overflow-auto">
       <div class="card-body">
-        <h5 class="card-title">Verifikasi Pengguna <span>| Status: Pending</span></h5>
+        <h5 class="card-title">Daftar Pengguna Pending <span>| Status: Pending</span></h5>
         <table class="table table-borderless datatable">
           <thead>
             <tr>
@@ -36,38 +36,38 @@
             </tr>
           </thead>
           <tbody>
+            @foreach($pendingUsers as $user)
             <tr>
-              <th scope="row">1</th>
-              <td>rafid21</td>
-              <td>rafid@example.com</td>
-              <td>FTIK</td>
-              <td>Informatika</td>
-              <td>089653920595</td>
-              <td>Editor</td>
+              <th scope="row">{{ $loop->iteration }}</th>
+              <td>{{ $user->name }}</td>
+              <td>{{ $user->email }}</td>
+              <td>{{ $user->fakultas ? $user->fakultas->nama_fakultas : '-' }}</td>
+              <td>{{ $user->prodi ? $user->prodi->nama_prodi : '-' }}</td>
+              <td>{{ $user->nomor_telepon ?? '-' }}</td>
+              <td>{{ $user->role ?? '-' }}</td>
               <td><span class="badge bg-warning text-dark">Pending</span></td>
               <td>
-                <button class="btn btn-sm btn-success btn-verifikasi">Verifikasi</button>
-                <button class="btn btn-sm btn-danger btn-tolak">Tolak</button>
+                <form action="{{ route('user.updateStatus', $user->id) }}" method="POST" style="display: inline;">
+  @csrf
+  @method('PUT')
+  <input type="hidden" name="status" value="active">
+  <button type="submit" class="btn btn-sm btn-success btn-verifikasi">Verifikasi</button>
+</form>
 
+<form action="{{ route('user.updateStatus', $user->id) }}" method="POST" style="display: inline;">
+  @csrf
+  @method('PUT')
+  <input type="hidden" name="status" value="rejected">
+  <button type="submit" class="btn btn-sm btn-danger btn-tolak">Tolak</button>
+</form>
+
+                <!-- Debugging CSRF token -->
+                <div style="display: none;">
+                  CSRF Token: {{ csrf_token() }}
+                </div>
               </td>
             </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>nabila_dsn</td>
-              <td>nabila@example.com</td>
-              <td>FTIK</td>
-              <td>Sistem Informasi</td>
-              <td>089653920595</td>
-              <td>Editor</td>
-              <td><span class="badge bg-warning text-dark">Pending</span></td>
-              <td>
-                <button class="btn btn-sm btn-success btn-verifikasi">Verifikasi</button>
-                <button class="btn btn-sm btn-danger btn-tolak">Tolak</button>
-
-              </td>
-            </tr>
-
-            <!-- Tambahkan baris lainnya sesuai data -->
+            @endforeach
           </tbody>
         </table>
 
@@ -177,6 +177,8 @@
     document.querySelectorAll('.btn-verifikasi').forEach(btn => {
       btn.addEventListener('click', function(e) {
         e.preventDefault();
+        const form = this.closest('form');
+        console.log('Verifikasi button clicked', form);
         Swal.fire({
           title: 'Verifikasi Pengguna?',
           text: 'Pengguna akan diubah menjadi aktif.',
@@ -186,8 +188,14 @@
           cancelButtonText: 'Batal'
         }).then((result) => {
           if (result.isConfirmed) {
-            // Kirim form / AJAX di sini
-            Swal.fire('Berhasil!', 'Pengguna telah diverifikasi.', 'success');
+            console.log('Form submitted', form);
+            console.log('Form action', form.action);
+            console.log('Form method', form.method);
+            const formData = new FormData(form);
+            for (let [key, value] of formData.entries()) {
+              console.log(key, value);
+            }
+            form.submit();
           }
         });
       });
@@ -196,6 +204,8 @@
     document.querySelectorAll('.btn-tolak').forEach(btn => {
       btn.addEventListener('click', function(e) {
         e.preventDefault();
+        const form = this.closest('form');
+        console.log('Tolak button clicked', form);
         Swal.fire({
           title: 'Tolak Pengguna?',
           text: 'Pengguna akan ditolak dan tidak bisa login.',
@@ -205,8 +215,14 @@
           cancelButtonText: 'Batal'
         }).then((result) => {
           if (result.isConfirmed) {
-            // Kirim form / AJAX di sini
-            Swal.fire('Ditolak!', 'Pengguna telah ditolak.', 'error');
+            console.log('Form submitted', form);
+            console.log('Form action', form.action);
+            console.log('Form method', form.method);
+            const formData = new FormData(form);
+            for (let [key, value] of formData.entries()) {
+              console.log(key, value);
+            }
+            form.submit();
           }
         });
       });

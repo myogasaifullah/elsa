@@ -40,127 +40,124 @@
 <body>
 
   <main>
-    <div class="container">
+  <div class="container">
+    <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
-      <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
-        <div class="container">
-          <div class="row justify-content-center">
-            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+            <div class="d-flex justify-content-center py-4">
+              <a href="{{ url('/') }}" class="logo d-flex align-items-center w-auto">
+                <img src="{{ asset('assets/img/logo.png') }}" alt="">
+                <span class="d-none d-lg-block">Elsa</span>
+              </a>
+            </div>
 
-              <div class="d-flex justify-content-center py-4">
-                <a href="index.html" class="logo d-flex align-items-center w-auto">
-                  <img src="assets/img/logo.png" alt="">
-                  <span class="d-none d-lg-block">Elsa</span>
-                </a>
-              </div><!-- End Logo -->
+            <div class="card mb-3">
+              <div class="card-body">
+                <div class="pt-4 pb-2">
+                  <h5 class="card-title text-center pb-0 fs-4">Create an Account</h5>
+                  <p class="text-center small">Enter your personal details to create account</p>
+                </div>
 
-              <div class="card mb-3">
+                <form method="POST" action="{{ route('register') }}" class="row g-3 needs-validation" novalidate>
+                  @csrf
 
-                <div class="card-body">
-
-                  <div class="pt-4 pb-2">
-                    <h5 class="card-title text-center pb-0 fs-4">Create an Account</h5>
-                    <p class="text-center small">Enter your personal details to create account</p>
+                  <div class="col-12">
+                    <label for="name" class="form-label">Nama Lengkap</label>
+                    <input type="text" name="name" class="form-control" id="name" value="{{ old('name') }}" required>
+                    <x-input-error :messages="$errors->get('name')" class="invalid-feedback d-block" />
                   </div>
 
-                  <form class="row g-3 needs-validation" novalidate>
-                    <div class="col-12">
-                      <label for="yourName" class="form-label">Nama Lengkap</label>
-                      <input type="text" name="name" class="form-control" id="yourName" required>
-                      <div class="invalid-feedback">Please, enter your name!</div>
+                  <div class="col-12">
+                    <label for="nomor_telepon" class="form-label">Nomor Telepon</label>
+                    <input type="text" name="nomor_telepon" class="form-control" id="nomor_telepon" value="{{ old('nomor_telepon') }}" required>
+                    <x-input-error :messages="$errors->get('nomor_telepon')" class="invalid-feedback d-block" />
+                  </div>
+
+                  <div class="col-12">
+                    <label for="fakultas_id" class="form-label">Fakultas</label>
+                    <select name="fakultas_id" id="fakultas_id" class="form-select" required>
+                      <option value="" disabled selected>Pilih Fakultas</option>
+                      @foreach ($fakultas as $fak)
+                        <option value="{{ $fak->id }}" {{ old('fakultas_id') == $fak->id ? 'selected' : '' }}>{{ $fak->nama_fakultas }}</option>
+                      @endforeach
+                    </select>
+                    <x-input-error :messages="$errors->get('fakultas_id')" class="invalid-feedback d-block" />
+                  </div>
+
+                  <div class="col-12">
+                    <label for="prodi_id" class="form-label">Program Studi</label>
+                    <select name="prodi_id" id="prodi_id" class="form-select" required>
+                      <option value="" disabled selected>Pilih Program Studi</option>
+                      @foreach ($prodis as $prodi)
+                        <option value="{{ $prodi->id }}" {{ old('prodi_id') == $prodi->id ? 'selected' : '' }}>{{ $prodi->nama_prodi }}</option>
+                      @endforeach
+                    </select>
+                    <x-input-error :messages="$errors->get('prodi_id')" class="invalid-feedback d-block" />
+                  </div>
+
+                  <div class="col-12">
+                    <label for="role" class="form-label">Role</label>
+                    <select name="role" id="role" class="form-select" required>
+                      <option value="" disabled selected>Pilih Role</option>
+                      <option value="Mahasiswa" {{ old('role') == 'Mahasiswa' ? 'selected' : '' }}>Mahasiswa</option>
+                      <option value="Dosen" {{ old('role') == 'Dosen' ? 'selected' : '' }}>Dosen</option>
+                      <option value="Editor" {{ old('role') == 'Editor' ? 'selected' : '' }}>Editor</option>
+                    </select>
+                    <x-input-error :messages="$errors->get('role')" class="invalid-feedback d-block" />
+                  </div>
+
+                  <div class="col-12">
+                    <label for="email" class="form-label">Email</label>
+                    <div class="input-group has-validation">
+                      <span class="input-group-text" id="inputGroupPrepend">@</span>
+                      <input type="email" name="email" class="form-control" id="email" value="{{ old('email') }}" required>
+                      <x-input-error :messages="$errors->get('email')" class="invalid-feedback d-block" />
                     </div>
+                  </div>
 
-                    <div class="col-12">
-                      <label for="notelp" class="form-label">Nomor Telpon</label>
-                      <input type="notelp" name="notelp" class="form-control" id="notelp" required>
-                      <div class="invalid-feedback">Please enter a valid Program Studi!</div>
+                  <div class="col-12">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control" id="password" required>
+                    <x-input-error :messages="$errors->get('password')" class="invalid-feedback d-block" />
+                  </div>
+
+                  <div class="col-12">
+                    <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
+                    <input type="password" name="password_confirmation" class="form-control" id="password_confirmation" required>
+                    <x-input-error :messages="$errors->get('password_confirmation')" class="invalid-feedback d-block" />
+                  </div>
+
+                  <div class="col-12">
+                    <div class="form-check">
+                      <input class="form-check-input" name="terms" type="checkbox" value="1" id="acceptTerms" required>
+                      <label class="form-check-label" for="acceptTerms">Saya setuju dengan <a href="#">syarat dan ketentuan</a></label>
                     </div>
+                  </div>
 
-                    <div class="col-12">
-  <label for="fakultas" class="form-label">Fakultas</label>
-  <select name="fakultas" id="fakultas" class="form-select" required>
-    <option value="" disabled selected>Pilih Fakultas</option>
-    <option value="Fakultas Teknik">Fakultas Teknik</option>
-    <option value="Fakultas Ekonomi dan Bisnis">Fakultas Ekonomi dan Bisnis</option>
-    <option value="Fakultas Ilmu Komputer">Fakultas Ilmu Komputer</option>
-    <option value="Fakultas Sastra">Fakultas Sastra</option>
-  </select>
-  <div class="invalid-feedback">Silakan pilih Fakultas!</div>
-</div>
+                  <div class="col-12">
+                    <button class="btn btn-primary w-100" type="submit">Create Account</button>
+                  </div>
 
-<div class="col-12">
-  <label for="prodi" class="form-label">Program Studi</label>
-  <select name="prodi" id="prodi" class="form-select" required>
-    <option value="" disabled selected>Pilih Program Studi</option>
-    <option value="Informatika">Informatika</option>
-    <option value="Sistem Informasi">Sistem Informasi</option>
-    <option value="Teknik Elektro">Teknik Elektro</option>
-    <option value="Manajemen">Manajemen</option>
-    <option value="Akuntansi">Akuntansi</option>
-    <option value="Sastra Inggris">Sastra Inggris</option>
-  </select>
-  <div class="invalid-feedback">Silakan pilih Program Studi!</div>
-</div>
+                  <div class="col-12">
+                    <p class="small mb-0">Sudah punya akun? <a href="{{ route('login') }}">Login</a></p>
+                  </div>
 
-<div class="col-12">
-  <label for="role" class="form-label">Role</label>
-  <select name="role" id="role" class="form-select" required>
-    <option value="" disabled selected>Pilih Role</option>
-    <option value="mahasiswa">Mahasiswa</option>
-    <option value="dosen">Dosen</option>
-      </select>
-  <div class="invalid-feedback">Silakan pilih Role!</div>
-</div>
-
-                    <div class="col-12">
-                      <label for="yourUsername" class="form-label">Email</label>
-                      <div class="input-group has-validation">
-                        <span class="input-group-text" id="inputGroupPrepend">@</span>
-                        <input type="text" name="username" class="form-control" id="yourUsername" required>
-                        <div class="invalid-feedback">Please choose a username.</div>
-                      </div>
-                    </div>
-
-                    <div class="col-12">
-                      <label for="yourPassword" class="form-label">Password</label>
-                      <input type="password" name="password" class="form-control" id="yourPassword" required>
-                      <div class="invalid-feedback">Please enter your password!</div>
-                    </div>
-
-                    <div class="col-12">
-                      <div class="form-check">
-                        <input class="form-check-input" name="terms" type="checkbox" value="" id="acceptTerms" required>
-                        <label class="form-check-label" for="acceptTerms">I agree and accept the <a href="#">terms and conditions</a></label>
-                        <div class="invalid-feedback">You must agree before submitting.</div>
-                      </div>
-                    </div>
-                    <div class="col-12">
-                      <button class="btn btn-primary w-100" type="submit">Create Account</button>
-                    </div>
-                    <div class="col-12">
-                      <p class="small mb-0">Already have an account? <a href="login">Log in</a></p>
-                    </div>
-                  </form>
-
-                </div>
+                </form>
               </div>
-
-              <div class="credits">
-                <!-- All the links in the footer should remain intact. -->
-                <!-- You can delete the links only if you purchased the pro version. -->
-                <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                . <a href="https://bootstrapmade.com/">Elsa</a>
-              </div>
-
             </div>
+
+            <div class="credits text-center mt-2">
+              &copy; {{ date('Y') }} <a href="https://bootstrapmade.com/">Elsa</a>. All Rights Reserved.
+            </div>
+
           </div>
         </div>
-
-      </section>
-
-    </div>
-  </main><!-- End #main -->
+      </div>
+    </section>
+  </div>
+</main>
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 

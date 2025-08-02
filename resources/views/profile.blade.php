@@ -23,6 +23,18 @@
 
         <div class="card">
           <div class="card-body pt-3">
+            <!-- Display success and error messages -->
+            @if(session('status') == 'profile-updated')
+                <div class="alert alert-success" role="alert">
+                    Profile updated successfully.
+                </div>
+            @endif
+            @if(session('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{ session('error') }}
+                </div>
+            @endif
+
             <!-- Bordered Tabs -->
             <ul class="nav nav-tabs nav-tabs-bordered">
 
@@ -40,148 +52,141 @@
 
             </ul>
             <div class="tab-content pt-2">
+    <div class="tab-pane fade show active profile-overview" id="profile-overview">
+        
+        <h5 class="card-title">Profile Details</h5>
 
-              <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                <h5 class="card-title">About</h5>
-                <p class="small fst-italic">Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</p>
+        <div class="row">
+            <div class="col-lg-3 col-md-4 label">Nama Lengkap</div>
+            <div class="col-lg-9 col-md-8">{{ $user->name }}</div>
+        </div>
 
-                <h5 class="card-title">Profile Details</h5>
+        <div class="row">
+            <div class="col-lg-3 col-md-4 label">Nomor Telepon</div>
+            <div class="col-lg-9 col-md-8">{{ $user->nomor_telepon }}</div>
+        </div>
 
-                <div class="row">
-                  <div class="col-lg-3 col-md-4 label">Nama Lengkap</div>
-                  <div class="col-lg-9 col-md-8">Kevin Anderson</div>
+        <div class="row">
+            <div class="col-lg-3 col-md-4 label">Fakultas</div>
+            <div class="col-lg-9 col-md-8">{{ $user->fakultas->nama_fakultas }}</div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3 col-md-4 label">Program Studi</div>
+            <div class="col-lg-9 col-md-8">{{ $user->prodi->nama_prodi }}</div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3 col-md-4 label">Role</div>
+            <div class="col-lg-9 col-md-8">{{ $user->role }}</div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3 col-md-4 label">Email</div>
+            <div class="col-lg-9 col-md-8">{{ $user->email }}</div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+        <form method="POST" action="{{ route('profile.update') }}">
+            @csrf
+            @method('PATCH')
+
+            <div class="row mb-3">
+                <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Nama Lengkap</label>
+                <div class="col-md-8 col-lg-9">
+                    <input name="fullName" type="text" class="form-control" id="fullName" value="{{ $user->name }}">
                 </div>
+            </div>
 
-                <div class="row">
-                  <div class="col-lg-3 col-md-4 label">Nomor Telepon</div>
-                  <div class="col-lg-9 col-md-8">+62 812 3456 7890</div>
-                </div>
+            <div class="row mb-3">
+                <label for="phone" class="col-md-4 col-lg-3 col-form-label">Nomor Telepon</label>
+            <div class="col-md-8 col-lg-9">
+                <input name="nomor_telepon" type="text" class="form-control" id="nomor_telepon" value="{{ $user->nomor_telepon }}">
+            </div>
+            </div>
 
-                <div class="row">
-                  <div class="col-lg-3 col-md-4 label">Fakultas</div>
-                  <div class="col-lg-9 col-md-8">Fakultas Teknik</div>
-                </div>
-
-                <div class="row">
-                  <div class="col-lg-3 col-md-4 label">Program Studi</div>
-                  <div class="col-lg-9 col-md-8">Teknik Informatika</div>
-                </div>
-
-                <div class="row">
-                  <div class="col-lg-3 col-md-4 label">Role</div>
-                  <div class="col-lg-9 col-md-8">Mahasiswa</div>
-                </div>
-
-                <div class="row">
-                  <div class="col-lg-3 col-md-4 label">Email</div>
-                  <div class="col-lg-9 col-md-8">kevin.anderson@student.example.com</div>
-                </div>
-
-              </div>
-
-              <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-
-                <!-- Profile Edit Form -->
-                <form>
-                  
-                  <div class="row mb-3">
-                    <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Nama Lengkap</label>
-                    <div class="col-md-8 col-lg-9">
-                      <input name="fullName" type="text" class="form-control" id="fullName" value="Nama Lengkap">
-                    </div>
-                  </div>
-
-                  <div class="row mb-3">
-                    <label for="phone" class="col-md-4 col-lg-3 col-form-label">Nomor Telepon</label>
-                    <div class="col-md-8 col-lg-9">
-                      <input name="phone" type="text" class="form-control" id="phone" value="+62">
-                    </div>
-                  </div>
-
-                  <div class="row mb-3">
-                    <label for="fakultas" class="col-md-4 col-lg-3 col-form-label">Fakultas</label>
-                    <div class="col-md-8 col-lg-9">
-                      <select class="form-select" id="fakultas" name="fakultas">
+            <div class="row mb-3">
+                <label for="fakultas" class="col-md-4 col-lg-3 col-form-label">Fakultas</label>
+                <div class="col-md-8 col-lg-9">
+                    <select class="form-select" id="fakultas" name="fakultas">
                         <option value="">Pilih Fakultas</option>
-                        <option value="Teknik">Fakultas Teknik</option>
-                        <option value="Ekonomi">Fakultas Ekonomi</option>
-                        <option value="Ilmu Komputer">Fakultas Ilmu Komputer</option>
-                      </select>
-                    </div>
-                  </div>
+                        @foreach ($fakultas as $fak)
+                            <option value="{{ $fak->id }}" {{ $user->fakultas_id == $fak->id ? 'selected' : '' }}>{{ $fak->nama_fakultas }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
 
-                  <div class="row mb-3">
-                    <label for="prodi" class="col-md-4 col-lg-3 col-form-label">Program Studi</label>
-                    <div class="col-md-8 col-lg-9">
-                      <select class="form-select" id="prodi" name="prodi">
+            <div class="row mb-3">
+                <label for="prodi" class="col-md-4 col-lg-3 col-form-label">Program Studi</label>
+                <div class="col-md-8 col-lg-9">
+                    <select class="form-select" id="prodi" name="prodi">
                         <option value="">Pilih Program Studi</option>
-                        <option value="Informatika">Informatika</option>
-                        <option value="Sistem Informasi">Sistem Informasi</option>
-                        <option value="Manajemen">Manajemen</option>
-                      </select>
-                    </div>
-                  </div>
+                        @foreach ($prodis as $prodi)
+                            <option value="{{ $prodi->id }}" {{ $user->prodi_id == $prodi->id ? 'selected' : '' }}>{{ $prodi->nama_prodi }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
 
-                  <div class="row mb-3">
-                    <label for="role" class="col-md-4 col-lg-3 col-form-label">Role</label>
-                    <div class="col-md-8 col-lg-9">
-                      <select class="form-select" id="role" name="role">
+            <div class="row mb-3">
+                <label for="role" class="col-md-4 col-lg-3 col-form-label">Role</label>
+                <div class="col-md-8 col-lg-9">
+                    <select class="form-select" id="role" name="role">
                         <option value="">Pilih Role</option>
-                        <option value="Mahasiswa">Mahasiswa</option>
-                        <option value="Dosen">Dosen</option>
-                        <option value="Admin">Admin</option>
-                      </select>
-                    </div>
-                  </div>
+                        <option value="Mahasiswa" {{ $user->role == 'Mahasiswa' ? 'selected' : '' }}>Mahasiswa</option>
+                        <option value="Dosen" {{ $user->role == 'Dosen' ? 'selected' : '' }}>Dosen</option>
+                        <option value="Admin" {{ $user->role == 'Admin' ? 'selected' : '' }}>Admin</option>
+                    </select>
+                </div>
+            </div>
 
-                  <div class="row mb-3">
-                    <label for="email" class="col-md-4 col-lg-3 col-form-label">Email</label>
-                    <div class="col-md-8 col-lg-9">
-                      <input name="email" type="email" class="form-control" id="email" value="user@example.com">
-                    </div>
-                  </div>
+            <div class="row mb-3">
+                <label for="email" class="col-md-4 col-lg-3 col-form-label">Email</label>
+                <div class="col-md-8 col-lg-9">
+                    <input name="email" type="email" class="form-control" id="email" value="{{ $user->email }}">
+                </div>
+            </div>
 
-                  <div class="text-center">
-                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                  </div>
-                </form>
-                <!-- End Profile Edit Form -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+            </div>
+        </form>
+    </div>
 
-              </div>
+    <div class="tab-pane fade pt-3" id="profile-change-password">
+        <form method="POST" action="{{ route('password.update') }}">
+            @csrf
+            @method('PUT')
 
-              <div class="tab-pane fade pt-3" id="profile-change-password">
-                <!-- Change Password Form -->
-                <form>
+            <div class="row mb-3">
+                <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
+                <div class="col-md-8 col-lg-9">
+                    <input name="password" type="password" class="form-control" id="currentPassword">
+                </div>
+            </div>
 
-                  <div class="row mb-3">
-                    <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
-                    <div class="col-md-8 col-lg-9">
-                      <input name="password" type="password" class="form-control" id="currentPassword">
-                    </div>
-                  </div>
+            <div class="row mb-3">
+                <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
+                <div class="col-md-8 col-lg-9">
+                    <input name="newpassword" type="password" class="form-control" id="newPassword">
+                </div>
+            </div>
 
-                  <div class="row mb-3">
-                    <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
-                    <div class="col-md-8 col-lg-9">
-                      <input name="newpassword" type="password" class="form-control" id="newPassword">
-                    </div>
-                  </div>
+            <div class="row mb-3">
+                <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
+                <div class="col-md-8 col-lg-9">
+                    <input name="renewpassword" type="password" class="form-control" id="renewPassword">
+                </div>
+            </div>
 
-                  <div class="row mb-3">
-                    <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
-                    <div class="col-md-8 col-lg-9">
-                      <input name="renewpassword" type="password" class="form-control" id="renewPassword">
-                    </div>
-                  </div>
-
-                  <div class="text-center">
-                    <button type="submit" class="btn btn-primary">Change Password</button>
-                  </div>
-                </form><!-- End Change Password Form -->
-
-              </div>
-
-            </div><!-- End Bordered Tabs -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Change Password</button>
+            </div>
+        </form>
+    </div>
+</div><!-- End Bordered Tabs -->
 
           </div>
         </div>

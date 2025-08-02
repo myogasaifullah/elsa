@@ -15,24 +15,24 @@
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
 
   <!-- Favicons -->
-  <link href="assets/favicon.ico" rel="icon" type="image/x-icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="{{ asset('assets/favicon.ico') }}" rel="icon" type="image/x-icon">
+  <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link href="https://fonts.gstatic.com" rel="preconnect">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
-  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
-  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+  <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+  <link href="{{ asset('assets/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('assets/vendor/quill/quill.snow.css') }}" rel="stylesheet">
+  <link href="{{ asset('assets/vendor/quill/quill.bubble.css') }}" rel="stylesheet">
+  <link href="{{ asset('assets/vendor/remixicon/remixicon.css') }}" rel="stylesheet">
+  <link href="{{ asset('assets/vendor/simple-datatables/style.css') }}" rel="stylesheet">
 
   <!-- Template Main CSS File -->
-  <link href="assets/css/style.css" rel="stylesheet">
+  <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
 
   <!-- =======================================================
   * Template Name: NiceAdmin - v2.5.0
@@ -42,8 +42,8 @@
   ======================================================== -->
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </head>
 
@@ -76,159 +76,22 @@
           </a>
         </li><!-- End Search Icon-->
 
-        <!-- <li class="nav-item dropdown">
-
-          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-            <i class="bi bi-bell"></i>
-            <span class="badge bg-primary badge-number">4</span>
-          </a>
-
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-            <li class="dropdown-header">
-              You have 4 new notifications
-              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-exclamation-circle text-warning"></i>
-              <div>
-                <h4>Lorem Ipsum</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>30 min. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-x-circle text-danger"></i>
-              <div>
-                <h4>Atque rerum nesciunt</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>1 hr. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-check-circle text-success"></i>
-              <div>
-                <h4>Sit rerum fuga</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>2 hrs. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-info-circle text-primary"></i>
-              <div>
-                <h4>Dicta reprehenderit</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>4 hrs. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <li class="dropdown-footer">
-              <a href="#">Show all notifications</a>
-            </li>
-
-          </ul>
-
-        </li>
-
-        <li class="nav-item dropdown">
-
-          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-            <i class="bi bi-chat-left-text"></i>
-            <span class="badge bg-success badge-number">3</span>
-          </a>
-
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
-            <li class="dropdown-header">
-              You have 3 new messages
-              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="assets/img/messages-1.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>Maria Hudson</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>4 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="assets/img/messages-2.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>Anna Nelson</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>6 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="message-item">
-              <a href="#">
-                <img src="assets/img/messages-3.jpg" alt="" class="rounded-circle">
-                <div>
-                  <h4>David Muldon</h4>
-                  <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                  <p>8 hrs. ago</p>
-                </div>
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="dropdown-footer">
-              <a href="#">Show all messages</a>
-            </li>
-
-          </ul>
-
-        </li> -->
 
         <li class="nav-item dropdown pe-3">
 
-          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="assets/img/profile.png" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
-          </a><!-- End Profile Iamge Icon -->
+         <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+    <img src="{{ asset('assets/img/profile.png') }}" alt="Profile" class="rounded-circle">
+    <span class="d-none d-md-block dropdown-toggle ps-2">
+      {{ Auth::check() ? Auth::user()->name : 'Guest' }}
+    </span>
+  </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6>Kevin Anderson</h6>
-              <span>Web Designer</span>
-            </li>
+      <h6>{{ Auth::check() ? Auth::user()->name : 'Guest' }}</h6>
+      <span>{{ Auth::check() ? Auth::user()->email : 'Not logged in' }}</span>
+    </li>
+    
             <li>
               <hr class="dropdown-divider">
             </li>
@@ -257,12 +120,21 @@
               <hr class="dropdown-divider">
             </li>
 
-            <li>
-              <a class="dropdown-item d-flex align-items-center" href="login">
-                <i class="bi bi-box-arrow-right"></i>
-                <span>Sign Out</span>
-              </a>
-            </li>
+             @auth
+    <li>
+      <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="btn btn-danger btn-sm w-100"><i class="bi bi-box-arrow-right me-1"></i> Logout</button>
+              </form>
+    </li>
+    @else
+    <li>
+      <a class="dropdown-item d-flex align-items-center" href="{{ route('login') }}">
+        <i class="bi bi-box-arrow-in-right"></i>
+        <span>Login</span>
+      </a>
+    </li>
+    @endauth
 
           </ul><!-- End Profile Dropdown Items -->
         </li><!-- End Profile Nav -->
