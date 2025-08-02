@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->foreignId('fakultas_id')->nullable()->constrained('fakultas')->nullOnDelete();
-            $table->foreignId('prodi_id')->nullable()->constrained('prodis')->nullOnDelete();
+            $table->unsignedBigInteger('fakultas_id')->nullable();
+            $table->unsignedBigInteger('prodi_id')->nullable();
             $table->string('role')->nullable();
             $table->string('nomor_telepon')->nullable();
             $table->string('status')->default('active');

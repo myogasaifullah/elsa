@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Log;
 // routes/web.php
 
 use App\Http\Controllers\FakultasProdiController;
+use App\Http\Controllers\DosenMoocController;
+use App\Http\Controllers\StudioMatkulController;
 
 // Index
 Route::get('/fakultas-prodi', [FakultasProdiController::class, 'index'])->name('fakultas-prodi.index');
@@ -19,6 +21,22 @@ Route::delete('/fakultas/{id}', [FakultasProdiController::class, 'destroyFakulta
 Route::post('/prodi', [FakultasProdiController::class, 'storeProdi'])->name('prodi.store');
 Route::put('/prodi/{id}', [FakultasProdiController::class, 'updateProdi'])->name('prodi.update');
 Route::delete('/prodi/{id}', [FakultasProdiController::class, 'destroyProdi'])->name('prodi.destroy');
+
+// Studio & Mata Kuliah
+Route::get('/studio-matkul', [StudioMatkulController::class, 'index'])->name('studio-matkul.index');
+
+// Studio
+Route::post('/studio', [StudioMatkulController::class, 'storeStudio'])->name('studio.store');
+Route::put('/studio/{id}', [StudioMatkulController::class, 'updateStudio'])->name('studio.update');
+Route::delete('/studio/{id}', [StudioMatkulController::class, 'destroyStudio'])->name('studio.destroy');
+
+// Gambar Studio
+Route::delete('/gambar-studio/{id}', [StudioMatkulController::class, 'destroyGambarStudio'])->name('gambar-studio.destroy');
+
+// Mata Kuliah
+Route::post('/mata-kuliah', [StudioMatkulController::class, 'storeMataKuliah'])->name('mata-kuliah.store');
+Route::put('/mata-kuliah/{id}', [StudioMatkulController::class, 'updateMataKuliah'])->name('mata-kuliah.update');
+Route::delete('/mata-kuliah/{id}', [StudioMatkulController::class, 'destroyMataKuliah'])->name('mata-kuliah.destroy');
 
 Route::get('/', function () {
     return view('index');
@@ -41,13 +59,18 @@ Route::put('/verifikasi/status/{id}', [App\Http\Controllers\UserController::clas
 
 
 
-Route::get('/dosen-mooc', function () {
-    return view('akademik/dosen-mooc');
-});
+// Dosen & MOOC Routes
+Route::get('/dosen-mooc', [DosenMoocController::class, 'index'])->name('dosen-mooc.index');
 
-Route::get('/studio-matkul', function () {
-    return view('akademik/studio-matkul');
-});
+// Dosen Routes
+Route::post('/dosen', [DosenMoocController::class, 'storeDosen'])->name('dosen.store');
+Route::put('/dosen/{dosen}', [DosenMoocController::class, 'updateDosen'])->name('dosen.update');
+Route::delete('/dosen/{dosen}', [DosenMoocController::class, 'destroyDosen'])->name('dosen.destroy');
+
+// MOOC Routes
+Route::post('/mooc', [DosenMoocController::class, 'storeMooc'])->name('mooc.store');
+Route::put('/mooc/{mooc}', [DosenMoocController::class, 'updateMooc'])->name('mooc.update');
+Route::delete('/mooc/{mooc}', [DosenMoocController::class, 'destroyMooc'])->name('mooc.destroy');
 
 Route::get('/jadwal', function () {
     return view('jadwal');
