@@ -1264,3 +1264,37 @@ h6 {
     object-fit: cover;
     object-position: center;
   }
+
+   .calendar-wrapper {
+    display: flex;
+    gap: 24px;
+  }
+
+  .calendar-sidebar {
+    width: 260px;
+  }
+
+  .calendar-content {
+    width: 900px;
+  }
+
+  .event-filters label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    gap: 8px;
+  }
+
+  .event-filters input[type="checkbox"] {
+    transform: scale(1.2);
+  }
+
+  .fc {
+    background: white;
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .mini-calendar {
+    padding: 8px 10px;
+  }
