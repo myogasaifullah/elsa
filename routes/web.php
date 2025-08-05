@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 use App\Http\Controllers\FakultasProdiController;
 use App\Http\Controllers\DosenMoocController;
+use App\Http\Controllers\JadwalBookingController;
 use App\Http\Controllers\StudioMatkulController;
 
 // Index
@@ -72,8 +73,11 @@ Route::post('/mooc', [DosenMoocController::class, 'storeMooc'])->name('mooc.stor
 Route::put('/mooc/{mooc}', [DosenMoocController::class, 'updateMooc'])->name('mooc.update');
 Route::delete('/mooc/{mooc}', [DosenMoocController::class, 'destroyMooc'])->name('mooc.destroy');
 
-Route::get('/jadwal', function () {
-    return view('jadwal');
+Route::middleware('auth')->group(function () {
+    Route::get('/jadwal', [JadwalBookingController::class, 'index'])->name('jadwal.index');
+    Route::post('/jadwal', [JadwalBookingController::class, 'store'])->name('jadwal.store');
+    Route::put('/jadwal/{jadwal}', [JadwalBookingController::class, 'update'])->name('jadwal.update');
+    Route::delete('/jadwal/{jadwal}', [JadwalBookingController::class, 'destroy'])->name('jadwal.destroy');
 });
 
 Route::get('/acc', function () {
@@ -122,6 +126,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::put('/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('password.update');
-   });
+});
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

@@ -1,6 +1,6 @@
 @extends('layout.header')
 
-@section('title', 'Dashboard')
+@section('title', 'Booking Jadwal')
 
 @include('layout.sidebar')
 
@@ -17,33 +17,12 @@
     </nav>
   </div>
 
-  <div class="card p-3">
-    <div class="calendar-wrapper">
-      <!-- Sidebar -->
-      <div class="calendar-sidebar">
-        <!-- Mini Calendar -->
-        <div class="card mb-3">
-          <div class="mini-calendar" id="mini-calendar"></div>
-        </div>
-
-        <!-- Filter -->
-        <div class="card p-3">
-          <h6 class="mb-2">Event Filters</h6>
-          <div class="event-filters">
-            <label><input type="checkbox" checked /> Semua</label>
-            <label><input type="checkbox" checked style="accent-color: red;" /> MOOC</label>
-            <label><input type="checkbox" checked style="accent-color: green;" /> Pembelajaran</label>
-            <label><input type="checkbox" checked style="accent-color: orange;" /> Lomba</label>
-          </div>
-        </div>
-      </div>
-
-      <!-- Main Calendar -->
-      <div class="calendar-content">
-        <div id="calendar"></div>
-      </div>
-    </div>
+  @if(session('success'))
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ session('success') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
+  @endif
 
   <div class="col-12">
     <div class="card recent-sales overflow-auto">
@@ -61,83 +40,112 @@
               <th scope="col">#</th>
               <th scope="col">Tanggal</th>
               <th scope="col">Jam</th>
-              <th scope="col">Nama</th>
-              <th scope="col">Email</th>
-              <th scope="col">Telpon</th>
-              <th scope="col">Fakultas</th>
-              <th scope="col">Prodi</th>
               <th scope="col">Jenis Kategori</th>
-              <th scope="col">Dosen</th>
               <th scope="col">Kategori MOOC</th>
               <th scope="col">Studio</th>
               <th scope="col">Mata Kuliah</th>
-              <th scope="col">Judul Course</th>
-              <th scope="col">Status</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>31/05/03</td>
-              <td>12.00</td>
-              <td>Yosa</td>
-              <td>yosa@gmail.com</td>
-              <td>089643920595</td>
-              <td>FTIK</td>
-              <td>IF</td>
-              <td>Lomba</td>
-              <td>Dr. Andi Maulana</td>
-              <td>MOOC Mandiri</td>
-              <td>Studio 1</td>
-              <td>Pemrograman</td>
-              <td>Methamorz</td>
-              <td>
-                <span class="badge bg-warning text-dark">
-                  <i class="bi bi-hourglass-split me-1"></i> Pending
-                </span>
-              </td>
-              <td>
-                <button class="btn btn-sm btn-primary btn-editJadwal" data-bs-toggle="modal" data-bs-target="#modalEditjadwal">Edit</button>
-                <button class="btn btn-sm btn-danger btn-hapusJadwal">Hapus</button>
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>01/06/03</td>
-              <td>09.00</td>
-              <td>Putri</td>
-              <td>putri@gmail.com</td>
-              <td>082199887766</td>
-              <td>FTIK</td>
-              <td>TS</td>
-              <td>Mooc</td>
-              <td>Dr. Andi Maulana</td>
-              <td>MOOC Mandiri</td>
-              <td>Studio 2</td>
-              <td>Sistem Informasi</td>
-              <td>Methamorz</td>
-              <td>
-                <span class="badge bg-success">
-                  <i class="bi bi-calendar-check me-1"></i> Schedule
-                </span>
-              </td>
-              <td>
-                <button class="btn btn-sm btn-primary btn-editJadwal" data-bs-toggle="modal" data-bs-target="#modalEditjadwal">Edit</button>
-                <button class="btn btn-sm btn-danger btn-hapusJadwal">Hapus</button>
-              </td>
-            </tr>
-          </tbody>
+            <th scope="col">Judul Course</th>
+            <th scope="col">Status</th>
+            <th scope="col">User Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Telepon</th>
+            <th scope="col">Fakultas</th>
+            <th scope="col">Prodi</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @forelse($jadwals as $index => $jadwal)
+          <tr>
+            <th scope="row">{{ $index + 1 }}</th>
+            <td>{{ \Carbon\Carbon::parse($jadwal->tanggal)->format('d/m/Y') }}</td>
+            <td>{{ $jadwal->jam }}</td>
+            <td>{{ $jadwal->jenis_kategori }}</td>
+            <td>{{ $jadwal->kategori_mooc ?? '-' }}</td>
+            <td>{{ 'Studio ' . $jadwal->studio }}</td>
+            <td>{{ $jadwal->nama_mata_kuliah }}</td>
+            <td>{{ $jadwal->judul_course }}</td>
+            <td>
+              @if($jadwal->status == 'pending')
+              <span class="badge bg-warning text-dark">
+                <i class="bi bi-hourglass-split me-1"></i> Pending
+              </span>
+              @elseif($jadwal->status == 'schedule')
+              <span class="badge bg-success">
+                <i class="bi bi-calendar-check me-1"></i> Schedule
+              </span>
+              @else
+              <span class="badge bg-secondary">{{ $jadwal->status }}</span>
+              @endif
+            </td>
+            <td>{{ $jadwal->user->name ?? '-' }}</td>
+            <td>{{ $jadwal->user->email ?? '-' }}</td>
+            <td>{{ $jadwal->user->nomor_telepon ?? '-' }}</td>
+            <td>{{ $jadwal->user->fakultas->nama_fakultas ?? '-' }}</td>
+            <td>{{ $jadwal->user->prodi->nama_prodi ?? '-' }}</td>
+            <td>
+              <button class="btn btn-sm btn-primary btn-editJadwal"
+                data-id="{{ $jadwal->id }}"
+                data-tanggal="{{ $jadwal->tanggal }}"
+                data-jam="{{ $jadwal->jam }}"
+                data-jenis="{{ $jadwal->jenis_kategori }}"
+                data-kategori="{{ $jadwal->kategori_mooc }}"
+                data-studio="{{ $jadwal->studio }}"
+                data-matkul="{{ $jadwal->nama_mata_kuliah }}"
+                data-judul="{{ $jadwal->judul_course }}"
+                data-bs-toggle="modal"
+                data-bs-target="#modalEditJadwal">
+                Edit
+              </button>
+              <form action="{{ route('jadwal.destroy', $jadwal->id) }}" method="POST" class="d-inline" id="deleteForm{{ $jadwal->id }}">
+                @csrf
+                @method('DELETE')
+                <button type="button" class="btn btn-sm btn-danger btn-delete" data-id="{{ $jadwal->id }}">
+                  Hapus
+                </button>
+              </form>
+            </td>
+          </tr>
+          @empty
+          <tr>
+            <td colspan="15" class="text-center">Tidak ada jadwal booking</td>
+          </tr>
+          @endforelse
+        </tbody>
         </table>
       </div>
     </div>
   </div>
 
+  @include('components.delete-confirmation-modal')
 
-  <div class="modal fade" id="modalTambahjadwal" tabindex="-1" aria-labelledby="modalTambahJadwalLabel" aria-hidden="true">
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      let deleteFormId = null;
+      const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+      const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+
+      document.querySelectorAll('.btn-delete').forEach(button => {
+        button.addEventListener('click', function() {
+          deleteFormId = 'deleteForm' + this.dataset.id;
+          deleteModal.show();
+        });
+      });
+
+      confirmDeleteButton.addEventListener('click', function() {
+        if (deleteFormId) {
+          document.getElementById(deleteFormId).submit();
+        }
+      });
+    });
+  </script>
+
+  <!-- Modal Tambah Jadwal -->
+  <div class="modal fade" id="modalTambahJadwal" tabindex="-1" aria-labelledby="modalTambahJadwalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form id="formTambahJadwal">
+        <form action="{{ route('jadwal.store') }}" method="POST">
+          @csrf
           <div class="modal-header">
             <h5 class="modal-title">Tambah Jadwal</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
@@ -145,11 +153,11 @@
           <div class="modal-body">
             <div class="mb-3">
               <label class="form-label">Tanggal</label>
-              <input type="date" class="form-control" id="tanggal">
+              <input type="date" class="form-control" name="tanggal" required>
             </div>
             <div class="mb-3">
               <label class="form-label">Jam</label>
-              <select class="form-select" id="jam">
+              <select class="form-select" name="jam" required>
                 <option selected disabled>Pilih Jam</option>
                 <option value="09.00 WIB - 11.00 WIB">09.00 WIB - 11.00 WIB</option>
                 <option value="11.00 WIB - 13.00 WIB">11.00 WIB - 13.00 WIB</option>
@@ -160,24 +168,26 @@
             </div>
             <div class="mb-3">
               <label class="form-label">Jenis Kategori</label>
-              <select class="form-select" id="jenisKategori">
+              <select class="form-select" name="jenis_kategori" id="jenisKategori" required>
                 <option selected disabled>Pilih Kategori</option>
-                <option value="Mooc">Mooc</option>
                 <option value="Lomba">Lomba</option>
-                <option value="Pembelajaran">Pembelajaran</option>
+                <option value="Marketing">Marketing</option>
+                <option value="E-Learning">E-Learning</option>
+                <option value="Mooc">Mooc</option>
               </select>
             </div>
             <div class="mb-3 d-none" id="kategoriMoocGroup">
               <label class="form-label">Kategori MOOC</label>
-              <select class="form-select" id="kategoriMooc">
+              <select class="form-select" name="kategori_mooc" id="kategoriMooc">
                 <option selected disabled>Pilih Kategori MOOC</option>
-                <option value="MOOC Nasional">MOOC Nasional</option>
-                <option value="MOOC Mandiri">MOOC Mandiri</option>
+                @foreach($moocs as $mooc)
+                <option value="{{ $mooc->judul_mooc }}">{{ $mooc->judul_mooc }}</option>
+                @endforeach
               </select>
             </div>
             <div class="mb-3">
               <label class="form-label">Studio</label>
-              <select class="form-select" id="studio">
+              <select class="form-select" name="studio" required>
                 <option selected disabled>Pilih Studio</option>
                 <option value="1">Studio 1</option>
                 <option value="2">Studio 2</option>
@@ -185,11 +195,16 @@
             </div>
             <div class="mb-3">
               <label class="form-label">Nama Mata Kuliah</label>
-              <input type="text" class="form-control" id="namaJadwal" placeholder="Contoh: Pemrograman Web">
+              <select class="form-select" name="nama_mata_kuliah" required>
+                <option selected disabled>Pilih Mata Kuliah</option>
+                @foreach($mataKuliahs as $mataKuliah)
+                <option value="{{ $mataKuliah->nama_mata_kuliah }}">{{ $mataKuliah->nama_mata_kuliah }}</option>
+                @endforeach
+              </select>
             </div>
             <div class="mb-3">
               <label class="form-label">Judul Course</label>
-              <input type="text" class="form-control" id="judul">
+              <input type="text" class="form-control" name="judul_course" required>
             </div>
           </div>
           <div class="modal-footer">
@@ -201,23 +216,26 @@
     </div>
   </div>
 
+  <!-- Modal Edit Jadwal -->
   <div class="modal fade" id="modalEditJadwal" tabindex="-1" aria-labelledby="modalEditJadwalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form id="formEditJadwal">
+        <form action="" method="POST" id="formEditJadwal">
+          @csrf
+          @method('PUT')
           <div class="modal-header">
             <h5 class="modal-title">Edit Jadwal</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
           </div>
           <div class="modal-body">
-            <input type="hidden" id="editJadwalId">
+            <input type="hidden" name="id" id="editId">
             <div class="mb-3">
               <label class="form-label">Tanggal</label>
-              <input type="date" class="form-control" id="editTanggal">
+              <input type="date" class="form-control" name="tanggal" id="editTanggal" required>
             </div>
             <div class="mb-3">
               <label class="form-label">Jam</label>
-              <select class="form-select" id="editJam">
+              <select class="form-select" name="jam" id="editJam" required>
                 <option selected disabled>Pilih Jam</option>
                 <option value="09.00 WIB - 11.00 WIB">09.00 WIB - 11.00 WIB</option>
                 <option value="11.00 WIB - 13.00 WIB">11.00 WIB - 13.00 WIB</option>
@@ -228,7 +246,7 @@
             </div>
             <div class="mb-3">
               <label class="form-label">Jenis Kategori</label>
-              <select class="form-select" id="editJenisKategori">
+              <select class="form-select" name="jenis_kategori" id="editJenisKategori" required>
                 <option selected disabled>Pilih Kategori</option>
                 <option value="Mooc">Mooc</option>
                 <option value="Lomba">Lomba</option>
@@ -237,15 +255,16 @@
             </div>
             <div class="mb-3 d-none" id="editKategoriMoocGroup">
               <label class="form-label">Kategori MOOC</label>
-              <select class="form-select" id="editKategoriMooc">
+              <select class="form-select" name="kategori_mooc" id="editKategoriMooc">
                 <option selected disabled>Pilih Kategori MOOC</option>
-                <option value="MOOC Nasional">MOOC Nasional</option>
-                <option value="MOOC Mandiri">MOOC Mandiri</option>
+                @foreach($moocs as $mooc)
+                <option value="{{ $mooc->judul_mooc }}">{{ $mooc->judul_mooc }}</option>
+                @endforeach
               </select>
             </div>
             <div class="mb-3">
               <label class="form-label">Studio</label>
-              <select class="form-select" id="editStudio">
+              <select class="form-select" name="studio" id="editStudio" required>
                 <option selected disabled>Pilih Studio</option>
                 <option value="1">Studio 1</option>
                 <option value="2">Studio 2</option>
@@ -253,16 +272,21 @@
             </div>
             <div class="mb-3">
               <label class="form-label">Nama Mata Kuliah</label>
-              <input type="text" class="form-control" id="editNamaJadwal" placeholder="Contoh: Pemrograman Web">
+              <select class="form-select" name="nama_mata_kuliah" id="editNamaMataKuliah" required>
+                <option selected disabled>Pilih Mata Kuliah</option>
+                @foreach($mataKuliahs as $mataKuliah)
+                <option value="{{ $mataKuliah->nama_mata_kuliah }}">{{ $mataKuliah->nama_mata_kuliah }}</option>
+                @endforeach
+              </select>
             </div>
             <div class="mb-3">
               <label class="form-label">Judul Course</label>
-              <input type="text" class="form-control" id="editJudul">
+              <input type="text" class="form-control" name="judul_course" id="editJudulCourse" required>
             </div>
           </div>
           <div class="modal-footer">
-            <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-            <button class="btn btn-primary" type="submit">Simpan Perubahan</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
           </div>
         </form>
       </div>
@@ -273,6 +297,7 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    // Handle Kategori MOOC visibility
     const jenisKategori = document.getElementById('jenisKategori');
     const kategoriMoocGroup = document.getElementById('kategoriMoocGroup');
 
@@ -280,7 +305,7 @@
     const editKategoriMoocGroup = document.getElementById('editKategoriMoocGroup');
 
     // Tambah Jadwal
-    jenisKategori.addEventListener('change', function() {
+    jenisKategori?.addEventListener('change', function() {
       if (this.value === 'Mooc') {
         kategoriMoocGroup.classList.remove('d-none');
       } else {
@@ -289,151 +314,48 @@
     });
 
     // Edit Jadwal
-    editJenisKategori.addEventListener('change', function() {
+    editJenisKategori?.addEventListener('change', function() {
       if (this.value === 'Mooc') {
         editKategoriMoocGroup.classList.remove('d-none');
       } else {
         editKategoriMoocGroup.classList.add('d-none');
       }
     });
-  });
-</script>
 
-
-@include('layout.footer')
-
-
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Tombol Edit
+    // Handle Edit Button Click
     document.querySelectorAll('.btn-editJadwal').forEach(btn => {
       btn.addEventListener('click', function() {
-        // Simulasi isi data ke modal edit
-        document.getElementById('editFakultasJadwal').value = 'FTIK';
-        document.getElementById('editProdiJadwal').value = 'IF';
-        document.getElementById('editNamaJadwal').value = 'Algoritma dan Pemrograman';
-        new bootstrap.Modal(document.getElementById('modalEditJadwal')).show();
-      });
-    });
+        const id = this.dataset.id;
+        const tanggal = this.dataset.tanggal;
+        const jam = this.dataset.jam;
+        const jenis = this.dataset.jenis;
+        const kategori = this.dataset.kategori;
+        const studio = this.dataset.studio;
+        const matkul = this.dataset.matkul;
+        const judul = this.dataset.judul;
 
-    // Tombol Hapus
-    document.querySelectorAll('.btn-hapusJadwal').forEach(btn => {
-      btn.addEventListener('click', function() {
-        Swal.fire({
-          title: 'Hapus Booking?',
-          text: 'Data Booking akan dihapus permanen.',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Ya, Hapus',
-          cancelButtonText: 'Batal'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            Swal.fire('Dihapus!', 'Data Booking telah dihapus.', 'success');
-            // Tambahkan logika hapus di sini (AJAX atau hapus baris)
-          }
-        });
+        // Set form action
+        document.getElementById('formEditJadwal').action = `/jadwal/${id}`;
+
+        // Fill form fields
+        document.getElementById('editId').value = id;
+        document.getElementById('editTanggal').value = tanggal;
+        document.getElementById('editJam').value = jam;
+        document.getElementById('editJenisKategori').value = jenis;
+        document.getElementById('editStudio').value = studio;
+        document.getElementById('editNamaMataKuliah').value = matkul;
+        document.getElementById('editJudulCourse').value = judul;
+
+        // Handle Kategori MOOC
+        if (jenis === 'Mooc') {
+          editKategoriMoocGroup.classList.remove('d-none');
+          document.getElementById('editKategoriMooc').value = kategori || '';
+        } else {
+          editKategoriMoocGroup.classList.add('d-none');
+        }
       });
     });
   });
 </script>
 
-<!-- ======================== FullCalendar & Datepicker CDN ======================== -->
-<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
-<link href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/css/datepicker.min.css" rel="stylesheet" />
-
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/js/datepicker-full.min.js"></script>
-
-<!-- ======================== Style (bisa pindahkan ke CSS file utama) ======================== -->
-
-<style>
-  .calendar-wrapper {
-    display: flex;
-    gap: 24px;
-  }
-
-  .calendar-sidebar {
-    width: 260px;
-  }
-
-  .calendar-content {
-    width: 900px;
-    /* ubah sesuai kebutuhan */
-  }
-
-  .event-filters label {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-    gap: 8px;
-  }
-
-  .event-filters input[type="checkbox"] {
-    transform: scale(1.2);
-  }
-
-  .fc {
-    background: white;
-    padding: 16px;
-    border-radius: 12px;
-  }
-
-  .mini-calendar {
-    padding: 8px 10px;
-  }
-
-  .add-event-btn {
-    width: 100%;
-    margin-bottom: 16px;
-    font-weight: 500;
-  }
-</style>
-
-<!-- ======================== Init Script ======================== -->
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Inisialisasi FullCalendar
-    const calendarEl = document.getElementById('calendar');
-    if (calendarEl) {
-      const calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        height: 530, // atur tinggi kalender
-        headerToolbar: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
-        },
-        events: [{
-            title: 'Booking Studio 1',
-            start: '2025-07-20T09:00:00',
-            color: '#4ade80'
-          },
-          {
-            title: 'Pembelajaran Multimedia',
-            start: '2025-07-22T13:00:00',
-            end: '2025-07-22T15:00:00',
-            color: '#facc15'
-          },
-          {
-            title: 'Lomba Nasional',
-            start: '2025-07-25',
-            color: '#fb923c'
-          }
-        ]
-      });
-
-      calendar.render();
-    }
-
-    // Inisialisasi Mini Calendar
-    const miniCal = document.getElementById('mini-calendar');
-    if (miniCal) {
-      new Datepicker(miniCal, {
-        calendarInline: true,
-        todayHighlight: true,
-        format: 'yyyy-mm-dd'
-      });
-    }
-  });
-</script>
+@include('layout.footer')
