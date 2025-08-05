@@ -44,74 +44,74 @@
               <th scope="col">Kategori MOOC</th>
               <th scope="col">Studio</th>
               <th scope="col">Mata Kuliah</th>
-            <th scope="col">Judul Course</th>
-            <th scope="col">Status</th>
-            <th scope="col">User Name</th>
-            <th scope="col">Email</th>
-            <th scope="col">Telepon</th>
-            <th scope="col">Fakultas</th>
-            <th scope="col">Prodi</th>
-            <th scope="col">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          @forelse($jadwals as $index => $jadwal)
-          <tr>
-            <th scope="row">{{ $index + 1 }}</th>
-            <td>{{ \Carbon\Carbon::parse($jadwal->tanggal)->format('d/m/Y') }}</td>
-            <td>{{ $jadwal->jam }}</td>
-            <td>{{ $jadwal->jenis_kategori }}</td>
-            <td>{{ $jadwal->kategori_mooc ?? '-' }}</td>
-            <td>{{ 'Studio ' . $jadwal->studio }}</td>
-            <td>{{ $jadwal->nama_mata_kuliah }}</td>
-            <td>{{ $jadwal->judul_course }}</td>
-            <td>
-              @if($jadwal->status == 'pending')
-              <span class="badge bg-warning text-dark">
-                <i class="bi bi-hourglass-split me-1"></i> Pending
-              </span>
-              @elseif($jadwal->status == 'schedule')
-              <span class="badge bg-success">
-                <i class="bi bi-calendar-check me-1"></i> Schedule
-              </span>
-              @else
-              <span class="badge bg-secondary">{{ $jadwal->status }}</span>
-              @endif
-            </td>
-            <td>{{ $jadwal->user->name ?? '-' }}</td>
-            <td>{{ $jadwal->user->email ?? '-' }}</td>
-            <td>{{ $jadwal->user->nomor_telepon ?? '-' }}</td>
-            <td>{{ $jadwal->user->fakultas->nama_fakultas ?? '-' }}</td>
-            <td>{{ $jadwal->user->prodi->nama_prodi ?? '-' }}</td>
-            <td>
-              <button class="btn btn-sm btn-primary btn-editJadwal"
-                data-id="{{ $jadwal->id }}"
-                data-tanggal="{{ $jadwal->tanggal }}"
-                data-jam="{{ $jadwal->jam }}"
-                data-jenis="{{ $jadwal->jenis_kategori }}"
-                data-kategori="{{ $jadwal->kategori_mooc }}"
-                data-studio="{{ $jadwal->studio }}"
-                data-matkul="{{ $jadwal->nama_mata_kuliah }}"
-                data-judul="{{ $jadwal->judul_course }}"
-                data-bs-toggle="modal"
-                data-bs-target="#modalEditJadwal">
-                Edit
-              </button>
-              <form action="{{ route('jadwal.destroy', $jadwal->id) }}" method="POST" class="d-inline" id="deleteForm{{ $jadwal->id }}">
-                @csrf
-                @method('DELETE')
-                <button type="button" class="btn btn-sm btn-danger btn-delete" data-id="{{ $jadwal->id }}">
-                  Hapus
+              <th scope="col">Judul Course</th>
+              <th scope="col">Status</th>
+              <th scope="col">User Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Telepon</th>
+              <th scope="col">Fakultas</th>
+              <th scope="col">Prodi</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @forelse($jadwals as $index => $jadwal)
+            <tr>
+              <th scope="row">{{ $index + 1 }}</th>
+              <td>{{ \Carbon\Carbon::parse($jadwal->tanggal)->format('d/m/Y') }}</td>
+              <td>{{ $jadwal->jam }}</td>
+              <td>{{ $jadwal->jenis_kategori }}</td>
+              <td>{{ $jadwal->kategori_mooc ?? '-' }}</td>
+              <td>{{ 'Studio ' . $jadwal->studio }}</td>
+              <td>{{ $jadwal->nama_mata_kuliah }}</td>
+              <td>{{ $jadwal->judul_course }}</td>
+              <td>
+                @if($jadwal->status == 'pending')
+                <span class="badge bg-warning text-dark">
+                  <i class="bi bi-hourglass-split me-1"></i> Pending
+                </span>
+                @elseif($jadwal->status == 'schedule')
+                <span class="badge bg-success">
+                  <i class="bi bi-calendar-check me-1"></i> Schedule
+                </span>
+                @else
+                <span class="badge bg-secondary">{{ $jadwal->status }}</span>
+                @endif
+              </td>
+              <td>{{ $jadwal->user->name ?? '-' }}</td>
+              <td>{{ $jadwal->user->email ?? '-' }}</td>
+              <td>{{ $jadwal->user->nomor_telepon ?? '-' }}</td>
+              <td>{{ $jadwal->user->fakultas->nama_fakultas ?? '-' }}</td>
+              <td>{{ $jadwal->user->prodi->nama_prodi ?? '-' }}</td>
+              <td>
+                <button class="btn btn-sm btn-primary btn-editJadwal"
+                  data-id="{{ $jadwal->id }}"
+                  data-tanggal="{{ $jadwal->tanggal }}"
+                  data-jam="{{ $jadwal->jam }}"
+                  data-jenis="{{ $jadwal->jenis_kategori }}"
+                  data-kategori="{{ $jadwal->kategori_mooc }}"
+                  data-studio="{{ $jadwal->studio }}"
+                  data-matkul="{{ $jadwal->nama_mata_kuliah }}"
+                  data-judul="{{ $jadwal->judul_course }}"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalEditJadwal">
+                  Edit
                 </button>
-              </form>
-            </td>
-          </tr>
-          @empty
-          <tr>
-            <td colspan="15" class="text-center">Tidak ada jadwal booking</td>
-          </tr>
-          @endforelse
-        </tbody>
+                <form action="{{ route('jadwal.destroy', $jadwal->id) }}" method="POST" class="d-inline" id="deleteForm{{ $jadwal->id }}">
+                  @csrf
+                  @method('DELETE')
+                  <button type="button" class="btn btn-sm btn-danger btn-delete" data-id="{{ $jadwal->id }}">
+                    Hapus
+                  </button>
+                </form>
+              </td>
+            </tr>
+            @empty
+            <tr>
+              <td colspan="15" class="text-center">Tidak ada jadwal booking</td>
+            </tr>
+            @endforelse
+          </tbody>
         </table>
       </div>
     </div>
@@ -144,7 +144,7 @@
   <div class="modal fade" id="modalTambahJadwal" tabindex="-1" aria-labelledby="modalTambahJadwalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form action="{{ route('jadwal.store') }}" method="POST">
+        <form action="{{ route('jadwal.store') }}" method="POST" id="formTambahJadwal">
           @csrf
           <div class="modal-header">
             <h5 class="modal-title">Tambah Jadwal</h5>
@@ -153,11 +153,11 @@
           <div class="modal-body">
             <div class="mb-3">
               <label class="form-label">Tanggal</label>
-              <input type="date" class="form-control" name="tanggal" required>
+              <input type="date" class="form-control" name="tanggal" id="tambahTanggal" required>
             </div>
             <div class="mb-3">
               <label class="form-label">Jam</label>
-              <select class="form-select" name="jam" required>
+              <select class="form-select" name="jam" id="tambahJam" required>
                 <option selected disabled>Pilih Jam</option>
                 <option value="09.00 WIB - 11.00 WIB">09.00 WIB - 11.00 WIB</option>
                 <option value="11.00 WIB - 13.00 WIB">11.00 WIB - 13.00 WIB</option>
@@ -165,6 +165,10 @@
                 <option value="15.00 WIB - 17.00 WIB">15.00 WIB - 17.00 WIB</option>
                 <option value="17.00 WIB - 19.00 WIB">17.00 WIB - 19.00 WIB</option>
               </select>
+            </div>
+            <div class="alert alert-danger d-none" id="errorTambahJumat" role="alert">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>
+              Maaf, pada hari Jumat jam 11.00 WIB - 13.00 WIB tidak dapat digunakan karena waktu sholat Jumat.
             </div>
             <div class="mb-3">
               <label class="form-label">Jenis Kategori</label>
@@ -244,6 +248,10 @@
                 <option value="17.00 WIB - 19.00 WIB">17.00 WIB - 19.00 WIB</option>
               </select>
             </div>
+            <div class="alert alert-danger d-none" id="errorEditJumat" role="alert">
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>
+              Maaf, pada hari Jumat jam 11.00 WIB - 13.00 WIB tidak dapat digunakan karena waktu sholat Jumat.
+            </div>
             <div class="mb-3">
               <label class="form-label">Jenis Kategori</label>
               <select class="form-select" name="jenis_kategori" id="editJenisKategori" required>
@@ -295,7 +303,7 @@
 
 </main>
 
-<script>
+  <script>
   document.addEventListener('DOMContentLoaded', function() {
     // Handle Kategori MOOC visibility
     const jenisKategori = document.getElementById('jenisKategori');
@@ -303,6 +311,64 @@
 
     const editJenisKategori = document.getElementById('editJenisKategori');
     const editKategoriMoocGroup = document.getElementById('editKategoriMoocGroup');
+
+    // Friday prayer time validation function
+    function validateFridayPrayerTime(date, timeSlot) {
+      if (!date || !timeSlot) return true;
+
+      const selectedDate = new Date(date);
+      const dayOfWeek = selectedDate.getDay(); // 5 = Friday
+
+      // Check if it's Friday and time slot is 11:00-13:00 WIB
+      if (dayOfWeek === 5 && timeSlot === '11.00 WIB - 13.00 WIB') {
+        return false;
+      }
+
+      return true;
+    }
+
+    // Show/hide error messages
+    function showError(elementId, show) {
+      const errorElement = document.getElementById(elementId);
+      if (errorElement) {
+        if (show) {
+          errorElement.classList.remove('d-none');
+        } else {
+          errorElement.classList.add('d-none');
+        }
+      }
+    }
+
+    // Setup validation for forms
+    function setupFormValidation(formId, dateId, timeId, errorId) {
+      const form = document.getElementById(formId);
+      const dateInput = document.getElementById(dateId);
+      const timeSelect = document.getElementById(timeId);
+
+      if (!form || !dateInput || !timeSelect) return;
+
+      // Real-time validation
+      dateInput.addEventListener('change', function() {
+        showError(errorId, !validateFridayPrayerTime(this.value, timeSelect.value));
+      });
+
+      timeSelect.addEventListener('change', function() {
+        showError(errorId, !validateFridayPrayerTime(dateInput.value, this.value));
+      });
+
+      // Form submission validation
+      form.addEventListener('submit', function(e) {
+        if (!validateFridayPrayerTime(dateInput.value, timeSelect.value)) {
+          e.preventDefault();
+          showError(errorId, true);
+          return false;
+        }
+      });
+    }
+
+    // Setup validation for both forms
+    setupFormValidation('formTambahJadwal', 'tambahTanggal', 'tambahJam', 'errorTambahJumat');
+    setupFormValidation('formEditJadwal', 'editTanggal', 'editJam', 'errorEditJumat');
 
     // Tambah Jadwal
     jenisKategori?.addEventListener('change', function() {
@@ -346,6 +412,9 @@
         document.getElementById('editNamaMataKuliah').value = matkul;
         document.getElementById('editJudulCourse').value = judul;
 
+        // Clear any previous error messages
+        showError('errorEditJumat', false);
+
         // Handle Kategori MOOC
         if (jenis === 'Mooc') {
           editKategoriMoocGroup.classList.remove('d-none');
@@ -355,7 +424,28 @@
         }
       });
     });
+
+    // Handle delete confirmation
+    let deleteFormId = null;
+    const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+    const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+
+    document.querySelectorAll('.btn-delete').forEach(button => {
+      button.addEventListener('click', function() {
+        deleteFormId = 'deleteForm' + this.dataset.id;
+        deleteModal.show();
+      });
+    });
+
+    confirmDeleteButton.addEventListener('click', function() {
+      if (deleteFormId) {
+        document.getElementById(deleteFormId).submit();
+      }
+    });
   });
 </script>
+                    <
+                    question > Should I proceed with implementing the Friday prayer time validation
+                    for both modals ? The validation will prevent booking on Fridays from 11 : 00 - 13: 00 WIB and show an appropriate error message. < /question>
 
-@include('layout.footer')
+                    @include('layout.footer')
