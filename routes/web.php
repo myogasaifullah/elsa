@@ -80,9 +80,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/jadwal/{jadwal}', [JadwalBookingController::class, 'destroy'])->name('jadwal.destroy');
 });
 
-Route::get('/acc', function () {
-    return view('booking/acc');
-});
+Route::get('/acc', [App\Http\Controllers\BookingController::class, 'acc'])->name('booking.acc');
+Route::post('/booking/{booking}/approve', [App\Http\Controllers\BookingController::class, 'approve'])->name('booking.approve');
+Route::post('/booking/{booking}/reject', [App\Http\Controllers\BookingController::class, 'reject'])->name('booking.reject');
 
 Route::get('/booking', function () {
     return view('booking/booking');

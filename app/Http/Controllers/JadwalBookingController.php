@@ -10,10 +10,11 @@ class JadwalBookingController extends Controller
 {
     public function index()
     {
-        $jadwals = JadwalBooking::with(['user.fakultas', 'user.prodi'])->latest()->get();
+        $jadwals = JadwalBooking::with(['user.fakultas', 'user.prodi', 'dosen'])->latest()->get();
         $moocs = \App\Models\Mooc::all();
         $mataKuliahs = \App\Models\MataKuliah::all();
-        return view('jadwal', compact('jadwals', 'moocs', 'mataKuliahs'));
+        $dosens = \App\Models\Dosen::all();
+        return view('jadwal', compact('jadwals', 'moocs', 'mataKuliahs', 'dosens'));
     }
 
     public function store(Request $request)
@@ -26,6 +27,7 @@ class JadwalBookingController extends Controller
             'studio' => 'required|string',
             'nama_mata_kuliah' => 'required|string|max:255',
             'judul_course' => 'required|string|max:255',
+            'dosen_id' => 'required|exists:dosens,id',
         ]);
 
         JadwalBooking::create([
@@ -37,6 +39,7 @@ class JadwalBookingController extends Controller
             'nama_mata_kuliah' => $request->nama_mata_kuliah,
             'judul_course' => $request->judul_course,
             'user_id' => Auth::id(),
+            'dosen_id' => $request->dosen_id,
             'status' => 'pending'
         ]);
 

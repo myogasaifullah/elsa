@@ -15,11 +15,17 @@ class JadwalBooking extends Model
         'nama_mata_kuliah',
         'judul_course',
         'status',
-        'user_id'
+        'user_id',
+        'dosen_id'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function dosen()
+    {
+        return $this->belongsTo(Dosen::class);
     }
 }

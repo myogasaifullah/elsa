@@ -45,6 +45,7 @@
               <th scope="col">Studio</th>
               <th scope="col">Mata Kuliah</th>
               <th scope="col">Judul Course</th>
+              <th scope="col">Dosen</th>
               <th scope="col">Status</th>
               <th scope="col">User Name</th>
               <th scope="col">Email</th>
@@ -65,6 +66,7 @@
               <td>{{ 'Studio ' . $jadwal->studio }}</td>
               <td>{{ $jadwal->nama_mata_kuliah }}</td>
               <td>{{ $jadwal->judul_course }}</td>
+              <td>{{ $jadwal->dosen->nama_dosen ?? '-' }}</td>
               <td>
                 @if($jadwal->status == 'pending')
                 <span class="badge bg-warning text-dark">
@@ -210,6 +212,15 @@
               <label class="form-label">Judul Course</label>
               <input type="text" class="form-control" name="judul_course" required>
             </div>
+            <div class="mb-3">
+              <label class="form-label">Dosen</label>
+              <select class="form-select" name="dosen_id" required>
+                <option selected disabled>Pilih Dosen</option>
+                @foreach($dosens as $dosen)
+                <option value="{{ $dosen->id }}">{{ $dosen->nama_dosen }}</option>
+                @endforeach
+              </select>
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -291,6 +302,15 @@
               <label class="form-label">Judul Course</label>
               <input type="text" class="form-control" name="judul_course" id="editJudulCourse" required>
             </div>
+            <div class="mb-3">
+              <label class="form-label">Dosen</label>
+              <select class="form-select" name="dosen_id" id="editDosen" required>
+                <option selected disabled>Pilih Dosen</option>
+                @foreach($dosens as $dosen)
+                <option value="{{ $dosen->id }}">{{ $dosen->nama_dosen }}</option>
+                @endforeach
+              </select>
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -303,7 +323,7 @@
 
 </main>
 
-  <script>
+<script>
   document.addEventListener('DOMContentLoaded', function() {
     // Handle Kategori MOOC visibility
     const jenisKategori = document.getElementById('jenisKategori');
@@ -411,6 +431,7 @@
         document.getElementById('editStudio').value = studio;
         document.getElementById('editNamaMataKuliah').value = matkul;
         document.getElementById('editJudulCourse').value = judul;
+        document.getElementById('editDosen').value = dosen_id || '';
 
         // Clear any previous error messages
         showError('errorEditJumat', false);
@@ -444,8 +465,8 @@
     });
   });
 </script>
-                    <
-                    question > Should I proceed with implementing the Friday prayer time validation
-                    for both modals ? The validation will prevent booking on Fridays from 11 : 00 - 13: 00 WIB and show an appropriate error message. < /question>
+<
+  question> Should I proceed with implementing the Friday prayer time validation
+  for both modals ? The validation will prevent booking on Fridays from 11 : 00 - 13: 00 WIB and show an appropriate error message. < /question>
 
-                    @include('layout.footer')
+    @include('layout.footer')
