@@ -60,7 +60,7 @@
               <td>{{ $booking->jam }}</td>
               <td>{{ $booking->jenis_kategori }}</td>
               <td>{{ $booking->kategori_mooc ?? '-' }}</td>
-              <td>{{ 'Studio ' . $booking->studio }}</td>
+              <td>{{ $booking->studio->nama_studio }}</td>
               <td>{{ $booking->nama_mata_kuliah }}</td>
               <td>{{ $booking->judul_course }}</td>
               <td>{{ $booking->dosen->nama_dosen ?? '-' }}</td>

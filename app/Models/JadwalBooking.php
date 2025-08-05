@@ -16,7 +16,8 @@ class JadwalBooking extends Model
         'judul_course',
         'status',
         'user_id',
-        'dosen_id'
+        'dosen_id',
+        'studio_id'
     ];
 
     public function user()
@@ -27,5 +28,10 @@ class JadwalBooking extends Model
     public function dosen()
     {
         return $this->belongsTo(Dosen::class);
+    }
+
+    public function studio()
+    {
+        return $this->belongsTo(Studio::class);
     }
 }

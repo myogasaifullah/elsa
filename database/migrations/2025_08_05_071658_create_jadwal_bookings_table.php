@@ -17,11 +17,12 @@ return new class extends Migration
             $table->string('jam');
             $table->string('jenis_kategori');
             $table->string('kategori_mooc')->nullable();
-            $table->string('studio');
+
             $table->string('nama_mata_kuliah');
             $table->string('judul_course');
             $table->string('status')->default('pending');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('studio_id')->constrained('studios')->onDelete('cascade');
             $table->timestamps();
         });
     }

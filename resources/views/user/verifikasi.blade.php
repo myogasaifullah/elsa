@@ -80,7 +80,7 @@
         <div class="card recent-sales overflow-auto">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="card-title mb-0">Daftar Editor <span>| Universitas</span></h5>
+<h2>Jumlah Editor: {{ isset($editors) ? $editors->count() : 0 }}</h2>
                     <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahEditor">
                         <i class="bi bi-plus-circle"></i> Tambah MOOC
                     </button>
@@ -96,17 +96,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Hapis yuliana</td>
-                            <td>hapisyuliana@gmail.com</td>
-                            <td>
-                                <button class="btn btn-sm btn-primary btn-edit-editor" data-id="1">Edit</button>
-                                <button class="btn btn-sm btn-danger btn-hapus-editor" data-id="1">Hapus</button>
-                            </td>
-                        </tr>
-                        <!-- Tambah baris lainnya -->
-                    </tbody>
+    @foreach($editors as $index => $editor)
+    <tr data-id="{{ $editor->id }}">
+        <td>{{ $index + 1 }}</td>
+        <td class="nama-editor">{{ $editor->nama }}</td>
+        <td class="email-editor">{{ $editor->email }}</td>
+        <td>
+            <button class="btn btn-sm btn-primary btn-edit-editor" data-id="{{ $editor->id }}">Edit</button>
+            <button class="btn btn-sm btn-danger btn-hapus-editor" data-id="{{ $editor->id }}">Hapus</button>
+        </td>
+    </tr>
+    @endforeach
+</tbody>
+
                 </table>
 
 
@@ -119,17 +121,16 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <form id="formEditEditor">
+                   @csrf
+    @method('PUT')
                     <div class="modal-header">
-                        <h5 class="modal-title">Edit MOOC</h5>
+                        <h5 class="modal-title">Edit Editor</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <input type="hidden" id="editMoocId">
-                        <input type="text" class="form-control mb-2" id="editJudulEditor" placeholder="Nama Editor">
-                        <select class="form-select" id="editEditorId">
-                            <option value="1">hapisyuliana@gmail.com</option>
-                            <option value="2">hapisyuliana@gmail.com</option>
-                        </select>
+                        <input type="hidden" id="editIdEditor">
+    <input type="text" class="form-control mb-2" name="nama" id="editNamaEditor" required placeholder="Nama Editor">
+    <input type="email" class="form-control mb-2" name="email" id="editEmailEditor" required placeholder="Email Editor">
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -145,20 +146,16 @@
     <div class="modal fade" id="modalTambahEditor" tabindex="-1" aria-labelledby="modalTambahEditorLabel">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form id="formTambahEditor">
+<form id="formTambahEditor" method="POST" action="{{ route('editor.store') }}">
+    @csrf
                     <div class="modal-header">
-                        <h5 class="modal-title">Tambah MOOC</h5>
+                        <h5 class="modal-title">Tambah Editor</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <input type="text" class="form-control mb-2" placeholder="Nama Editor" name="judul_editor">
-
-                        <select class="form-select" name="editor_id">
-                            <option selected disabled>Akun Editor</option>
-                            <option value="1">hapisyuliana@gmail.com</option>
-                            <option value="2">hapisyuliana@gmail.com</option>
-                        </select>
-                    </div>
+        <input type="text" class="form-control mb-2" placeholder="Nama Editor" name="nama" required>
+        <input type="email" class="form-control mb-2" placeholder="Email Editor" name="email" required>
+    </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                         <button class="btn btn-primary" type="submit">Simpan</button>
@@ -232,76 +229,88 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // --- FUNGSI EDIT ---
-        document.querySelectorAll('.btn-edit-editor').forEach(button => {
-            button.addEventListener('click', function() {
-                const row = this.closest('tr');
-                const id = this.getAttribute('data-id');
-                const judul = row.children[1].textContent.trim();
-                const namaDosen = row.children[2].textContent.trim();
+document.addEventListener('DOMContentLoaded', function () {
+    // Edit
+    document.querySelectorAll('.btn-edit-editor').forEach(button => {
+        button.addEventListener('click', function () {
+            const row = this.closest('tr');
+            const id = this.dataset.id;
+            const nama = row.querySelector('.nama-editor').textContent.trim();
+            const email = row.querySelector('.email-editor').textContent.trim();
 
-                // Set data ke modal edit
-                document.getElementById('editMoocId').value = id;
-                document.getElementById('editJudulEditor').value = judul;
+            document.getElementById('editIdEditor').value = id;
+            document.getElementById('editNamaEditor').value = nama;
+            document.getElementById('editEmailEditor').value = email;
 
-                const select = document.getElementById('editEditorId');
-                for (let i = 0; i < select.options.length; i++) {
-                    if (select.options[i].text === namaDosen) {
-                        select.selectedIndex = i;
-                        break;
-                    }
-                }
-
-                // Tampilkan modal edit
-                const modal = new bootstrap.Modal(document.getElementById('modalEditEditor'));
-                modal.show();
-            });
-        });
-
-        // --- FUNGSI HAPUS ---
-        document.querySelectorAll('.btn-hapus-editor').forEach(button => {
-            button.addEventListener('click', function() {
-                const row = this.closest('tr');
-                const id = this.getAttribute('data-id');
-                const judul = row.children[1].textContent.trim();
-
-                Swal.fire({
-                    title: 'Yakin ingin menghapus?',
-                    text: `MOOC "${judul}" akan dihapus!`,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Ya, hapus',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        row.remove(); // Hapus baris dari tabel
-
-                        Swal.fire('Dihapus!', 'MOOC berhasil dihapus.', 'success');
-                    }
-                });
-            });
-        });
-
-        // --- SIMPAN EDITOR (opsional: pakai AJAX/Fetch ke server) ---
-        document.getElementById('formEditEditor').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const id = document.getElementById('editMoocId').value;
-            const judul = document.getElementById('editJudulEditor').value;
-            const dosen = document.getElementById('editEditorId').selectedOptions[0].text;
-
-            const row = [...document.querySelectorAll('.btn-edit-editor')].find(btn => btn.getAttribute('data-id') === id)?.closest('tr');
-            if (row) {
-                row.children[1].textContent = judul;
-                row.children[2].textContent = dosen;
-            }
-
-            bootstrap.Modal.getInstance(document.getElementById('modalEditEditor')).hide();
-            Swal.fire('Tersimpan!', 'Data editor berhasil diperbarui.', 'success');
+            new bootstrap.Modal(document.getElementById('modalEditEditor')).show();
         });
     });
+
+    // Simpan Edit
+    document.getElementById('formEditEditor').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const id = document.getElementById('editIdEditor').value;
+        const nama = document.getElementById('editNamaEditor').value;
+        const email = document.getElementById('editEmailEditor').value;
+
+        fetch(`/editor/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ nama, email })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                const row = document.querySelector(`tr[data-id="${id}"]`);
+                row.querySelector('.nama-editor').textContent = nama;
+                row.querySelector('.email-editor').textContent = email;
+
+                bootstrap.Modal.getInstance(document.getElementById('modalEditEditor')).hide();
+                Swal.fire('Tersimpan!', 'Editor berhasil diperbarui.', 'success');
+            }
+        });
+    });
+
+    // Hapus
+    document.querySelectorAll('.btn-hapus-editor').forEach(button => {
+        button.addEventListener('click', function () {
+            const id = this.dataset.id;
+            const row = this.closest('tr');
+            const nama = row.querySelector('.nama-editor').textContent.trim();
+
+            Swal.fire({
+                title: 'Yakin ingin menghapus?',
+                text: `Editor "${nama}" akan dihapus!`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, hapus',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/editor/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            row.remove();
+                            Swal.fire('Dihapus!', 'Editor berhasil dihapus.', 'success');
+                        }
+                    });
+                }
+            });
+        });
+    });
+});
 </script>
+
 
 
 @include('layout.footer')

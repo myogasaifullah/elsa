@@ -63,7 +63,7 @@
               <td>{{ $jadwal->jam }}</td>
               <td>{{ $jadwal->jenis_kategori }}</td>
               <td>{{ $jadwal->kategori_mooc ?? '-' }}</td>
-              <td>{{ 'Studio ' . $jadwal->studio }}</td>
+              <td>{{ $jadwal->studio->nama_studio }}</td>
               <td>{{ $jadwal->nama_mata_kuliah }}</td>
               <td>{{ $jadwal->judul_course }}</td>
               <td>{{ $jadwal->dosen->nama_dosen ?? '-' }}</td>
@@ -193,11 +193,12 @@
             </div>
             <div class="mb-3">
               <label class="form-label">Studio</label>
-              <select class="form-select" name="studio" required>
-                <option selected disabled>Pilih Studio</option>
-                <option value="1">Studio 1</option>
-                <option value="2">Studio 2</option>
-              </select>
+              <select name="studio_id" required>
+    @foreach($studios as $studio)
+        <option value="{{ $studio->id }}">{{ $studio->nama_studio }}</option>
+    @endforeach
+</select>
+
             </div>
             <div class="mb-3">
               <label class="form-label">Nama Mata Kuliah</label>
@@ -283,11 +284,12 @@
             </div>
             <div class="mb-3">
               <label class="form-label">Studio</label>
-              <select class="form-select" name="studio" id="editStudio" required>
-                <option selected disabled>Pilih Studio</option>
-                <option value="1">Studio 1</option>
-                <option value="2">Studio 2</option>
-              </select>
+              <select name="studio_id" required>
+    @foreach($studios as $studio)
+        <option value="{{ $studio->id }}">{{ $studio->nama_studio }}</option>
+    @endforeach
+</select>
+
             </div>
             <div class="mb-3">
               <label class="form-label">Nama Mata Kuliah</label>

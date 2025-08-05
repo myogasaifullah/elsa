@@ -9,6 +9,13 @@ use App\Http\Controllers\FakultasProdiController;
 use App\Http\Controllers\DosenMoocController;
 use App\Http\Controllers\JadwalBookingController;
 use App\Http\Controllers\StudioMatkulController;
+use App\Http\Controllers\EditorController;
+use App\Http\Controllers\UserController;
+
+// Route::get('/verifikasi', [UserController::class, 'editor'])->name('user.verifikasi');
+Route::post('/editor', [EditorController::class, 'store'])->name('editor.store');
+Route::put('/editor/{editor}', [EditorController::class, 'update'])->name('editor.update');
+Route::delete('/editor/{editor}', [EditorController::class, 'destroy'])->name('editor.destroy');
 
 // Index
 Route::get('/fakultas-prodi', [FakultasProdiController::class, 'index'])->name('fakultas-prodi.index');

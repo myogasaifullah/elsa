@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Editor;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -13,12 +14,20 @@ class UserController extends Controller
      *
      * @return \Illuminate\View\View
      */
+//     public function editor()
+// {
+//     $editors = Editor::all();
+//     return view('user.verifikasi', compact('editors'));
+// }
+
     public function index()
     {
         $users = User::with(['fakultas', 'prodi'])->get();
         $fakultas = \App\Models\Fakultas::all();
         $prodis = \App\Models\Prodi::all();
-        return view('user.listuser', compact('users', 'fakultas', 'prodis'));
+            $editors = Editor::all();
+
+        return view('user.listuser', compact('users', 'fakultas', 'prodis','editors'));
     }
 
     /**
@@ -36,7 +45,8 @@ class UserController extends Controller
         Log::info('Pending users', $pendingUsers->toArray());
         $fakultas = \App\Models\Fakultas::all();
         $prodis = \App\Models\Prodi::all();
-        return view('user.verifikasi', compact('pendingUsers', 'fakultas', 'prodis'));
+        $editors = Editor::all();
+        return view('user.verifikasi', compact('pendingUsers', 'fakultas', 'prodis', 'editors'));
     }
 
     /**
