@@ -46,22 +46,22 @@
             </tr>
           </thead>
           <tbody>
-            <!-- Data Booking -->
-            <tr>
-              <th>1</th>
-              <td>18/07/2025</td>
-              <td>10.00</td>
-              <td>Dina</td>
-              <td>dina@example.com</td>
-              <td>081234567890</td>
-              <td>FTIK</td>
-              <td>Informatika</td>
-              <td>Dr. Andi Maulana</td>
-              <td>Mooc</td>
-              <td>MOOC Mandiri</td>
-              <td>Studio 1</td>
-              <td>Jaringan Komputer</td>
-              <td>Methamorz</td>
+            @foreach($jadwals as $index => $jadwal)
+            <tr data-id="{{ $jadwal->id }}">
+              <th>{{ $index + 1 }}</th>
+              <td>{{ \Carbon\Carbon::parse($jadwal->tanggal)->format('d/m/Y') }}</td>
+              <td>{{ $jadwal->jam }}</td>
+              <td>{{ $jadwal->user->name ?? '-' }}</td>
+              <td>{{ $jadwal->user->email ?? '-' }}</td>
+              <td>{{ $jadwal->user->nomor_telepon ?? '-' }}</td>
+              <td>{{ $jadwal->user->fakultas->nama_fakultas ?? '-' }}</td>
+              <td>{{ $jadwal->user->prodi->nama_prodi ?? '-' }}</td>
+              <td>{{ $jadwal->dosen->nama_dosen ?? '-' }}</td>
+              <td>{{ $jadwal->jenis_kategori }}</td>
+              <td>{{ $jadwal->kategori_mooc }}</td>
+              <td>{{ $jadwal->studio->nama_studio ?? '-' }}</td>
+              <td>{{ $jadwal->nama_mata_kuliah }}</td>
+              <td>{{ $jadwal->judul_course }}</td>
               <td>
                 <span class="badge bg-secondary text-white">
                   <i class="bi bi-camera-video-off me-1"></i> Belum Shooting
@@ -73,7 +73,7 @@
                 </button>
               </td>
             </tr>
-            <!-- Tambah data jika perlu -->
+            @endforeach
           </tbody>
         </table>
       </div>
@@ -90,17 +90,35 @@
         Swal.fire({
           title: 'Tandai Sudah Shooting?',
           text: 'Status akan diubah menjadi sudah shooting.',
-          icon: 'success',
+          icon: 'warning',
           showCancelButton: true,
           confirmButtonText: 'Ya, Tandai',
           cancelButtonText: 'Batal'
         }).then((result) => {
           if (result.isConfirmed) {
             const row = btn.closest("tr");
-            const statusCell = row.querySelector("td:nth-child(15)");
-            statusCell.innerHTML = `<span class="badge bg-success text-white"><i class="bi bi-camera-video me-1"></i> Sudah Shooting</span>`;
-            btn.parentElement.innerHTML = `<span class="text-success"><i class="bi bi-check-circle"></i> Selesai</span>`;
-            Swal.fire('Sukses!', 'Status telah diperbarui.', 'success');
+            const jadwalId = row.getAttribute('data-id');
+            fetch(`/jadwal/${jadwalId}/done`, {
+              method: 'POST',
+              headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json'
+              },
+            })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                const statusCell = row.querySelector("td:nth-child(15)");
+                statusCell.innerHTML = `<span class="badge bg-success text-white"><i class="bi bi-camera-video me-1"></i> Sudah Shooting</span>`;
+                btn.parentElement.innerHTML = `<span class="text-success"><i class="bi bi-check-circle"></i> Selesai</span>`;
+                Swal.fire('Sukses!', data.message, 'success');
+              } else {
+                Swal.fire('Gagal!', data.message, 'error');
+              }
+            })
+            .catch(error => {
+              Swal.fire('Gagal!', 'Terjadi kesalahan saat mengubah status.', 'error');
+            });
           }
         });
       });

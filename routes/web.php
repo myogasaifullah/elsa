@@ -91,9 +91,8 @@ Route::get('/acc', [App\Http\Controllers\BookingController::class, 'acc'])->name
 Route::post('/booking/{booking}/approve', [App\Http\Controllers\BookingController::class, 'approve'])->name('booking.approve');
 Route::post('/booking/{booking}/reject', [App\Http\Controllers\BookingController::class, 'reject'])->name('booking.reject');
 
-Route::get('/booking', function () {
-    return view('booking/booking');
-});
+Route::get('/booking', [JadwalBookingController::class, 'scheduledBookings'])->name('booking.index');
+Route::post('/jadwal/{jadwal}/done', [JadwalBookingController::class, 'markAsDone'])->name('jadwal.done');
 
 Route::get('/laporan', function () {
     return view('laporan');

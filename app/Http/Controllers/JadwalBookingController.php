@@ -74,7 +74,54 @@ class JadwalBookingController extends Controller
     }
 
     /**
+     * Display approved bookings
+     */
+    public function scheduledBookings()
+    {
+        $jadwals = JadwalBooking::with(['user.fakultas', 'user.prodi', 'dosen', 'studio'])
+            ->where('status', 'approved')
+            ->orderBy('tanggal', 'asc')
+            ->orderBy('jam', 'asc')
+            ->get();
+
+        return view('booking.booking', compact('jadwals'));
+    }
+
+    /**
      * Mark a booking as done and create progress entry
+     */
+    public function markAsDone(JadwalBooking $jadwal)
+    {
+        try {
+            // Update the jadwal status to "sudah shooting"
+            $jadwal->update(['status' => 'sudah shooting']);
+
+            // Create progress entry with the jadwal_booking_id
+            $progress = \App\Models\Progress::create([
+                'jadwal_booking_id' => $jadwal->id,
+                'target_upload' => now()->addDays(7), // Default target upload in 7 days
+                'persentase' => 0.00,
+                'progres' => 'belum',
+                'keterangan' => 'belum terbit',
+                'durasi' => null,
+                'tanggal_upload_youtube' => null,
+                'editor_id' => 1, // Default editor, can be updated later
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Booking berhasil ditandai sebagai sudah shooting dan progress berhasil dibuat.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menandai booking: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Mark a booking as done and create progress entry (legacy method)
      */
     public function done(JadwalBooking $jadwal)
     {
