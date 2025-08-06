@@ -11,6 +11,7 @@ use App\Http\Controllers\JadwalBookingController;
 use App\Http\Controllers\StudioMatkulController;
 use App\Http\Controllers\EditorController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProgresController;
 
 // Route::get('/verifikasi', [UserController::class, 'editor'])->name('user.verifikasi');
 Route::post('/editor', [EditorController::class, 'store'])->name('editor.store');
@@ -98,9 +99,13 @@ Route::get('/laporan', function () {
     return view('laporan');
 });
 
-Route::get('/progres', function () {
-    return view('progres');
-});
+Route::get('/progres', [ProgresController::class, 'index'])->name('progres.index');
+Route::get('/progres/create', [ProgresController::class, 'create'])->name('progres.create');
+Route::post('/progres', [ProgresController::class, 'store'])->name('progres.store');
+Route::get('/progres/{progress}/edit', [ProgresController::class, 'edit'])->name('progres.edit');
+Route::put('/progres/{progress}', [ProgresController::class, 'update'])->name('progres.update');
+Route::delete('/progres/{progress}', [ProgresController::class, 'destroy'])->name('progres.destroy');
+Route::get('/progres/jadwal/{jadwal_booking_id}', [ProgresController::class, 'showByJadwal'])->name('progres.byJadwal');
 
 Route::get('/modal-progres', function () {
     return view('modal_progres');
