@@ -30,6 +30,7 @@
                                         <th>No</th>
                                         <th>Dosen</th>
                                         <th>Fakultas</th>
+                                        <th>Prodi</th>
                                         <th>Mata Kuliah</th>
                                         <th>Kategori MOOC</th>
                                         <th>Judul Course</th>
@@ -38,55 +39,81 @@
                                         <th>Waktu</th>
                                         <th>Jenis Kategori</th>
                                         <th>Target Upload</th>
-                                        <th>Persentase</th> <!-- Ganti dari 'Progres' menjadi 'Persentase' -->
-                                        <th>Progres</th> <!-- Field Progres -->
-                                        <th>Keterangan</th> <!-- Field Keterangan -->
+                                        <th>Persentase</th>
+                                        <th>Progres</th>
+                                        <th>Keterangan</th>
                                         <th>Durasi (Menit)</th>
                                         <th>Tautan Video</th>
                                         <th>Tgl Upload YouTube</th>
                                         <th>Editor</th>
-                                        <th>Status</th> <!-- Status -->
+                                        <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td>1</td>
-                                        <td>Dr. Andi Maulana</td>
-                                        <td>Teknik dan Ilmu Komputer</td>
-                                        <td>Rekayasa Perangkat Lunak</td>
-                                        <td>MOOC Mandiri</td>
-                                        <td>Pemrograman Web Lanjut</td>
-                                        <td>Studio 1</td>
-                                        <td>2025-07-18</td>
-                                        <td>08:00 - 10:00</td>
-                                        <td>Video Teaching</td>
-                                        <td>2025-07-30</td>
+                                        <td>{{ $progress->jadwalBooking->dosen->nama_dosen ?? $progress->jadwalBooking->booking->dosen->nama ?? '-' }}</td>
+                                        <td>{{ $progress->jadwalBooking->user->fakultas->nama_fakultas ?? $progress->jadwalBooking->booking->dosen->fakultas->nama ?? '-' }}</td>
+                                        <td>{{ $progress->jadwalBooking->user->prodi->nama_prodi ?? $progress->jadwalBooking->booking->dosen->prodi->nama ?? '-' }}</td>
+                                        <td>{{ $progress->jadwalBooking->nama_mata_kuliah ?? $progress->jadwalBooking->booking->mataKuliah->nama ?? '-' }}</td>
+                                        <td>{{ $progress->jadwalBooking->kategori_mooc ?? $progress->jadwalBooking->booking->kategori_mooc ?? '-' }}</td>
+                                        <td>{{ $progress->jadwalBooking->judul_course ?? $progress->jadwalBooking->booking->judul_course ?? '-' }}</td>
+                                        <td>{{ $progress->jadwalBooking->studio->nama_studio ?? $progress->jadwalBooking->studio->nama ?? '-' }}</td>
+                                        <td>{{ $progress->jadwalBooking->tanggal ?? $progress->jadwalBooking->tanggal_shooting ?? '-' }}</td>
+                                        <td>{{ $progress->jadwalBooking->jam ?? $progress->jadwalBooking->waktu ?? '-' }}</td>
+                                        <td>{{ $progress->jadwalBooking->jenis_kategori ?? $progress->jadwalBooking->booking->jenis_kategori ?? '-' }}</td>
+                                        <td>{{ $progress->target_upload ? \Carbon\Carbon::parse($progress->target_upload)->format('d/m/Y') : '-' }}</td>
                                         <td>
                                             <div class="progress">
-                                                <div class="progress-bar bg-info" style="width: 70%;">70%</div>
+                                                <div class="progress-bar bg-info" style="width: {{ $progress->persentase ?? 0 }}%;">{{ $progress->persentase ?? 0 }}%</div>
                                             </div>
                                         </td>
                                         <td>
-                                            <span class="progress-text">Progres</span> <!-- Menampilkan Progres -->
+                                            <span class="badge 
+                                                @if($progress->progres == 'belum') bg-secondary
+                                                @elseif($progress->progres == 'progres') bg-warning text-dark
+                                                @else bg-success
+                                                @endif">
+                                                {{ ucfirst($progress->progres ?? '-') }}
+                                            </span>
                                         </td>
                                         <td>
-                                            <span class="keterangan-text">Belum Terbit</span> <!-- Keterangan -->
+                                            <span class="badge 
+                                                @if($progress->keterangan == 'belum terbit') bg-danger
+                                                @else bg-success
+                                                @endif">
+                                                {{ ucfirst(str_replace('_', ' ', $progress->keterangan ?? '-')) }}
+                                            </span>
                                         </td>
-                                        <td>45</td>
-                                        <td><a href="https://youtu.be/xxxxxxx" target="_blank">Lihat Video</a></td>
-                                        <td>2025-07-19</td>
+                                        <td>{{ $progress->durasi ?? '-' }}</td>
+                                        <td>
+                                            @if($progress->jadwalBooking->booking->link_video ?? $progress->tautan_video ?? '')
+                                            <a href="{{ $progress->jadwalBooking->booking->link_video ?? $progress->tautan_video ?? '' }}" target="_blank" class="btn btn-sm btn-primary">Lihat Video</a>
+                                            @else
+                                            -
+                                            @endif
+                                        </td>
+                                        <td>{{ $progress->tanggal_upload_youtube ? \Carbon\Carbon::parse($progress->tanggal_upload_youtube)->format('d/m/Y') : '-' }}</td>
                                         <td class="text-center">
-                                            <button class="btn btn-warning btn-edit-editor" data-name="Rizky Putra">Edit</button>
+                                            @if(empty($progress->editor->nama))
+                                            <button type="button"
+                                                class="btn btn-sm btn-primary assign-editor-btn"
+                                                data-progress-id="{{ $progress->id }}"
+                                                onclick="assignEditor({{ $progress->id }})">
+                                                <i class="bi bi-person-plus"></i> Isi Nama
+                                            </button>
+                                            @else
+                                            {{ $progress->editor->nama }}
+                                            @endif
                                         </td>
-                                        <td class="text-center status-col">
-                                            <span class="badge bg-success text-white">Sudah Shooting</span> <!-- Status awal -->
+                                        <td class="text-center">
+                                            <span class="badge bg-success text-white">Sudah Shooting</span>
                                         </td>
-                                        <td class="text-center action-col" style="display: none;">
-                                            <a href="{{ url('modal-progres') }}"> <button class="btn btn-primary btn-progres">Progres</button></a>
+                                        <td class="text-center">
+                                            <a href="{{ route('progres.edit', $progress->id) }}" class="btn btn-primary btn-sm">Edit</a>
                                         </td>
                                     </tr>
-                                    <!-- Tambahkan baris lainnya sesuai data -->
                                 </tbody>
                             </table>
                         </div>

@@ -60,7 +60,7 @@ class BookingController extends Controller
                 'keterangan' => 'belum terbit',
                 'durasi' => null,
                 'tanggal_upload_youtube' => null,
-                'editor_id' => 1,
+                'editor_id' => null,
             ]);
 
             // Update booking status
@@ -71,5 +71,4 @@ class BookingController extends Controller
             return redirect()->back()->with('error', 'Failed to mark booking as done: ' . $e->getMessage());
         }
     }
-    
 }

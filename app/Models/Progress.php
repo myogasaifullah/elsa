@@ -10,7 +10,7 @@ class Progress extends Model
     use HasFactory;
 
     protected $table = 'progress';
-    
+
     protected $fillable = [
         'jadwal_booking_id',
         'target_upload',
@@ -36,5 +36,10 @@ class Progress extends Model
     public function editor()
     {
         return $this->belongsTo(Editor::class, 'editor_id');
+    }
+
+    public function getEditorAttribute()
+    {
+        return $this->editor_id ? $this->editor()->first() : null;
     }
 }

@@ -106,10 +106,12 @@ Route::get('/progres/{progress}/edit', [ProgresController::class, 'edit'])->name
 Route::put('/progres/{progress}', [ProgresController::class, 'update'])->name('progres.update');
 Route::delete('/progres/{progress}', [ProgresController::class, 'destroy'])->name('progres.destroy');
 Route::get('/progres/jadwal/{jadwal_booking_id}', [ProgresController::class, 'showByJadwal'])->name('progres.byJadwal');
+Route::post('/progres/{progress}/assign-editor', [ProgresController::class, 'assignEditor'])->name('progres.assign-editor');
 
 Route::get('/modal-progres', function () {
     return view('modal_progres');
 });
+Route::get('/modal-progres/{id}', [ProgresController::class, 'modal'])->name('progres.modal');
 
 Route::get('/template', function () {
     return view('template');

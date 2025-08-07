@@ -91,20 +91,29 @@
                                         <td>{{ $item->durasi ?? '-' }}</td>
                                         <td>
                                             @if($item->jadwalBooking->booking->link_video ?? '')
-                                                <a href="{{ $item->jadwalBooking->booking->link_video ?? '' }}" target="_blank" class="btn btn-sm btn-primary">Lihat Video</a>
+                                            <a href="{{ $item->jadwalBooking->booking->link_video ?? '' }}" target="_blank" class="btn btn-sm btn-primary">Lihat Video</a>
                                             @else
-                                                -
+                                            -
                                             @endif
                                         </td>
                                         <td>{{ $item->tanggal_upload_youtube ? \Carbon\Carbon::parse($item->tanggal_upload_youtube)->format('d/m/Y') : '-' }}</td>
                                         <td class="text-center">
-                                            {{ $item->editor->nama ?? '-' }}
+                                            @if(empty($item->editor->nama))
+                                            <button type="button"
+                                                class="btn btn-sm btn-primary assign-editor-btn"
+                                                data-progress-id="{{ $item->id }}"
+                                                onclick="assignEditor({{ $item->id }})">
+                                                <i class="bi bi-person-plus"></i> Isi Nama
+                                            </button>
+                                            @else
+                                            {{ $item->editor->nama }}
+                                            @endif
                                         </td>
                                         <td class="text-center">
                                             <span class="badge bg-success text-white">Sudah Shooting</span>
                                         </td>
                                         <td class="text-center">
-                                            <a href="{{ route('progres.edit', $item->id) }}" class="btn btn-primary btn-sm">Edit</a>
+                                            <a href="{{ url('modal-progres/' . $item->id) }}" class="btn btn-primary btn-sm">Edit</a>
                                         </td>
                                     </tr>
                                     @empty
@@ -182,9 +191,65 @@
                 });
             });
         });
-
-
     });
+
+    function assignEditor(progressId) {
+        Swal.fire({
+            title: 'Konfirmasi',
+            text: 'Apakah Anda ingin menjadi editor untuk progress ini?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, Saya Setuju',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Get current user name
+                const userName = '{{ auth()->user()->name ?? auth()->user()->email }}';
+
+                // Send AJAX request to assign editor
+                fetch(`/progres/${progressId}/assign-editor`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            editor_name: userName
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Update the button to show the editor name
+                            const button = document.querySelector(`button[data-progress-id="${progressId}"]`);
+                            if (button) {
+                                button.outerHTML = `<span>${userName}</span>`;
+                            }
+
+                            Swal.fire(
+                                'Berhasil!',
+                                'Anda telah ditambahkan sebagai editor.',
+                                'success'
+                            );
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                data.message || 'Gagal menambahkan editor.',
+                                'error'
+                            );
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire(
+                            'Error!',
+                            'Terjadi kesalahan saat mengirim request.',
+                            'error'
+                        );
+                    });
+            }
+        });
+    }
 </script>
 
 

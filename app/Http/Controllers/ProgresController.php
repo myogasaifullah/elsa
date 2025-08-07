@@ -122,4 +122,48 @@ class ProgresController extends Controller
 
         return view('progres-detail', compact('jadwalBookings'));
     }
+
+    /**
+     * Display modal view for progress
+     */
+    public function modal($id)
+    {
+        $progress = Progress::with([
+            'jadwalBooking.dosen.fakultas',
+            'jadwalBooking.dosen.prodi',
+            'jadwalBooking.studio',
+            'editor'
+        ])->findOrFail($id);
+
+        return view('modal_progres', compact('progress'));
+    }
+
+    /**
+     * Assign the current logged-in user as editor for a progress
+     */
+    public function assignEditor(Request $request, Progress $progress)
+    {
+        try {
+            // Get or create editor for current user
+            $user = auth()->user();
+            $editor = Editor::firstOrCreate(
+                ['email' => $user->email],
+                ['nama' => $user->name ?? $user->email]
+            );
+
+            // Update the progress with the editor
+            $progress->update(['editor_id' => $editor->id]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Editor berhasil ditambahkan',
+                'editor_name' => $editor->nama
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menambahkan editor: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

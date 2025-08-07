@@ -105,7 +105,7 @@ class JadwalBookingController extends Controller
                 'keterangan' => 'belum terbit',
                 'durasi' => null,
                 'tanggal_upload_youtube' => null,
-                'editor_id' => 1, // Default editor, can be updated later
+                'editor_id' => null, // Default editor, can be updated later
             ]);
 
             return response()->json([
@@ -135,7 +135,7 @@ class JadwalBookingController extends Controller
                 'keterangan' => 'belum terbit',
                 'durasi' => null,
                 'tanggal_upload_youtube' => null,
-                'editor_id' => 1, // Default editor, can be updated later
+                'editor_id' => null, // Default editor, can be updated later
             ]);
 
             // Update the jadwal status to completed
