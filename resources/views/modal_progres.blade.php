@@ -127,151 +127,97 @@
    <div class="card mb-4">
       <div class="card-body">
          <h5 class="card-title">Persentase Progres</h5>
-         <!-- Progress Bars with labels-->
+        09/08 <!-- Progress Bars with labels-->
          <div class="progress">
             <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
          </div>
       </div>
    </div>
 
-   <!-- Accordion for Task Sections -->
-   <div class="accordion" id="accordionExample">
-      
-      <!-- Task 1: Pra-produksi -->
-      <div class="accordion-item">
-         <h2 class="accordion-header" id="headingPraProduksi">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePraProduksi" aria-expanded="true" aria-controls="collapsePraProduksi">
-               Pra-produksi
-            </button>
-         </h2>
-         <div id="collapsePraProduksi" class="accordion-collapse collapse show" aria-labelledby="headingPraProduksi" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-               <p>"Menerima brief dari dosen/pengampu; Menyusun rencana editing; Memastikan ketersediaan materi (video, audio, slide, dll)"</p>
-               
-               <!-- Button to trigger modal for Task 1 -->
-               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalPraProduksi">
-                  Progres
-               </button>
+   <!-- Form untuk input/update persentase -->
+   @php
+       // Gunakan variabel existingPersentase yang dikirim dari controller
+       // $existingPersentase sudah tersedia dari controller
+   @endphp
 
-               <!-- Modal for Task 1 -->
-               <div class="modal fade" id="modalPraProduksi" tabindex="-1">
-                  <div class="modal-dialog">
-                     <div class="modal-content">
-                        <div class="modal-header">
-                           <h5 class="modal-title">Pra-produksi</h5>
-                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                           <p>"Menerima brief dari dosen/pengampu; Menyusun rencana editing; Memastikan ketersediaan materi (video, audio, slide, dll)"</p>
+   @if ($errors->any())
+       <div class="alert alert-danger">
+           <ul class="mb-0">
+               @foreach ($errors->all() as $error)
+                   <li>{{ $error }}</li>
+               @endforeach
+           </ul>
+       </div>
+   @endif
 
-                           <!-- Catatan input field -->
-                           <div class="mb-3">
-                              <label for="catatanPraProduksi" class="form-label">Catatan</label>
-                              <textarea class="form-control" id="catatanPraProduksi" rows="3" placeholder="Tambahkan catatan"></textarea>
-                           </div>
-                        </div>
-                        <div class="modal-footer">
-                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                           <button type="button" class="btn btn-primary">Simpan perubahan</button>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <!-- End Modal for Task 1 -->
-            </div>
-         </div>
-      </div>
+   <form action="{{ $existingPersentase ? route('persentase.update', $existingPersentase->id) : route('persentase.store') }}" method="POST">
+       @csrf
+       @if($existingPersentase)
+           @method('PUT')
+       @endif
+       
+       <input type="hidden" name="id_progres" value="{{ $progress->id }}">
+       
+       <div class="row">
+           <div class="col-md-6 mb-3">
+               <label for="target_publish" class="form-label">Target Publish</label>
+               <input type="date" class="form-control @error('target_publish') is-invalid @enderror" id="target_publish" name="target_publish" 
+                      value="{{ old('target_publish', isset($existingPersentase->target_publish) ? $existingPersentase->target_publish->format('Y-m-d') : '') }}" required>
+               @error('target_publish')
+                   <div class="invalid-feedback">{{ $message }}</div>
+               @enderror
+           </div>
+           <div class="col-md-6 mb-3">
+               <label for="tanggal_publish" class="form-label">Tanggal Publish</label>
+               <input type="date" class="form-control @error('tanggal_publish') is-invalid @enderror" id="tanggal_publish" name="tanggal_publish" 
+                      value="{{ old('tanggal_publish', isset($existingPersentase->tanggal_publish) ? $existingPersentase->tanggal_publish->format('Y-m-d') : '') }}">
+               @error('tanggal_publish')
+                   <div class="invalid-feedback">{{ $message }}</div>
+               @enderror
+           </div>
+       </div>
 
-      <!-- Task 2: Import dan Organisasi Materi -->
-      <div class="accordion-item">
-         <h2 class="accordion-header" id="headingImportOrganisasi">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseImportOrganisasi" aria-expanded="false" aria-controls="collapseImportOrganisasi">
-               Import dan Organisasi Materi
-            </button>
-         </h2>
-         <div id="collapseImportOrganisasi" class="accordion-collapse collapse" aria-labelledby="headingImportOrganisasi" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-               <p>"Mengimpor footage, audio, dan bahan pendukung ke software; Membuat folder kerja terstruktur (bining)"</p>
+       <div class="row">
+           <div class="col-md-6 mb-3">
+               <label for="publish_link_youtube" class="form-label">Link YouTube</label>
+               <input type="url" class="form-control @error('publish_link_youtube') is-invalid @enderror" id="publish_link_youtube" name="publish_link_youtube" 
+                      value="{{ old('publish_link_youtube', $existingPersentase->publish_link_youtube ?? '') }}" 
+                      placeholder="https://youtube.com/...">
+               @error('publish_link_youtube')
+                   <div class="invalid-feedback">{{ $message }}</div>
+               @enderror
+           </div>
+           <div class="col-md-6 mb-3">
+               <label for="durasi_video_menit" class="form-label">Durasi Video (Menit)</label>
+               <input type="number" class="form-control @error('durasi_video_menit') is-invalid @enderror" id="durasi_video_menit" name="durasi_video_menit" 
+                      value="{{ old('durasi_video_menit', $existingPersentase->durasi_video_menit ?? '') }}" 
+                      step="0.01" min="0">
+               @error('durasi_video_menit')
+                   <div class="invalid-feedback">{{ $message }}</div>
+               @enderror
+           </div>
+       </div>
 
-               <!-- Button to trigger modal for Task 2 -->
-               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalImportOrganisasi">
-                  Progres
-               </button>
+       <div class="mb-3">
+           <label class="form-label">Catatan</label>
+           @for($i = 1; $i <= 10; $i++)
+           <div class="mb-2">
+               <input type="text" class="form-control @error('catatan'.$i) is-invalid @enderror" name="catatan{{ $i }}" 
+                      placeholder="Catatan {{ $i }}"
+                      value="{{ old('catatan'.$i, $existingPersentase->{'catatan'.$i} ?? '') }}">
+               @error('catatan'.$i)
+                   <div class="invalid-feedback">{{ $message }}</div>
+               @enderror
+           </div>
+           @endfor
+       </div>
 
-               <!-- Modal for Task 2 -->
-               <div class="modal fade" id="modalImportOrganisasi" tabindex="-1">
-                  <div class="modal-dialog">
-                     <div class="modal-content">
-                        <div class="modal-header">
-                           <h5 class="modal-title">Import dan Organisasi Materi</h5>
-                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                           <p>"Mengimpor footage, audio, dan bahan pendukung ke software; Membuat folder kerja terstruktur (bining)"</p>
-
-                           <!-- Catatan input field -->
-                           <div class="mb-3">
-                              <label for="catatanImportOrganisasi" class="form-label">Catatan</label>
-                              <textarea class="form-control" id="catatanImportOrganisasi" rows="3" placeholder="Tambahkan catatan"></textarea>
-                           </div>
-                        </div>
-                        <div class="modal-footer">
-                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                           <button type="button" class="btn btn-primary">Simpan perubahan</button>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <!-- End Modal for Task 2 -->
-            </div>
-         </div>
-      </div>
-
-      <!-- Task 3: Rough Cut -->
-      <div class="accordion-item">
-         <h2 class="accordion-header" id="headingRoughCut">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRoughCut" aria-expanded="false" aria-controls="collapseRoughCut">
-               Rough Cut
-            </button>
-         </h2>
-         <div id="collapseRoughCut" class="accordion-collapse collapse" aria-labelledby="headingRoughCut" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-               <p>"Memilih bagian-bagian penting video; Menyusun urutan sesuai alur pembelajaran; Menghapus bagian yang tidak diperlukan"</p>
-
-               <!-- Button to trigger modal for Task 3 -->
-               <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalRoughCut">
-                  Progres
-               </button>
-
-               <!-- Modal for Task 3 -->
-               <div class="modal fade" id="modalRoughCut" tabindex="-1">
-                  <div class="modal-dialog">
-                     <div class="modal-content">
-                        <div class="modal-header">
-                           <h5 class="modal-title">Rough Cut</h5>
-                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                           <p>"Memilih bagian-bagian penting video; Menyusun urutan sesuai alur pembelajaran; Menghapus bagian yang tidak diperlukan"</p>
-
-                           <!-- Catatan input field -->
-                           <div class="mb-3">
-                              <label for="catatanRoughCut" class="form-label">Catatan</label>
-                              <textarea class="form-control" id="catatanRoughCut" rows="3" placeholder="Tambahkan catatan"></textarea>
-                           </div>
-                        </div>
-                        <div class="modal-footer">
-                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                           <button type="button" class="btn btn-primary">Simpan perubahan</button>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <!-- End Modal for Task 3 -->
-            </div>
-         </div>
-      </div>
-   </div><!-- End Accordion -->
+       <div class="text-center">
+           <button type="submit" class="btn btn-primary">
+               {{ $existingPersentase ? 'Update Persentase' : 'Simpan Persentase' }}
+           </button>
+       </div>
+   </form>
 
 </main>
 

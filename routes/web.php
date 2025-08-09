@@ -113,6 +113,10 @@ Route::get('/modal-progres', function () {
 });
 Route::get('/modal-progres/{id}', [ProgresController::class, 'modal'])->name('progres.modal');
 
+// Persentase routes
+Route::post('/persentase', [App\Http\Controllers\PersentaseController::class, 'store'])->name('persentase.store');
+Route::put('/persentase/{persentase}', [App\Http\Controllers\PersentaseController::class, 'update'])->name('persentase.update');
+
 Route::get('/template', function () {
     return view('template');
 });

@@ -135,7 +135,10 @@ class ProgresController extends Controller
             'editor'
         ])->findOrFail($id);
 
-        return view('modal_progres', compact('progress'));
+        // Ambil data persentase terkait progress ini
+        $existingPersentase = \App\Models\Persentase::where('id_progres', $progress->id)->first();
+
+        return view('modal_progres', compact('progress', 'existingPersentase'));
     }
 
     /**
