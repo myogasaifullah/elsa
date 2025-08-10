@@ -151,73 +151,521 @@
    @endif
 
    <form action="{{ $existingPersentase ? route('persentase.update', $existingPersentase->id) : route('persentase.store') }}" method="POST">
-       @csrf
-       @if($existingPersentase)
-           @method('PUT')
-       @endif
-       
-       <input type="hidden" name="id_progres" value="{{ $progress->id }}">
-       
-       <div class="row">
-           <div class="col-md-6 mb-3">
-               <label for="target_publish" class="form-label">Target Publish</label>
-               <input type="date" class="form-control @error('target_publish') is-invalid @enderror" id="target_publish" name="target_publish" 
-                      value="{{ old('target_publish', isset($existingPersentase->target_publish) ? $existingPersentase->target_publish->format('Y-m-d') : '') }}" required>
-               @error('target_publish')
-                   <div class="invalid-feedback">{{ $message }}</div>
-               @enderror
-           </div>
-           <div class="col-md-6 mb-3">
-               <label for="tanggal_publish" class="form-label">Tanggal Publish</label>
-               <input type="date" class="form-control @error('tanggal_publish') is-invalid @enderror" id="tanggal_publish" name="tanggal_publish" 
-                      value="{{ old('tanggal_publish', isset($existingPersentase->tanggal_publish) ? $existingPersentase->tanggal_publish->format('Y-m-d') : '') }}">
-               @error('tanggal_publish')
-                   <div class="invalid-feedback">{{ $message }}</div>
-               @enderror
-           </div>
-       </div>
+    @csrf
+    @if($existingPersentase)
+        @method('PUT')
+    @endif
+    
+    <input type="hidden" name="id_progres" value="{{ $progress->id }}">
 
-       <div class="row">
-           <div class="col-md-6 mb-3">
-               <label for="publish_link_youtube" class="form-label">Link YouTube</label>
-               <input type="url" class="form-control @error('publish_link_youtube') is-invalid @enderror" id="publish_link_youtube" name="publish_link_youtube" 
-                      value="{{ old('publish_link_youtube', $existingPersentase->publish_link_youtube ?? '') }}" 
-                      placeholder="https://youtube.com/...">
-               @error('publish_link_youtube')
-                   <div class="invalid-feedback">{{ $message }}</div>
-               @enderror
-           </div>
-           <div class="col-md-6 mb-3">
-               <label for="durasi_video_menit" class="form-label">Durasi Video (Menit)</label>
-               <input type="number" class="form-control @error('durasi_video_menit') is-invalid @enderror" id="durasi_video_menit" name="durasi_video_menit" 
-                      value="{{ old('durasi_video_menit', $existingPersentase->durasi_video_menit ?? '') }}" 
-                      step="0.01" min="0">
-               @error('durasi_video_menit')
-                   <div class="invalid-feedback">{{ $message }}</div>
-               @enderror
-           </div>
-       </div>
+    <div class="accordion" id="accordionProgres">
 
-       <div class="mb-3">
-           <label class="form-label">Catatan</label>
-           @for($i = 1; $i <= 10; $i++)
-           <div class="mb-2">
-               <input type="text" class="form-control @error('catatan'.$i) is-invalid @enderror" name="catatan{{ $i }}" 
-                      placeholder="Catatan {{ $i }}"
-                      value="{{ old('catatan'.$i, $existingPersentase->{'catatan'.$i} ?? '') }}">
-               @error('catatan'.$i)
-                   <div class="invalid-feedback">{{ $message }}</div>
-               @enderror
-           </div>
-           @endfor
-       </div>
+        {{-- Bagian Target & Tanggal Publish --}}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingPublish">
+                <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapsePublish" aria-expanded="true" aria-controls="collapsePublish">
+                    Target & Tanggal Publish
+                </button>
+            </h2>
+            <div id="collapsePublish" class="accordion-collapse collapse show" aria-labelledby="headingPublish" data-parent="#accordionProgres">
+                <div class="accordion-body">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalPublish">Isi Data</button>
+                </div>
+            </div>
+        </div>
 
-       <div class="text-center">
-           <button type="submit" class="btn btn-primary">
-               {{ $existingPersentase ? 'Update Persentase' : 'Simpan Persentase' }}
-           </button>
-       </div>
-   </form>
+        {{-- Modal Publish --}}
+        <div class="modal fade" id="modalPublish" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Target & Tanggal Publish</h5>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="target_publish" class="form-label">Target Publish</label>
+                                <input type="date" class="form-control @error('target_publish') is-invalid @enderror" id="target_publish" name="target_publish" 
+                                    value="{{ old('target_publish', isset($existingPersentase->target_publish) ? $existingPersentase->target_publish->format('Y-m-d') : '') }}" required>
+                                @error('target_publish')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="tanggal_publish" class="form-label">Tanggal Publish</label>
+                                <input type="date" class="form-control @error('tanggal_publish') is-invalid @enderror" id="tanggal_publish" name="tanggal_publish" 
+                                    value="{{ old('tanggal_publish', isset($existingPersentase->tanggal_publish) ? $existingPersentase->tanggal_publish->format('Y-m-d') : '') }}">
+                                @error('tanggal_publish')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">{{ $existingPersentase ? 'Update' : 'Simpan' }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Bagian Link & Durasi --}}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingVideo">
+                <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseVideo" aria-expanded="false" aria-controls="collapseVideo">
+                    Link YouTube & Durasi Video
+                </button>
+            </h2>
+            <div id="collapseVideo" class="accordion-collapse collapse" aria-labelledby="headingVideo" data-parent="#accordionProgres">
+                <div class="accordion-body">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalVideo">Isi Data</button>
+                </div>
+            </div>
+        </div>
+
+        {{-- Modal Video --}}
+        <div class="modal fade" id="modalVideo" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Link & Durasi Video</h5>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="publish_link_youtube" class="form-label">Link YouTube</label>
+                                <input type="url" class="form-control @error('publish_link_youtube') is-invalid @enderror" id="publish_link_youtube" name="publish_link_youtube" 
+                                    value="{{ old('publish_link_youtube', $existingPersentase->publish_link_youtube ?? '') }}" placeholder="https://youtube.com/...">
+                                @error('publish_link_youtube')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="durasi_video_menit" class="form-label">Durasi Video (Menit)</label>
+                                <input type="number" class="form-control @error('durasi_video_menit') is-invalid @enderror" id="durasi_video_menit" name="durasi_video_menit" 
+                                    value="{{ old('durasi_video_menit', $existingPersentase->durasi_video_menit ?? '') }}" step="0.01" min="0">
+                                @error('durasi_video_menit')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">{{ $existingPersentase ? 'Update' : 'Simpan' }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Bagian Catatan 1 --}}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingCatatan1">
+<button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan1" aria-expanded="false" aria-controls="collapseCatatan1">
+                    Pra-produksi
+                </button>
+            </h2>
+            <div id="collapseCatatan1" class="accordion-collapse collapse" aria-labelledby="headingCatatan1" data-parent="#accordionProgres">
+                <div class="accordion-body">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan1">Isi Catatan Pra-produksi</button>
+                </div>
+            </div>
+        </div>
+
+        {{-- Modal Catatan 1 --}}
+        <div class="modal fade" id="modalCatatan1" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Pra-produksi</h5>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="catatan1" class="form-label">Menerima brief dari dosen/pengampu; 
+Menyusun rencana editing; 
+Memastikan ketersediaan materi (video, audio, slide, dll)</label>
+                            <input type="text" class="form-control @error('catatan1') is-invalid @enderror" id="catatan1" name="catatan1" 
+                                value="{{ old('catatan1', $existingPersentase->catatan1 ?? '') }}" placeholder="Masukkan catatan Pra-produksi">
+                            @error('catatan1')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">{{ $existingPersentase ? 'Update' : 'Simpan' }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Bagian Catatan 2 --}}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingCatatan2">
+<button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan2" aria-expanded="false" aria-controls="collapseCatatan2">
+                    Import dan Organisasi Materi
+                </button>
+            </h2>
+            <div id="collapseCatatan2" class="accordion-collapse collapse" aria-labelledby="headingCatatan2" data-parent="#accordionProgres">
+                <div class="accordion-body">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan2">Isi Catatan Import dan Organisasi Materi</button>
+                </div>
+            </div>
+        </div>
+
+        {{-- Modal Catatan 2 --}}
+        <div class="modal fade" id="modalCatatan2" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Catatan Import dan Organisasi Materi</h5>
+                        <button type="button" class="btn-close" data-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="catatan2" class="form-label">Mengimpor footage, audio, dan bahan pendukung ke software; 
+Membuat folder kerja terstruktur (bining)</label>
+                            <input type="text" class="form-control @error('catatan2') is-invalid @enderror" id="catatan2" name="catatan2" 
+                                value="{{ old('catatan2', $existingPersentase->catatan2 ?? '') }}" placeholder="Masukkan catatan Import dan Organisasi Materi">
+                            @error('catatan2')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">{{ $existingPersentase ? 'Update' : 'Simpan' }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Bagian Catatan 3 --}}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingCatatan3">
+<button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan3" aria-expanded="false" aria-controls="collapseCatatan3">
+                    Catatan 3
+                </button>
+            </h2>
+            <div id="collapseCatatan3" class="accordion-collapse collapse" aria-labelledby="headingCatatan3" data-parent="#accordionProgres">
+                <div class="accordion-body">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan3">Isi Catatan 3</button>
+                </div>
+            </div>
+        </div>
+
+        {{-- Modal Catatan 3 --}}
+        <div class="modal fade" id="modalCatatan3" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Catatan 3</h5>
+                        <button type="button" class="btn-close" data-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="catatan3" class="form-label">Catatan 3</label>
+                            <input type="text" class="form-control @error('catatan3') is-invalid @enderror" id="catatan3" name="catatan3" 
+                                value="{{ old('catatan3', $existingPersentase->catatan3 ?? '') }}" placeholder="Masukkan catatan 3">
+                            @error('catatan3')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">{{ $existingPersentase ? 'Update' : 'Simpan' }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Bagian Catatan 4 --}}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingCatatan4">
+<button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan4" aria-expanded="false" aria-controls="collapseCatatan4">
+                    Catatan 4
+                </button>
+            </h2>
+            <div id="collapseCatatan4" class="accordion-collapse collapse" aria-labelledby="headingCatatan4" data-parent="#accordionProgres">
+                <div class="accordion-body">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan4">Isi Catatan 4</button>
+                </div>
+            </div>
+        </div>
+
+        {{-- Modal Catatan 4 --}}
+        <div class="modal fade" id="modalCatatan4" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Catatan 4</h5>
+                        <button type="button" class="btn-close" data-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="catatan4" class="form-label">Catatan 4</label>
+                            <input type="text" class="form-control @error('catatan4') is-invalid @enderror" id="catatan4" name="catatan4" 
+                                value="{{ old('catatan4', $existingPersentase->catatan4 ?? '') }}" placeholder="Masukkan catatan 4">
+                            @error('catatan4')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">{{ $existingPersentase ? 'Update' : 'Simpan' }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Bagian Catatan 5 --}}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingCatatan5">
+<button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan5" aria-expanded="false" aria-controls="collapseCatatan5">
+                    Catatan 5
+                </button>
+            </h2>
+            <div id="collapseCatatan5" class="accordion-collapse collapse" aria-labelledby="headingCatatan5" data-parent="#accordionProgres">
+                <div class="accordion-body">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan5">Isi Catatan 5</button>
+                </div>
+            </div>
+        </div>
+
+        {{-- Modal Catatan 5 --}}
+        <div class="modal fade" id="modalCatatan5" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Catatan 5</h5>
+                        <button type="button" class="btn-close" data-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="catatan5" class="form-label">Catatan 5</label>
+                            <input type="text" class="form-control @error('catatan5') is-invalid @enderror" id="catatan5" name="catatan5" 
+                                value="{{ old('catatan5', $existingPersentase->catatan5 ?? '') }}" placeholder="Masukkan catatan 5">
+                            @error('catatan5')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">{{ $existingPersentase ? 'Update' : 'Simpan' }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Bagian Catatan 6 --}}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingCatatan6">
+<button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan6" aria-expanded="false" aria-controls="collapseCatatan6">
+                    Catatan 6
+                </button>
+            </h2>
+            <div id="collapseCatatan6" class="accordion-collapse collapse" aria-labelledby="headingCatatan6" data-parent="#accordionProgres">
+                <div class="accordion-body">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan6">Isi Catatan 6</button>
+                </div>
+            </div>
+        </div>
+
+        {{-- Modal Catatan 6 --}}
+        <div class="modal fade" id="modalCatatan6" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Catatan 6</h5>
+                        <button type="button" class="btn-close" data-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="catatan6" class="form-label">Catatan 6</label>
+                            <input type="text" class="form-control @error('catatan6') is-invalid @enderror" id="catatan6" name="catatan6" 
+                                value="{{ old('catatan6', $existingPersentase->catatan6 ?? '') }}" placeholder="Masukkan catatan 6">
+                            @error('catatan6')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">{{ $existingPersentase ? 'Update' : 'Simpan' }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Bagian Catatan 7 --}}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingCatatan7">
+<button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan7" aria-expanded="false" aria-controls="collapseCatatan7">
+                    Catatan 7
+                </button>
+            </h2>
+            <div id="collapseCatatan7" class="accordion-collapse collapse" aria-labelledby="headingCatatan7" data-parent="#accordionProgres">
+                <div class="accordion-body">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan7">Isi Catatan 7</button>
+                </div>
+            </div>
+        </div>
+
+        {{-- Modal Catatan 7 --}}
+        <div class="modal fade" id="modalCatatan7" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Catatan 7</h5>
+                        <button type="button" class="btn-close" data-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="catatan7" class="form-label">Catatan 7</label>
+                            <input type="text" class="form-control @error('catatan7') is-invalid @enderror" id="catatan7" name="catatan7" 
+                                value="{{ old('catatan7', $existingPersentase->catatan7 ?? '') }}" placeholder="Masukkan catatan 7">
+                            @error('catatan7')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">{{ $existingPersentase ? 'Update' : 'Simpan' }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Bagian Catatan 8 --}}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingCatatan8">
+<button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan8" aria-expanded="false" aria-controls="collapseCatatan8">
+                    Catatan 8
+                </button>
+            </h2>
+            <div id="collapseCatatan8" class="accordion-collapse collapse" aria-labelledby="headingCatatan8" data-parent="#accordionProgres">
+                <div class="accordion-body">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan8">Isi Catatan 8</button>
+                </div>
+            </div>
+        </div>
+
+        {{-- Modal Catatan 8 --}}
+        <div class="modal fade" id="modalCatatan8" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Catatan 8</h5>
+                        <button type="button" class="btn-close" data-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="catatan8" class="form-label">Catatan 8</label>
+                            <input type="text" class="form-control @error('catatan8') is-invalid @enderror" id="catatan8" name="catatan8" 
+                                value="{{ old('catatan8', $existingPersentase->catatan8 ?? '') }}" placeholder="Masukkan catatan 8">
+                            @error('catatan8')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">{{ $existingPersentase ? 'Update' : 'Simpan' }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Bagian Catatan 9 --}}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingCatatan9">
+<button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan9" aria-expanded="false" aria-controls="collapseCatatan9">
+                    Catatan 9
+                </button>
+            </h2>
+            <div id="collapseCatatan9" class="accordion-collapse collapse" aria-labelledby="headingCatatan9" data-parent="#accordionProgres">
+                <div class="accordion-body">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan9">Isi Catatan 9</button>
+                </div>
+            </div>
+        </div>
+
+        {{-- Modal Catatan 9 --}}
+        <div class="modal fade" id="modalCatatan9" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Catatan 9</h5>
+                        <button type="button" class="btn-close" data-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="catatan9" class="form-label">Catatan 9</label>
+                            <input type="text" class="form-control @error('catatan9') is-invalid @enderror" id="catatan9" name="catatan9" 
+                                value="{{ old('catatan9', $existingPersentase->catatan9 ?? '') }}" placeholder="Masukkan catatan 9">
+                            @error('catatan9')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">{{ $existingPersentase ? 'Update' : 'Simpan' }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Bagian Catatan 10 --}}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingCatatan10">
+<button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan10" aria-expanded="false" aria-controls="collapseCatatan10">
+                    Catatan 10
+                </button>
+            </h2>
+            <div id="collapseCatatan10" class="accordion-collapse collapse" aria-labelledby="headingCatatan10" data-parent="#accordionProgres">
+                <div class="accordion-body">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan10">Isi Catatan 10</button>
+                </div>
+            </div>
+        </div>
+
+        {{-- Modal Catatan 10 --}}
+        <div class="modal fade" id="modalCatatan10" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Catatan 10</h5>
+                        <button type="button" class="btn-close" data-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="catatan10" class="form-label">Catatan 10</label>
+                            <input type="text" class="form-control @error('catatan10') is-invalid @enderror" id="catatan10" name="catatan10" 
+                                value="{{ old('catatan10', $existingPersentase->catatan10 ?? '') }}" placeholder="Masukkan catatan 10">
+                            @error('catatan10')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">{{ $existingPersentase ? 'Update' : 'Simpan' }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div> {{-- end accordion --}}
+</form>
+
 
 </main>
 
