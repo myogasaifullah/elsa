@@ -347,12 +347,12 @@ Membuat folder kerja terstruktur (bining)</label>
         <div class="accordion-item">
             <h2 class="accordion-header" id="headingCatatan3">
 <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan3" aria-expanded="false" aria-controls="collapseCatatan3">
-                    Catatan 3
+                    Rough Cut
                 </button>
             </h2>
             <div id="collapseCatatan3" class="accordion-collapse collapse" aria-labelledby="headingCatatan3" data-parent="#accordionProgres">
                 <div class="accordion-body">
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan3">Isi Catatan 3</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan3">Isi Catatan Rough Cut</button>
                 </div>
             </div>
         </div>
@@ -362,14 +362,16 @@ Membuat folder kerja terstruktur (bining)</label>
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Catatan 3</h5>
+                        <h5 class="modal-title">Rough Cut</h5>
                         <button type="button" class="btn-close" data-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="catatan3" class="form-label">Catatan 3</label>
+                            <label for="catatan3" class="form-label">Memilih bagian-bagian penting video;
+Menyusun urutan sesuai alur pembelajaran;
+Menghapus bagian yang tidak diperlukan</label>
                             <input type="text" class="form-control @error('catatan3') is-invalid @enderror" id="catatan3" name="catatan3" 
-                                value="{{ old('catatan3', $existingPersentase->catatan3 ?? '') }}" placeholder="Masukkan catatan 3">
+                                value="{{ old('catatan3', $existingPersentase->catatan3 ?? '') }}" placeholder="Masukkan catatan Rough Cut">
                             @error('catatan3')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -387,12 +389,12 @@ Membuat folder kerja terstruktur (bining)</label>
         <div class="accordion-item">
             <h2 class="accordion-header" id="headingCatatan4">
 <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan4" aria-expanded="false" aria-controls="collapseCatatan4">
-                    Catatan 4
+                    Fine Cut (Cutting Halus)
                 </button>
             </h2>
             <div id="collapseCatatan4" class="accordion-collapse collapse" aria-labelledby="headingCatatan4" data-parent="#accordionProgres">
                 <div class="accordion-body">
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan4">Isi Catatan 4</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan4">Isi Catatan Fine Cut (Cutting Halus)</button>
                 </div>
             </div>
         </div>
@@ -402,14 +404,16 @@ Membuat folder kerja terstruktur (bining)</label>
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Catatan 4</h5>
+                        <h5 class="modal-title">Fine Cut (Cutting Halus)</h5>
                         <button type="button" class="btn-close" data-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="catatan4" class="form-label">Catatan 4</label>
+                            <label for="catatan4" class="form-label">Memperhalus transisi antar bagian;
+Sinkronisasi audio dan video;
+Koreksi durasi agar efisien</label>
                             <input type="text" class="form-control @error('catatan4') is-invalid @enderror" id="catatan4" name="catatan4" 
-                                value="{{ old('catatan4', $existingPersentase->catatan4 ?? '') }}" placeholder="Masukkan catatan 4">
+                                value="{{ old('catatan4', $existingPersentase->catatan4 ?? '') }}" placeholder="Masukkan catatan Fine Cut (Cutting Halus)">
                             @error('catatan4')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -427,12 +431,12 @@ Membuat folder kerja terstruktur (bining)</label>
         <div class="accordion-item">
             <h2 class="accordion-header" id="headingCatatan5">
 <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan5" aria-expanded="false" aria-controls="collapseCatatan5">
-                    Catatan 5
+                    Penambahan Elemen Grafis & Visual
                 </button>
             </h2>
             <div id="collapseCatatan5" class="accordion-collapse collapse" aria-labelledby="headingCatatan5" data-parent="#accordionProgres">
                 <div class="accordion-body">
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan5">Isi Catatan 5</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan5">Isi Catatan Penambahan Elemen Grafis & Visual</button>
                 </div>
             </div>
         </div>
@@ -442,14 +446,16 @@ Membuat folder kerja terstruktur (bining)</label>
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Catatan 5</h5>
+                        <h5 class="modal-title">Penambahan Elemen Grafis & Visual</h5>
                         <button type="button" class="btn-close" data-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="catatan5" class="form-label">Catatan 5</label>
+                            <label for="catatan5" class="form-label">Menambahkan judul, nama narasumber, transisi visual;
+Menyisipkan gambar, ilustrasi, atau animasi penunjang materi
+Menyisipkan bumper opening video</label>
                             <input type="text" class="form-control @error('catatan5') is-invalid @enderror" id="catatan5" name="catatan5" 
-                                value="{{ old('catatan5', $existingPersentase->catatan5 ?? '') }}" placeholder="Masukkan catatan 5">
+                                value="{{ old('catatan5', $existingPersentase->catatan5 ?? '') }}" placeholder="Masukkan catatan Penambahan Elemen Grafis & Visual">
                             @error('catatan5')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -467,12 +473,12 @@ Membuat folder kerja terstruktur (bining)</label>
         <div class="accordion-item">
             <h2 class="accordion-header" id="headingCatatan6">
 <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan6" aria-expanded="false" aria-controls="collapseCatatan6">
-                    Catatan 6
+                    Penyuntingan Audio
                 </button>
             </h2>
             <div id="collapseCatatan6" class="accordion-collapse collapse" aria-labelledby="headingCatatan6" data-parent="#accordionProgres">
                 <div class="accordion-body">
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan6">Isi Catatan 6</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan6">Isi Catatan Penyuntingan Audio</button>
                 </div>
             </div>
         </div>
@@ -482,14 +488,16 @@ Membuat folder kerja terstruktur (bining)</label>
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Catatan 6</h5>
+                        <h5 class="modal-title">Penyuntingan Audio</h5>
                         <button type="button" class="btn-close" data-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="catatan6" class="form-label">Catatan 6</label>
+                            <label for="catatan6" class="form-label">Membersihkan noise;
+Menyesuaikan level suara (voice over, musik latar);
+Menambahkan sound effect jika dibutuhkan</label>
                             <input type="text" class="form-control @error('catatan6') is-invalid @enderror" id="catatan6" name="catatan6" 
-                                value="{{ old('catatan6', $existingPersentase->catatan6 ?? '') }}" placeholder="Masukkan catatan 6">
+                                value="{{ old('catatan6', $existingPersentase->catatan6 ?? '') }}" placeholder="Masukkan catatan Penyuntingan Audio">
                             @error('catatan6')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -507,12 +515,12 @@ Membuat folder kerja terstruktur (bining)</label>
         <div class="accordion-item">
             <h2 class="accordion-header" id="headingCatatan7">
 <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan7" aria-expanded="false" aria-controls="collapseCatatan7">
-                    Catatan 7
+                    Penyisipan Subtitle atau Teks Narasi
                 </button>
             </h2>
             <div id="collapseCatatan7" class="accordion-collapse collapse" aria-labelledby="headingCatatan7" data-parent="#accordionProgres">
                 <div class="accordion-body">
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan7">Isi Catatan 7</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan7">Isi Catatan Penyisipan Subtitle atau Teks Narasi</button>
                 </div>
             </div>
         </div>
@@ -522,14 +530,14 @@ Membuat folder kerja terstruktur (bining)</label>
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Catatan 7</h5>
+                        <h5 class="modal-title">Penyisipan Subtitle atau Teks Narasi</h5>
                         <button type="button" class="btn-close" data-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="catatan7" class="form-label">Catatan 7</label>
+                            <label for="catatan7" class="form-label">Menambahkan subtitle (bila diperlukan); Menyisipkan poin penting materi dalam bentuk teks visual</label>
                             <input type="text" class="form-control @error('catatan7') is-invalid @enderror" id="catatan7" name="catatan7" 
-                                value="{{ old('catatan7', $existingPersentase->catatan7 ?? '') }}" placeholder="Masukkan catatan 7">
+                                value="{{ old('catatan7', $existingPersentase->catatan7 ?? '') }}" placeholder="Masukkan catatan Penyisipan Subtitle atau Teks Narasi">
                             @error('catatan7')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -547,12 +555,12 @@ Membuat folder kerja terstruktur (bining)</label>
         <div class="accordion-item">
             <h2 class="accordion-header" id="headingCatatan8">
 <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan8" aria-expanded="false" aria-controls="collapseCatatan8">
-                    Catatan 8
+                    Quality Control (QC) dan Revisi
                 </button>
             </h2>
             <div id="collapseCatatan8" class="accordion-collapse collapse" aria-labelledby="headingCatatan8" data-parent="#accordionProgres">
                 <div class="accordion-body">
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan8">Isi Catatan 8</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan8">Isi Catatan Quality Control (QC) dan Revisi</button>
                 </div>
             </div>
         </div>
@@ -562,14 +570,14 @@ Membuat folder kerja terstruktur (bining)</label>
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Catatan 8</h5>
+                        <h5 class="modal-title">Quality Control (QC) dan Revisi</h5>
                         <button type="button" class="btn-close" data-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="catatan8" class="form-label">Catatan 8</label>
+                            <label for="catatan8" class="form-label">Menonton ulang hasil edit untuk deteksi kesalahan; Menyesuaikan revisi dari dosen</label>
                             <input type="text" class="form-control @error('catatan8') is-invalid @enderror" id="catatan8" name="catatan8" 
-                                value="{{ old('catatan8', $existingPersentase->catatan8 ?? '') }}" placeholder="Masukkan catatan 8">
+                                value="{{ old('catatan8', $existingPersentase->catatan8 ?? '') }}" placeholder="Masukkan catatan Quality Control (QC) dan Revisi">
                             @error('catatan8')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -587,12 +595,12 @@ Membuat folder kerja terstruktur (bining)</label>
         <div class="accordion-item">
             <h2 class="accordion-header" id="headingCatatan9">
 <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan9" aria-expanded="false" aria-controls="collapseCatatan9">
-                    Catatan 9
+                    Export dan Finalisasi
                 </button>
             </h2>
             <div id="collapseCatatan9" class="accordion-collapse collapse" aria-labelledby="headingCatatan9" data-parent="#accordionProgres">
                 <div class="accordion-body">
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan9">Isi Catatan 9</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan9">Isi Catatan Export dan Finalisasi</button>
                 </div>
             </div>
         </div>
@@ -602,14 +610,15 @@ Membuat folder kerja terstruktur (bining)</label>
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Catatan 9</h5>
+                        <h5 class="modal-title">Export dan Finalisasi</h5>
                         <button type="button" class="btn-close" data-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="catatan9" class="form-label">Catatan 9</label>
+                            <label for="catatan9" class="form-label">Mengekspor video dalam format dan resolusi sesuai kebutuhan; 
+Menyimpan arsip kerja</label>
                             <input type="text" class="form-control @error('catatan9') is-invalid @enderror" id="catatan9" name="catatan9" 
-                                value="{{ old('catatan9', $existingPersentase->catatan9 ?? '') }}" placeholder="Masukkan catatan 9">
+                                value="{{ old('catatan9', $existingPersentase->catatan9 ?? '') }}" placeholder="Masukkan catatan Export dan Finalisasi">
                             @error('catatan9')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -627,12 +636,12 @@ Membuat folder kerja terstruktur (bining)</label>
         <div class="accordion-item">
             <h2 class="accordion-header" id="headingCatatan10">
 <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan10" aria-expanded="false" aria-controls="collapseCatatan10">
-                    Catatan 10
+                    Pasca Produksi
                 </button>
             </h2>
             <div id="collapseCatatan10" class="accordion-collapse collapse" aria-labelledby="headingCatatan10" data-parent="#accordionProgres">
                 <div class="accordion-body">
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan10">Isi Catatan 10</button>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan10">Isi Catatan Pasca Produksi</button>
                 </div>
             </div>
         </div>
@@ -642,14 +651,14 @@ Membuat folder kerja terstruktur (bining)</label>
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Catatan 10</h5>
+                        <h5 class="modal-title">Pasca Produksi</h5>
                         <button type="button" class="btn-close" data-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="catatan10" class="form-label">Catatan 10</label>
+                            <label for="catatan10" class="form-label">Editor mengupload video dengan dilengkapi judul, caption, thumbnail, dan elemen lain yang sesuai dengan video</label>
                             <input type="text" class="form-control @error('catatan10') is-invalid @enderror" id="catatan10" name="catatan10" 
-                                value="{{ old('catatan10', $existingPersentase->catatan10 ?? '') }}" placeholder="Masukkan catatan 10">
+                                value="{{ old('catatan10', $existingPersentase->catatan10 ?? '') }}" placeholder="Masukkan catatan Pasca Produksi">
                             @error('catatan10')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
