@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('publish_link_youtube')->nullable();
             $table->date('tanggal_publish')->nullable();
             $table->decimal('durasi_video_menit', 4, 2)->nullable();
+            $table->decimal('persentase', 5, 2)->nullable();
             $table->timestamps();
         });
     }

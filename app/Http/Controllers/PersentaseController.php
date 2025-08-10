@@ -28,7 +28,12 @@ class PersentaseController extends Controller
             'publish_link_youtube' => 'nullable|url|max:255',
             'tanggal_publish' => 'nullable|date',
             'durasi_video_menit' => 'nullable|numeric|min:0|max:9999.99',
+            'persentase' => 'nullable|numeric|min:0|max:100',
         ]);
+
+        // Hitung persentase otomatis berdasarkan catatan yang terisi
+        $persentase = $this->calculatePersentase($validated);
+        $validated['persentase'] = $persentase;
 
         // Cek apakah sudah ada data persentase untuk progress ini
         $existing = Persentase::where('id_progres', $validated['id_progres'])->first();
@@ -73,10 +78,38 @@ class PersentaseController extends Controller
             'publish_link_youtube' => 'nullable|url|max:255',
             'tanggal_publish' => 'nullable|date',
             'durasi_video_menit' => 'nullable|numeric|min:0|max:9999.99',
+            'persentase' => 'nullable|numeric|min:0|max:100',
         ]);
+
+        // Hitung persentase otomatis berdasarkan catatan yang terisi
+        $persentaseValue = $this->calculatePersentase($validated);
+        $validated['persentase'] = $persentaseValue;
 
         $persentase->update($validated);
 
         return redirect()->back()->with('success', 'Data persentase berhasil diperbarui!');
+    }
+
+    /**
+     * Calculate persentase based on catatan values.
+     */
+    private function calculatePersentase(array $data): float
+    {
+        $persentaseMap = [
+            1 => 10, 6 => 10, 7 => 10,
+            2 => 5, 8 => 5, 9 => 5, 10 => 5,
+            3 => 15, 4 => 15,
+            5 => 20,
+        ];
+
+        $total = 0;
+
+        foreach ($persentaseMap as $key => $value) {
+            if (!empty($data['catatan' . $key])) {
+                $total += $value;
+            }
+        }
+
+        return min($total, 100);
     }
 }

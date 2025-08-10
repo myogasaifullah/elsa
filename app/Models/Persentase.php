@@ -27,12 +27,14 @@ class Persentase extends Model
         'publish_link_youtube',
         'tanggal_publish',
         'durasi_video_menit',
+        'persentase',
     ];
 
     protected $casts = [
         'target_publish' => 'date',
         'tanggal_publish' => 'date',
         'durasi_video_menit' => 'decimal:2',
+        'persentase' => 'decimal:2',
     ];
 
     public function progress()

@@ -121,12 +121,7 @@ Route::get('/template', function () {
     return view('template');
 });
 
-Route::get('/editor', function () {
-    return view('editor');
-});
-
-
-
+Route::get('/progres/editor', [ProgresController::class, 'editor'])->name('progres.editor');
 
 Route::get('/', function () {
     return view('welcome');

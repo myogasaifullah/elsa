@@ -26,6 +26,32 @@ class ProgresController extends Controller
         return view('progres', compact('progress'));
     }
 
+    public function editor()
+{
+    $userId = auth()->user()->id; // Get the logged-in user's ID
+    
+    // Get editor_id for the logged-in user
+    $editor = \App\Models\Editor::where('email', auth()->user()->email)->first();
+    
+    if (!$editor) {
+        // If no editor record exists, return empty collection
+        $progress = collect();
+    } else {
+        $progress = Progress::with([
+            'jadwalBooking.dosen.fakultas',
+            'jadwalBooking.dosen.prodi',
+            'jadwalBooking.studio',
+            'editor'
+        ])
+        ->where('editor_id', $editor->id) // Filter by editor_id
+        ->orderBy('created_at', 'desc')
+        ->get();
+    }
+    
+    return view('editor', compact('progress'));
+}
+
+
     /**
      * Show the form for creating a new resource.
      */
