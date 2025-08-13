@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Progress;
 use App\Models\JadwalBooking;
 use App\Models\Editor;
+use App\Models\Persentase;
 use Illuminate\Http\Request;
 
 class ProgresController extends Controller
@@ -22,35 +23,34 @@ class ProgresController extends Controller
         ])
             ->orderBy('created_at', 'desc')
             ->get();
-            
+
         return view('progres', compact('progress'));
     }
 
     public function editor()
-{
-    $userId = auth()->user()->id; // Get the logged-in user's ID
-    
-    // Get editor_id for the logged-in user
-    $editor = \App\Models\Editor::where('email', auth()->user()->email)->first();
-    
-    if (!$editor) {
-        // If no editor record exists, return empty collection
-        $progress = collect();
-    } else {
-        $progress = Progress::with([
-            'jadwalBooking.dosen.fakultas',
-            'jadwalBooking.dosen.prodi',
-            'jadwalBooking.studio',
-            'editor'
-        ])
-        ->where('editor_id', $editor->id) // Filter by editor_id
-        ->orderBy('created_at', 'desc')
-        ->get();
-    }
-    
-    return view('editor', compact('progress'));
-}
+    {
+        $userId = auth()->user()->id;
 
+        // Get editor_id for the logged-in user
+        $editor = \App\Models\Editor::where('email', auth()->user()->email)->first();
+
+        if (!$editor) {
+            // If no editor record exists, return empty collection
+            $progress = collect();
+        } else {
+            $progress = Progress::with([
+                'jadwalBooking.dosen.fakultas',
+                'jadwalBooking.dosen.prodi',
+                'jadwalBooking.studio',
+                'editor'
+            ])
+                ->where('editor_id', $editor->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
+
+        return view('editor', compact('progress'));
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -59,7 +59,7 @@ class ProgresController extends Controller
     {
         $jadwalBookings = JadwalBooking::all();
         $editors = Editor::all();
-        
+
         return view('progres.create', compact('jadwalBookings', 'editors'));
     }
 
@@ -100,7 +100,7 @@ class ProgresController extends Controller
     {
         $jadwalBookings = JadwalBooking::all();
         $editors = Editor::all();
-        
+
         return view('progres.edit', compact('progress', 'jadwalBookings', 'editors'));
     }
 
@@ -124,6 +124,55 @@ class ProgresController extends Controller
 
         return redirect()->route('progres.index')
             ->with('success', 'Progress berhasil diperbarui');
+    }
+
+    /**
+     * Transfer data from persentase to progress table
+     */
+    public function transferToProgress(Request $request, $id)
+    {
+        try {
+            // Find the progress record
+            $progress = Progress::findOrFail($id);
+            
+            // Find the related persentase record
+            $persentase = Persentase::where('id_progres', $id)->first();
+            
+            if (!$persentase) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Data persentase tidak ditemukan untuk progress ini'
+                ], 404);
+            }
+            
+            // Update progress with data from persentase
+            $updateData = [
+                'persentase' => $persentase->persentase ?? 0,
+                'target_upload' => $persentase->target_publish,
+                'tanggal_upload_youtube' => $persentase->tanggal_publish,
+                'durasi' => $persentase->durasi_video_menit,
+            ];
+            
+            // Only update tautan_video if the field exists in the progress table
+            if (isset($persentase->publish_link_youtube)) {
+                $updateData['tautan_video'] = $persentase->publish_link_youtube;
+            }
+            
+            $progress->update($updateData);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Data berhasil ditransfer dari persentase ke progress',
+                'data' => $updateData
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Transfer data error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mentransfer data: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -162,9 +211,52 @@ class ProgresController extends Controller
         ])->findOrFail($id);
 
         // Ambil data persentase terkait progress ini
-        $existingPersentase = \App\Models\Persentase::where('id_progres', $progress->id)->first();
+        $existingPersentase = Persentase::where('id_progres', $progress->id)->first();
 
         return view('modal_progres', compact('progress', 'existingPersentase'));
+    }
+
+    /**
+     * Transfer data from persentase table to progress table
+     */
+    public function transferFromPersentase(Request $request, $progressId)
+    {
+        try {
+            // Find the progress record
+            $progress = Progress::findOrFail($progressId);
+            
+            // Find the related persentase record
+            $persentase = Persentase::where('id_progres', $progressId)->first();
+            
+            if (!$persentase) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Data persentase tidak ditemukan untuk progress ini'
+                ], 404);
+            }
+            
+            // Update progress with data from persentase
+            $updateData = [
+                'persentase' => $persentase->persentase ?? 0,
+                'target_upload' => $persentase->target_publish,
+                'tanggal_upload_youtube' => $persentase->tanggal_publish,
+                'durasi' => $persentase->durasi_video_menit,
+            ];
+            
+            $progress->update($updateData);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Data berhasil dipindahkan dari persentase ke progress',
+                'data' => $updateData
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal memindahkan data: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

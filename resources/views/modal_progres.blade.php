@@ -143,6 +143,63 @@
                 </div>
             </div>
 
+    <!-- Button to transfer data from persentase to progress -->
+    @if($existingPersentase)
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Transfer Data ke Progress</h5>
+            <button type="button" class="btn btn-success" id="transferDataButton" data-progress-id="{{ $progress->id }}">
+                <i class="bi bi-arrow-down-up"></i> Transfer Data dari Persentase
+            </button>
+            <p class="text-muted mt-2">
+                <small>Menyalin data: persentase, target publish, tanggal publish, durasi, dan link YouTube ke tabel progress</small>
+            </p>
+        </div>
+    </div>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const transferButton = document.getElementById('transferDataButton');
+        
+        if (transferButton) {
+            transferButton.addEventListener('click', function() {
+                const progressId = this.getAttribute('data-progress-id');
+                
+                if (confirm('Apakah Anda yakin ingin mentransfer data dari persentase ke progress?')) {
+                    transferButton.disabled = true;
+                    transferButton.innerHTML = '<i class="bi bi-arrow-down-up"></i> Memproses...';
+                    
+                    fetch(`/progres/transfer-data/${progressId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Data berhasil ditransfer!');
+                            location.reload();
+                        } else {
+                            alert('Gagal mentransfer data: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Terjadi kesalahan saat mentransfer data');
+                    })
+                    .finally(() => {
+                        transferButton.disabled = false;
+                        transferButton.innerHTML = '<i class="bi bi-arrow-down-up"></i> Transfer Data dari Persentase';
+                    });
+                }
+            });
+        }
+    });
+    </script>
+    @endif
+
     <!-- Form untuk input/update persentase -->
     @php
     // Gunakan variabel existingPersentase yang dikirim dari controller
@@ -212,10 +269,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                            <button type="submit" class="btn btn-primary">{{ $existingPersentase ? 'Update' : 'Simpan' }}</button>
-                        </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                <button type="submit" class="btn btn-primary">{{ $existingPersentase ? 'Update' : 'Simpan' }}</button>
+            </div>
                     </div>
                 </div>
             </div>

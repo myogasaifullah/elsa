@@ -51,13 +51,6 @@ Route::get('/', function () {
     return view('index');
 });
 
-
-
-
-Route::get('/user', function () {
-    return view('user');
-});
-
 Route::get('/listuser', [App\Http\Controllers\UserController::class, 'index'])->name('user.index');
 Route::post('/user', [App\Http\Controllers\UserController::class, 'store'])->name('user.store');
 Route::put('/user/{user}', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
@@ -65,8 +58,6 @@ Route::delete('/user/{user}', [App\Http\Controllers\UserController::class, 'dest
 
 Route::get('/verifikasi', [App\Http\Controllers\UserController::class, 'verifikasi'])->name('user.verifikasi');
 Route::put('/verifikasi/status/{id}', [App\Http\Controllers\UserController::class, 'updateStatus'])->name('user.updateStatus');
-
-
 
 // Dosen & MOOC Routes
 Route::get('/dosen-mooc', [DosenMoocController::class, 'index'])->name('dosen-mooc.index');
@@ -95,10 +86,6 @@ Route::post('/booking/{booking}/reject', [App\Http\Controllers\BookingController
 Route::get('/booking', [JadwalBookingController::class, 'scheduledBookings'])->name('booking.index');
 Route::post('/jadwal/{jadwal}/done', [JadwalBookingController::class, 'markAsDone'])->name('jadwal.done');
 
-Route::get('/laporan', function () {
-    return view('laporan');
-});
-
 Route::get('/progres', [ProgresController::class, 'index'])->name('progres.index');
 Route::get('/progres/create', [ProgresController::class, 'create'])->name('progres.create');
 Route::post('/progres', [ProgresController::class, 'store'])->name('progres.store');
@@ -112,6 +99,10 @@ Route::get('/modal-progres', function () {
     return view('modal_progres');
 });
 Route::get('/modal-progres/{id}', [ProgresController::class, 'modal'])->name('progres.modal');
+
+// Route for transferring data from persentase to progress
+Route::post('/progres/transfer-data/{id}', [ProgresController::class, 'transferToProgress'])
+    ->name('progres.transfer');
 
 // Persentase routes
 Route::post('/persentase', [App\Http\Controllers\PersentaseController::class, 'store'])->name('persentase.store');
@@ -130,8 +121,6 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
-
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
