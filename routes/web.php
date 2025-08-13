@@ -51,6 +51,10 @@ Route::get('/', function () {
     return view('index');
 });
 
+Route::get('/laporan', function () {
+    return view('laporan');
+});
+
 Route::get('/listuser', [App\Http\Controllers\UserController::class, 'index'])->name('user.index');
 Route::post('/user', [App\Http\Controllers\UserController::class, 'store'])->name('user.store');
 Route::put('/user/{user}', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');

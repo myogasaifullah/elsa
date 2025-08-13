@@ -145,12 +145,32 @@ class ProgresController extends Controller
                 ], 404);
             }
             
+            // Determine progress status based on percentage
+            $persentaseValue = $persentase->persentase ?? 0;
+            $progresStatus = 'belum';
+            
+            if ($persentaseValue == 0) {
+                $progresStatus = 'belum';
+            } elseif ($persentaseValue == 100) {
+                $progresStatus = 'selesai';
+            } else {
+                $progresStatus = 'progres';
+            }
+            
+            // Determine keterangan based on YouTube link
+            $keteranganStatus = 'belum terbit';
+            if (!empty($persentase->publish_link_youtube)) {
+                $keteranganStatus = 'sudah terbit';
+            }
+            
             // Update progress with data from persentase
             $updateData = [
-                'persentase' => $persentase->persentase ?? 0,
+                'persentase' => $persentaseValue,
                 'target_upload' => $persentase->target_publish,
                 'tanggal_upload_youtube' => $persentase->tanggal_publish,
                 'durasi' => $persentase->durasi_video_menit,
+                'progres' => $progresStatus,
+                'keterangan' => $keteranganStatus,
             ];
             
             // Only update tautan_video if the field exists in the progress table
@@ -235,13 +255,38 @@ class ProgresController extends Controller
                 ], 404);
             }
             
+            // Determine progress status based on percentage
+            $persentaseValue = $persentase->persentase ?? 0;
+            $progresStatus = 'belum';
+            
+            if ($persentaseValue == 0) {
+                $progresStatus = 'belum';
+            } elseif ($persentaseValue == 100) {
+                $progresStatus = 'selesai';
+            } else {
+                $progresStatus = 'progres';
+            }
+            
+            // Determine keterangan based on YouTube link
+            $keteranganStatus = 'belum terbit';
+            if (!empty($persentase->publish_link_youtube)) {
+                $keteranganStatus = 'sudah terbit';
+            }
+            
             // Update progress with data from persentase
             $updateData = [
-                'persentase' => $persentase->persentase ?? 0,
+                'persentase' => $persentaseValue,
                 'target_upload' => $persentase->target_publish,
                 'tanggal_upload_youtube' => $persentase->tanggal_publish,
                 'durasi' => $persentase->durasi_video_menit,
+                'progres' => $progresStatus,
+                'keterangan' => $keteranganStatus,
             ];
+            
+            // Only update tautan_video if the field exists in the progress table
+            if (isset($persentase->publish_link_youtube)) {
+                $updateData['tautan_video'] = $persentase->publish_link_youtube;
+            }
             
             $progress->update($updateData);
             
