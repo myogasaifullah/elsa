@@ -52,8 +52,6 @@
 <!-- Template Main JS File -->
 <script src="assets/js/main.js"></script>
 
-<!-- FullCalendar JS -->
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -72,7 +70,13 @@
     }
   });
 </script>
-
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/js/datepicker-full.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script> -->
+<!-- <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script> -->
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/id.js'></script>
+<!-- <script src='https://cdn.jsdelivr.net/npm/flatpickr'></script> -->
+<script src='https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/id.js'></script>
 </body>
 
 </html>

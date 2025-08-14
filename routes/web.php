@@ -81,6 +81,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/jadwal', [JadwalBookingController::class, 'store'])->name('jadwal.store');
     Route::put('/jadwal/{jadwal}', [JadwalBookingController::class, 'update'])->name('jadwal.update');
     Route::delete('/jadwal/{jadwal}', [JadwalBookingController::class, 'destroy'])->name('jadwal.destroy');
+    Route::get('/jadwal-approved', [JadwalBookingController::class, 'getApprovedEvents']); // New route
 });
 
 Route::get('/acc', [App\Http\Controllers\BookingController::class, 'acc'])->name('booking.acc');
@@ -89,6 +90,7 @@ Route::post('/booking/{booking}/reject', [App\Http\Controllers\BookingController
 
 Route::get('/booking', [JadwalBookingController::class, 'scheduledBookings'])->name('booking.index');
 Route::post('/jadwal/{jadwal}/done', [JadwalBookingController::class, 'markAsDone'])->name('jadwal.done');
+Route::get('/jadwal/approved-events', [JadwalBookingController::class, 'getApprovedEvents'])->name('jadwal.approved-events');
 
 Route::get('/progres', [ProgresController::class, 'index'])->name('progres.index');
 Route::get('/progres/create', [ProgresController::class, 'create'])->name('progres.create');

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\JadwalBooking;
 use App\Models\Studio;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log; // Add this line
 use Illuminate\Support\Facades\Auth;
+
 
 class JadwalBookingController extends Controller
 {
@@ -17,37 +19,37 @@ class JadwalBookingController extends Controller
         $dosens = \App\Models\Dosen::all();
         $studios = Studio::all();
 
-        return view('jadwal', compact('jadwals', 'moocs', 'mataKuliahs', 'dosens','studios'));
+        return view('jadwal', compact('jadwals', 'moocs', 'mataKuliahs', 'dosens', 'studios'));
     }
 
     public function store(Request $request)
-{
-    $request->validate([
-        'tanggal' => 'required|date|after_or_equal:today',
-        'jam' => 'required|string',
-        'jenis_kategori' => 'required|string',
-        'kategori_mooc' => 'nullable|string',
-        'studio_id' => 'required|exists:studios,id', // Changed from 'studio' string
-        'nama_mata_kuliah' => 'required|string|max:255',
-        'judul_course' => 'required|string|max:255',
-        'dosen_id' => 'required|exists:dosens,id',
-    ]);
+    {
+        $request->validate([
+            'tanggal' => 'required|date|after_or_equal:today',
+            'jam' => 'required|string',
+            'jenis_kategori' => 'required|string',
+            'kategori_mooc' => 'nullable|string',
+            'studio_id' => 'required|exists:studios,id', // Changed from 'studio' string
+            'nama_mata_kuliah' => 'required|string|max:255',
+            'judul_course' => 'required|string|max:255',
+            'dosen_id' => 'required|exists:dosens,id',
+        ]);
 
-    JadwalBooking::create([
-        'tanggal' => $request->tanggal,
-        'jam' => $request->jam,
-        'jenis_kategori' => $request->jenis_kategori,
-        'kategori_mooc' => $request->kategori_mooc,
-        'studio_id' => $request->studio_id, // Changed from 'studio' string
-        'nama_mata_kuliah' => $request->nama_mata_kuliah,
-        'judul_course' => $request->judul_course,
-        'user_id' => Auth::id(),
-        'dosen_id' => $request->dosen_id,
-        'status' => 'pending'
-    ]);
+        JadwalBooking::create([
+            'tanggal' => $request->tanggal,
+            'jam' => $request->jam,
+            'jenis_kategori' => $request->jenis_kategori,
+            'kategori_mooc' => $request->kategori_mooc,
+            'studio_id' => $request->studio_id, // Changed from 'studio' string
+            'nama_mata_kuliah' => $request->nama_mata_kuliah,
+            'judul_course' => $request->judul_course,
+            'user_id' => Auth::id(),
+            'dosen_id' => $request->dosen_id,
+            'status' => 'pending'
+        ]);
 
-    return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil ditambahkan');
-}
+        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil ditambahkan');
+    }
 
 
     public function update(Request $request, JadwalBooking $jadwal)
@@ -146,4 +148,48 @@ class JadwalBookingController extends Controller
             return redirect()->back()->with('error', 'Failed to mark booking as done: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Get approved jadwal events for calendar display
+     */
+    public function getApprovedEvents()
+{
+    $approvedEvents = JadwalBooking::with(['studio', 'dosen'])
+        ->whereIn('status', ['approved', 'schedule'])
+        ->get()
+        ->map(function ($jadwal) {
+            // Ambil jam mulai & selesai dari format "15.00 WIB - 17.00 WIB"
+            $jamRange = explode('-', $jadwal->jam);
+            $jamMulai = isset($jamRange[0]) ? trim(str_replace(['WIB', '.', ' '], ['', ':', ''], $jamRange[0])) : '00:00';
+$jamSelesai = isset($jamRange[1]) ? trim(str_replace(['WIB', '.', ' '], ['', ':', ''], $jamRange[1])) : '00:00';
+
+if (strlen($jamMulai) == 5) $jamMulai .= ':00';
+if (strlen($jamSelesai) == 5) $jamSelesai .= ':00';
+
+            return [
+                'id' => $jadwal->id,
+                'title' => $jadwal->judul_course . ' - ' . $jadwal->studio->nama_studio,
+                'start' => $jadwal->tanggal . 'T' . $jamMulai,
+                'end' => $jadwal->tanggal . 'T' . $jamSelesai,
+                'description' => $jadwal->nama_mata_kuliah . ' - ' . ($jadwal->dosen->nama_dosen ?? 'Tidak ada dosen'),
+                'color' => $jadwal->jenis_kategori === 'Mooc'
+                    ? '#4ade80'
+                    : ($jadwal->jenis_kategori === 'Lomba'
+                        ? '#facc15'
+                        : '#fb923c'),
+                'allDay' => false,
+                'extendedProps' => [
+                    'studio' => $jadwal->studio->nama_studio,
+                    'mata_kuliah' => $jadwal->nama_mata_kuliah,
+                    'dosen' => $jadwal->dosen->nama_dosen ?? '-',
+                    'jam' => $jadwal->jam,
+                    'jenis' => $jadwal->jenis_kategori,
+                    'status' => $jadwal->status,
+                ]
+            ];
+        });
+
+    return response()->json($approvedEvents);
+}
+
 }

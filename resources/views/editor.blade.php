@@ -89,9 +89,9 @@
                                             </span>
                                         </td>
                                         <td>{{ $item->durasi ?? '-' }}</td>
-                                        <td>
-                                            @if($item->jadwalBooking->booking->link_video ?? '')
-                                            <a href="{{ $item->jadwalBooking->booking->link_video ?? '' }}" target="_blank" class="btn btn-sm btn-primary">Lihat Video</a>
+                                         <td>
+                                            @if($item->publish_link_youtube ?? '')
+                                            <a href="{{ $item->publish_link_youtube ?? '' }}" target="_blank" class="btn btn-sm btn-primary">Lihat Video</a>
                                             @else
                                             -
                                             @endif

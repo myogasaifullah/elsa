@@ -88,8 +88,8 @@
                                         </td>
                                         <td>{{ $progress->durasi ?? '-' }}</td>
                                         <td>
-                                            @if($progress->jadwalBooking->booking->link_video ?? $progress->tautan_video ?? '')
-                                            <a href="{{ $progress->jadwalBooking->booking->link_video ?? $progress->tautan_video ?? '' }}" target="_blank" class="btn btn-sm btn-primary">Lihat Video</a>
+                                            @if($progress->publish_link_youtube ?? '')
+                                            <a href="{{ $progress->publish_link_youtube ?? '' }}" target="_blank" class="btn btn-sm btn-primary">Lihat Video</a>
                                             @else
                                             -
                                             @endif
