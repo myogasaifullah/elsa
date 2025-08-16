@@ -9,7 +9,13 @@
         <span>Dashboard</span>
       </a>
     </li>
-
+<!-- Laporan -->
+    <li class="nav-item">
+      <a class="nav-link {{ Request::is('laporan') ? '' : 'collapsed' }}" href="{{ url('laporan') }}">
+        <i class="bi bi-file-earmark"></i>
+        <span>Laporan</span>
+      </a>
+    </li>
     <!-- User -->
     <li class="nav-item">
       <a class="nav-link {{ Request::is('listuser', 'verifikasi') ? '' : 'collapsed' }}" data-bs-target="#user-nav" data-bs-toggle="collapse" href="#">
@@ -78,13 +84,7 @@
       </ul>
     </li>
 
-    <!-- Laporan -->
-    <li class="nav-item">
-      <a class="nav-link {{ Request::is('laporan') ? '' : 'collapsed' }}" href="{{ url('laporan') }}">
-        <i class="bi bi-file-earmark"></i>
-        <span>Laporan</span>
-      </a>
-    </li>
+    
 
     <!-- progres -->
     <li class="nav-item">
@@ -103,12 +103,12 @@
     </li>
 
     <!-- template -->
-    <li class="nav-item">
+    <!-- <li class="nav-item">
       <a class="nav-link {{ Request::is('template') ? '' : 'collapsed' }}" href="{{ url('template') }}">
         <i class="bi bi-question-circle"></i>
         <span>Template</span>
       </a>
-    </li>
+    </li> -->
 
   </ul>
 </aside><!-- End Sidebar -->

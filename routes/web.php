@@ -10,6 +10,7 @@ use App\Http\Controllers\DosenMoocController;
 use App\Http\Controllers\JadwalBookingController;
 use App\Http\Controllers\StudioMatkulController;
 use App\Http\Controllers\EditorController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProgresController;
 
@@ -51,9 +52,7 @@ Route::get('/', function () {
     return view('index');
 });
 
-Route::get('/laporan', function () {
-    return view('laporan');
-});
+Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
 
 Route::get('/listuser', [App\Http\Controllers\UserController::class, 'index'])->name('user.index');
 Route::post('/user', [App\Http\Controllers\UserController::class, 'store'])->name('user.store');
