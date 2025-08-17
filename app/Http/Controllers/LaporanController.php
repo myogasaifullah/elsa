@@ -20,5 +20,4 @@ class LaporanController extends Controller
 
         return view('laporan', compact('progress'));
     }
-
 }

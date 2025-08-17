@@ -59,12 +59,22 @@ class JadwalBookingController extends Controller
             'jam' => 'required|string',
             'jenis_kategori' => 'required|string',
             'kategori_mooc' => 'nullable|string',
-            'studio' => 'required|string',
+            'studio_id' => 'required|exists:studios,id',
             'nama_mata_kuliah' => 'required|string|max:255',
             'judul_course' => 'required|string|max:255',
+            'dosen_id' => 'required|exists:dosens,id',
         ]);
 
-        $jadwal->update($request->all());
+        $jadwal->update([
+            'tanggal' => $request->tanggal,
+            'jam' => $request->jam,
+            'jenis_kategori' => $request->jenis_kategori,
+            'kategori_mooc' => $request->kategori_mooc,
+            'studio_id' => $request->studio_id,
+            'nama_mata_kuliah' => $request->nama_mata_kuliah,
+            'judul_course' => $request->judul_course,
+            'dosen_id' => $request->dosen_id,
+        ]);
 
         return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil diperbarui');
     }
