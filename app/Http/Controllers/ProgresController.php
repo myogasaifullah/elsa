@@ -171,12 +171,8 @@ class ProgresController extends Controller
                 'durasi' => $persentase->durasi_video_menit,
                 'progres' => $progresStatus,
                 'keterangan' => $keteranganStatus,
+                'publish_link_youtube' => $persentase->publish_link_youtube,
             ];
-            
-            // Only update tautan_video if the field exists in the progress table
-            if (isset($persentase->publish_link_youtube)) {
-                $updateData['tautan_video'] = $persentase->publish_link_youtube;
-            }
             
             $progress->update($updateData);
             
