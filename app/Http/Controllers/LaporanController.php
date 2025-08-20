@@ -18,6 +18,11 @@ class LaporanController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('laporan', compact('progress'));
+        $sudahShooting = $progress->where('status', 'sudah shooting')->count();
+        $prosesEdit = $progress->where('progres', 'progres')->count();
+        $belumShooting = $progress->where('status', 'belum shooting')->count();
+        $sudahTerbit = $progress->where('progres', 'selesai')->count();
+
+        return view('laporan', compact('progress', 'sudahShooting', 'prosesEdit', 'belumShooting', 'sudahTerbit'));
     }
 }
