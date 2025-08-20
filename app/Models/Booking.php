@@ -17,7 +17,7 @@ class Booking extends Model
         'jam',
         'jenis_kategori',
         'kategori_mooc',
-        'studio',
+        'studio_id',
         'nama_mata_kuliah',
         'judul_course',
         'status',
@@ -39,11 +39,13 @@ class Booking extends Model
 
     public function studio()
     {
-        return $this->belongsTo(Studio::class, 'studio', 'id');
+        return $this->belongsTo(Studio::class, 'studio_id');
     }
 
     public function mataKuliah()
     {
         return $this->belongsTo(MataKuliah::class, 'nama_mata_kuliah', 'nama_mata_kuliah');
     }
+
+    
 }

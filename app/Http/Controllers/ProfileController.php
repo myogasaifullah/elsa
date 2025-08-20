@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\Fakultas;
 use App\Models\Prodi;
+use App\Services\ActivityLogService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
 {
@@ -32,33 +32,30 @@ class ProfileController extends Controller
      * Update the user's profile information.
      */
     public function update(Request $request): RedirectResponse
-{
-    Log::info('Request masuk:', $request->all());
+    {
+        ActivityLogService::log('profile_update', 'User memperbarui informasi profile');
 
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'nomor_telepon' => 'nullable|string|max:20',
-        'fakultas_id' => 'nullable|exists:fakultas,id',
-        'prodi_id' => 'nullable|exists:prodi,id',
-        'role' => 'nullable|string',
-    ]);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'nomor_telepon' => 'nullable|string|max:20',
+            'fakultas_id' => 'required|exists:fakultas,id',
+            'prodi_id' => 'required|exists:prodis,id',
+            'role' => 'required|string|in:Mahasiswa,Dosen,Admin',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $request->user()->id,
+        ]);
 
-    $user = $request->user();
+        $user = $request->user();
+        $user->update([
+            'name' => $request->name,
+            'nomor_telepon' => $request->nomor_telepon,
+            'fakultas_id' => $request->fakultas_id,
+            'prodi_id' => $request->prodi_id,
+            'role' => $request->role,
+            'email' => $request->email,
+        ]);
 
-    Log::info('User lama:', $user->toArray());
-
-    $user->update([
-        'name' => $request->name,
-        'nomor_telepon' => $request->nomor_telepon,
-        'fakultas_id' => $request->fakultas_id,
-        'prodi_id' => $request->prodi_id,
-        'role' => $request->role,
-    ]);
-
-    Log::info('User baru:', $user->fresh()->toArray());
-
-    return redirect()->route('profile.edit')->with('status', 'profile-updated');
-}
+        return redirect()->route('profile.edit')->with('status', 'profile-updated');
+    }
 
 
     /**
