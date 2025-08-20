@@ -26,6 +26,7 @@ class DosenMoocController extends Controller
             'nama_dosen' => 'required|string|max:255',
             'nuptk_dosen' => 'required|string|unique:dosens,nuptk_dosen',
             'target_video_dosen' => 'required|integer',
+            'status_dosen' => 'required|in:tetap,tidak_tetap',
             'fakultas_id' => 'required|exists:fakultas,id',
             'prodi_id' => 'required|exists:prodis,id',
         ]);
@@ -41,6 +42,7 @@ class DosenMoocController extends Controller
             'nama_dosen' => 'required|string|max:255',
             'nuptk_dosen' => 'required|string|unique:dosens,nuptk_dosen,' . $dosen->id,
             'target_video_dosen' => 'required|integer',
+            'status_dosen' => 'required|in:tetap,tidak_tetap',
             'fakultas_id' => 'required|exists:fakultas,id',
             'prodi_id' => 'required|exists:prodis,id',
         ]);

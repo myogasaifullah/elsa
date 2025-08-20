@@ -12,6 +12,7 @@ class Dosen extends Model
         'nama_dosen',
         'nuptk_dosen',
         'target_video_dosen',
+        'status_dosen',
         'fakultas_id',
         'prodi_id',
     ];

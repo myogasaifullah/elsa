@@ -34,6 +34,7 @@
               <th>Nama Dosen</th>
               <th>NUPTK</th>
               <th>Target Video</th>
+              <th>Status</th>
               <th>Fakultas</th>
               <th>Prodi</th>
               <th>Action</th>
@@ -46,6 +47,11 @@
               <td>{{ $dosen->nama_dosen }}</td>
               <td>{{ $dosen->nuptk_dosen }}</td>
               <td>{{ $dosen->target_video_dosen }}</td>
+              <td>
+                <span class="badge {{ $dosen->status_dosen == 'tetap' ? 'bg-success' : 'bg-warning' }}">
+                  {{ ucfirst($dosen->status_dosen) }}
+                </span>
+              </td>
               <td>{{ $dosen->fakultas->nama_fakultas }}</td>
               <td>{{ $dosen->prodi->nama_prodi }}</td>
               <td>
@@ -54,6 +60,7 @@
                         data-nama="{{ $dosen->nama_dosen }}"
                         data-nuptk="{{ $dosen->nuptk_dosen }}"
                         data-target="{{ $dosen->target_video_dosen }}"
+                        data-status="{{ $dosen->status_dosen }}"
                         data-fakultas="{{ $dosen->fakultas_id }}"
                         data-prodi="{{ $dosen->prodi_id }}">
                   Edit
@@ -69,51 +76,7 @@
     </div>
   </div>
 
-
-  <div class="col-12">
-    <div class="card recent-sales overflow-auto">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h5 class="card-title mb-0">Daftar MOOC <span>| Universitas</span></h5>
-          <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahMooc">
-            <i class="bi bi-plus-circle"></i> Tambah MOOC
-          </button>
-        </div>
-
-        <table class="table table-borderless datatable">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Judul MOOC</th>
-              <th>Nama Dosen</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            @foreach($moocs as $mooc)
-            <tr>
-              <td>{{ $loop->iteration }}</td>
-              <td>{{ $mooc->judul_mooc }}</td>
-              <td>{{ $mooc->dosen->nama_dosen }}</td>
-              <td>
-                <button class="btn btn-sm btn-primary btn-edit-mooc" 
-                        data-id="{{ $mooc->id }}"
-                        data-judul="{{ $mooc->judul_mooc }}"
-                        data-dosen="{{ $mooc->dosen_id }}">
-                  Edit
-                </button>
-                <button class="btn btn-sm btn-danger btn-hapus-mooc" data-id="{{ $mooc->id }}">Hapus</button>
-              </td>
-            </tr>
-            @endforeach
-          </tbody>
-        </table>
-
-
-      </div>
-    </div>
-  </div>
-
+  
   <!-- Modal Tambah Dosen -->
   <div class="modal fade" id="modalTambahDosen" tabindex="-1" aria-labelledby="modalTambahDosenLabel">
     <div class="modal-dialog">
@@ -138,6 +101,15 @@
             <div class="mb-3">
               <label for="target_video_dosen" class="form-label">Target Video Dosen</label>
               <input type="number" class="form-control" id="target_video_dosen" name="target_video_dosen" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="status_dosen" class="form-label">Status Dosen</label>
+              <select class="form-select" id="status_dosen" name="status_dosen" required>
+                <option selected disabled>Pilih Status</option>
+                <option value="tetap">Tetap</option>
+                <option value="tidak_tetap">Tidak Tetap</option>
+              </select>
             </div>
 
             <div class="mb-3">
@@ -170,35 +142,6 @@
   </div>
 
 
-  <!-- Modal Tambah MOOC -->
-  <div class="modal fade" id="modalTambahMooc" tabindex="-1" aria-labelledby="modalTambahMoocLabel">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <form id="formTambahMooc">
-          @csrf
-          <div class="modal-header">
-            <h5 class="modal-title">Tambah MOOC</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body">
-            <input type="text" class="form-control mb-2" placeholder="Judul MOOC" name="judul_mooc" required>
-
-            <select class="form-select" name="dosen_id" required>
-              <option selected disabled>Pilih Dosen</option>
-              @foreach($dosens as $d)
-                <option value="{{ $d->id }}">{{ $d->nama_dosen }}</option>
-              @endforeach
-            </select>
-          </div>
-          <div class="modal-footer">
-            <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-            <button class="btn btn-primary" type="submit">Simpan</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
  <!-- Modal Edit Dosen -->
 <div class="modal fade" id="modalEditDosen" tabindex="-1" aria-labelledby="modalEditDosenLabel">
   <div class="modal-dialog">
@@ -217,6 +160,12 @@
           <input type="text" class="form-control mb-2" id="editNuptkDosen" placeholder="NUPTK Dosen" name="nuptk_dosen" required>
 
           <input type="number" class="form-control mb-2" id="editTargetVideoDosen" placeholder="Target Video Dosen" name="target_video_dosen" required>
+
+          <select class="form-select mb-2" id="editStatusDosen" name="status_dosen" required>
+            <option selected disabled>Pilih Status</option>
+            <option value="tetap">Tetap</option>
+            <option value="tidak_tetap">Tidak Tetap</option>
+          </select>
 
           <select class="form-select mb-2" id="editFakultasId" name="fakultas_id" required>
             <option selected disabled>Pilih Fakultas</option>
@@ -240,36 +189,7 @@
   </div>
 </div>
 
-<!-- Modal Edit MOOC -->
-<div class="modal fade" id="modalEditMooc" tabindex="-1" aria-labelledby="modalEditMoocLabel">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form id="formEditMooc">
-        @csrf
-        @method('PUT')
-        <div class="modal-header">
-          <h5 class="modal-title">Edit MOOC</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <input type="hidden" id="editMoocId" name="id">
-          <input type="text" class="form-control mb-2" id="editJudulMooc" placeholder="Judul MOOC" name="judul_mooc" required>
-          <select class="form-select" id="editDosenMoocId" name="dosen_id" required>
-            <option selected disabled>Pilih Dosen</option>
-            @foreach($dosens as $d)
-              <option value="{{ $d->id }}">{{ $d->nama_dosen }}</option>
-            @endforeach
-          </select>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-          <button class="btn btn-primary" type="submit">Simpan</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
+@include('akademik.mooc')
 
 </main><!-- End #main -->
 
@@ -334,6 +254,7 @@
         const nama = this.getAttribute('data-nama');
         const nuptk = this.getAttribute('data-nuptk');
         const target = this.getAttribute('data-target');
+        const status = this.getAttribute('data-status');
         const fakultas = this.getAttribute('data-fakultas');
         const prodi = this.getAttribute('data-prodi');
 
@@ -341,6 +262,7 @@
         document.getElementById('editNamaDosen').value = nama;
         document.getElementById('editNuptkDosen').value = nuptk;
         document.getElementById('editTargetVideoDosen').value = target;
+        document.getElementById('editStatusDosen').value = status;
         document.getElementById('editFakultasId').value = fakultas;
         document.getElementById('editProdiId').value = prodi;
 
