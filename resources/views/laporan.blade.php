@@ -20,81 +20,173 @@
   
 <div class="card p-4">
   <h5 class="text-center fw-bold">REKAP VIDEO PEMBELAJARAN DOSEN TETAP</h5>
-  <h6 class="text-center mb-3">FAKULTAS TEKNIK DAN ILMU KOMPUTER<br>UNIVERSITAS TEKNOKRAT INDONESIA</h6>
+  <h6 class="text-center mb-3">UNIVERSITAS TEKNOKRAT INDONESIA</h6>
 
-  
-  <div class="table-responsive">
+  <div class="table-responsive mb-4">
     <table class="table table-bordered text-center align-middle">
       <thead class="table-warning">
         <tr>
-          <th rowspan="2">No.</th>
-          <th rowspan="2">NUPTK</th>
-          <th rowspan="2">Nama Dosen</th>
-          <th rowspan="2">Prog Edit</th>
-          <th colspan="2">Jumlah Video</th>
-          <th rowspan="2">Total</th>
-          <th rowspan="2">Target</th>
-         
-        </tr>
-        <tr>
-          <th>Pembelajaran</th>
-          <th>MOOC</th>
+          <th>No</th>
+          <th>Fakultas</th>
+          <th>Jumlah Dosen</th>
+          <th>Video Pembelajaran</th>
+          <th>Video MOOC</th>
+          <th>Proses Editing</th>
+          <th>Jumlah Video</th>
         </tr>
       </thead>
       <tbody>
         @php
-          // Group progress by dosen and count by jenis_kategori
-          $groupedByDosen = [];
-          foreach($progress as $item) {
-              $dosen = $item->jadwalBooking->dosen ?? null;
-              $jenisKategori = $item->jadwalBooking->jenis_kategori ?? null;
+          $fakultasDataTetap = [];
+          foreach($progressTetap as $item) {
+              $dosen = $item->jadwalBooking->dosen;
+              $fakultas = $dosen->fakultas->nama_fakultas ?? 'Tidak Diketahui';
+              $dosenId = $dosen->id;
               
-              if ($dosen) {
-                  $dosenId = $dosen->id;
-                  if (!isset($groupedByDosen[$dosenId])) {
-                      $groupedByDosen[$dosenId] = [
-                          'dosen' => $dosen,
-                          'elearning_count' => 0,
-                          'mooc_count' => 0,
-                          'total_video' => 0,
-                          'progres_count' => 0
-                      ];
-                  }
-                  
-                  // Count by category
-                  if ($jenisKategori === 'E-learning') {
-                      $groupedByDosen[$dosenId]['elearning_count']++;
-                  } elseif ($jenisKategori === 'Mooc') {
-                      $groupedByDosen[$dosenId]['mooc_count']++;
-                  }
-                  
-                  // Count total videos
-                  $groupedByDosen[$dosenId]['total_video']++;
-                  
-                  // Count progress
-                  if ($item->progres === 'progres') {
-                      $groupedByDosen[$dosenId]['progres_count']++;
-                  }
+              if (!isset($fakultasDataTetap[$fakultas])) {
+                  $fakultasDataTetap[$fakultas] = [
+                      'jumlah_dosen' => \App\Models\Dosen::where('fakultas_id', $dosen->fakultas_id)->count(),
+                      'pembelajaran' => 0,
+                      'mooc' => 0,
+                      'editing' => 0,
+                      'total' => 0
+                  ];
               }
+              
+              if($item->progres == 'selesai') {
+                  if(str_contains(strtolower($item->judul_video ?? ''), 'mooc')) {
+                      $fakultasDataTetap[$fakultas]['mooc']++;
+                  } else {
+                      $fakultasDataTetap[$fakultas]['pembelajaran']++;
+                  }
+              } elseif($item->progres == 'progres') {
+                  $fakultasDataTetap[$fakultas]['editing']++;
+              }
+              
+              $fakultasDataTetap[$fakultas]['total']++;
           }
+          
+          $totalDosenTetap = 0;
+          $totalPembelajaran = 0;
+          $totalMooc = 0;
+          $totalEditing = 0;
+          $totalVideo = 0;
         @endphp
         
-        @forelse($groupedByDosen as $index => $data)
-          <tr>
-            <td>{{ $index + 1 }}</td>
-            <td>{{ $data['dosen']->nuptk_dosen ?? '-' }}</td>
-            <td class="text-start">{{ $data['dosen']->nama_dosen ?? '-' }}</td>
-            <td>{{ $data['progres_count'] }}</td>
-            <td>{{ $data['elearning_count'] }}</td>
-            <td>{{ $data['mooc_count'] }}</td>
-            <td>{{ $data['total_video'] }}</td>
-            <td class="text-start">{{ $data['dosen']->target_video_dosen ?? '-' }}</td>
+        @if(count($fakultasDataTetap) > 0)
+          @foreach($fakultasDataTetap as $fakultas => $data)
+            @php
+              $totalDosenTetap += $data['jumlah_dosen'];
+              $totalPembelajaran += $data['pembelajaran'];
+              $totalMooc += $data['mooc'];
+              $totalEditing += $data['editing'];
+              $totalVideo += $data['total'];
+            @endphp
+            <tr>
+              <td>{{ $loop->iteration }}</td>
+              <td class="text-start">{{ $fakultas }}</td>
+              <td>{{ $data['jumlah_dosen'] }}</td>
+              <td>{{ $data['pembelajaran'] }}</td>
+              <td>{{ $data['mooc'] }}</td>
+              <td>{{ $data['editing'] }}</td>
+              <td>{{ $data['total'] }}</td>
+            </tr>
+          @endforeach
+          
+          <tr class="fw-bold">
+            <td colspan="2">Jumlah</td>
+            <td>{{ $totalDosenTetap }}</td>
+            <td>{{ $totalPembelajaran }}</td>
+            <td>{{ $totalMooc }}</td>
+            <td>{{ $totalEditing }}</td>
+            <td>{{ $totalVideo }}</td>
           </tr>
-        @empty
+        @else
           <tr>
-            <td colspan="9" class="text-center">Tidak ada data progress</td>
+            <td colspan="7" class="text-center">Tidak ada data dosen tetap</td>
           </tr>
-        @endforelse
+        @endif
+      </tbody>
+    </table>
+  </div>
+
+  <h5 class="text-center fw-bold">REKAP VIDEO PEMBELAJARAN DOSEN TIDAK TETAP</h5>
+  <h6 class="text-center mb-3">UNIVERSITAS TEKNOKRAT INDONESIA</h6>
+
+  <div class="table-responsive">
+    <table class="table table-bordered text-center align-middle">
+      <thead class="table-warning">
+        <tr>
+          <th>No</th>
+          <th>Fakultas</th>
+          <th>Jumlah Dosen</th>
+          <th>Video Pembelajaran</th>
+          <th>Proses Editing</th>
+          <th>Jumlah Video</th>
+        </tr>
+      </thead>
+      <tbody>
+        @php
+          $fakultasDataTidakTetap = [];
+          foreach($progressTidakTetap as $item) {
+              $dosen = $item->jadwalBooking->dosen;
+              $fakultas = $dosen->fakultas->nama_fakultas ?? 'Tidak Diketahui';
+              $dosenId = $dosen->id;
+              
+              if (!isset($fakultasDataTidakTetap[$fakultas])) {
+                  $fakultasDataTidakTetap[$fakultas] = [
+                      'jumlah_dosen' => \App\Models\Dosen::where('fakultas_id', $dosen->fakultas_id)->count(),
+                      'pembelajaran' => 0,
+                      'editing' => 0,
+                      'total' => 0
+                  ];
+              }
+              
+              if($item->progres == 'selesai') {
+                  $fakultasDataTidakTetap[$fakultas]['pembelajaran']++;
+              } elseif($item->progres == 'progres') {
+                  $fakultasDataTidakTetap[$fakultas]['editing']++;
+              }
+              
+              $fakultasDataTidakTetap[$fakultas]['total']++;
+          }
+          
+          $totalDosenTidakTetap = 0;
+          $totalPembelajaranTidakTetap = 0;
+          $totalEditingTidakTetap = 0;
+          $totalVideoTidakTetap = 0;
+        @endphp
+        
+        @if(count($fakultasDataTidakTetap) > 0)
+          @foreach($fakultasDataTidakTetap as $fakultas => $data)
+            @php
+              $totalDosenTidakTetap += $data['jumlah_dosen'];
+              $totalPembelajaranTidakTetap += $data['pembelajaran'];
+              $totalEditingTidakTetap += $data['editing'];
+              $totalVideoTidakTetap += $data['total'];
+            @endphp
+            <tr>
+              <td>{{ $loop->iteration }}</td>
+              <td class="text-start">{{ $fakultas }}</td>
+              <td>{{ $data['jumlah_dosen'] }}</td>
+              <td>{{ $data['pembelajaran'] }}</td>
+              <td>{{ $data['editing'] }}</td>
+              <td>{{ $data['total'] }}</td>
+            </tr>
+          @endforeach
+          
+          <tr class="fw-bold">
+            <td colspan="2">Jumlah</td>
+            <td>{{ $totalDosenTidakTetap }}</td>
+            <td>{{ $totalPembelajaranTidakTetap }}</td>
+            <td>{{ $totalEditingTidakTetap }}</td>
+            <td>{{ $totalVideoTidakTetap }}</td>
+          </tr>
+        @else
+          <tr>
+            <td colspan="6" class="text-center">Tidak ada data dosen tidak tetap</td>
+          </tr>
+        @endif
       </tbody>
     </table>
   </div>
