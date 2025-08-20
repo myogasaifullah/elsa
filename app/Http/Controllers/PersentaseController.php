@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Persentase;
+use App\Models\Progress;
+use App\Services\ActivityLogService;
 use Illuminate\Http\Request;
 
 class PersentaseController extends Controller
@@ -41,10 +43,20 @@ class PersentaseController extends Controller
         if ($existing) {
             // Jika sudah ada, update data yang ada
             $existing->update($validated);
+            
+            // Catat aktivitas: memperbarui data persentase
+            $progress = Progress::find($validated['id_progres']);
+            ActivityLogService::update('persentase', "Memperbarui data persentase untuk progress ID {$validated['id_progres']} dengan persentase {$persentase}%");
+            
             return redirect()->back()->with('success', 'Data persentase berhasil diperbarui!');
         } else {
             // Jika belum ada, buat data baru
-            Persentase::create($validated);
+            $persentaseData = Persentase::create($validated);
+            
+            // Catat aktivitas: menambahkan data persentase baru
+            $progress = Progress::find($validated['id_progres']);
+            ActivityLogService::create('persentase', "Menambahkan data persentase baru untuk progress ID {$validated['id_progres']} dengan persentase {$persentase}%");
+            
             return redirect()->back()->with('success', 'Data persentase berhasil disimpan!');
         }
     }
@@ -54,6 +66,9 @@ class PersentaseController extends Controller
      */
     public function getByProgress($id_progres)
     {
+        // Catat aktivitas: mengambil data persentase berdasarkan progress ID
+        ActivityLogService::log('lihat_persentase', "Mengambil data persentase untuk progress ID {$id_progres}");
+        
         $persentase = Persentase::where('id_progres', $id_progres)->first();
         return response()->json($persentase);
     }
@@ -85,7 +100,11 @@ class PersentaseController extends Controller
         $persentaseValue = $this->calculatePersentase($validated);
         $validated['persentase'] = $persentaseValue;
 
+        $oldPersentase = $persentase->persentase;
         $persentase->update($validated);
+        
+        // Catat aktivitas: memperbarui data persentase
+        ActivityLogService::update('persentase', "Memperbarui data persentase ID {$persentase->id} untuk progress ID {$persentase->id_progres}. Persentase lama: {$oldPersentase}% -> Persentase baru: {$persentaseValue}%");
 
         return redirect()->back()->with('success', 'Data persentase berhasil diperbarui!');
     }

@@ -6,7 +6,9 @@ use App\Models\Progress;
 use App\Models\JadwalBooking;
 use App\Models\Editor;
 use App\Models\Persentase;
+use App\Services\ActivityLogService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProgresController extends Controller
 {
@@ -15,6 +17,9 @@ class ProgresController extends Controller
      */
     public function index()
     {
+        // Catat aktivitas: melihat daftar progress
+        ActivityLogService::log('lihat_progress', 'Melihat daftar semua progress');
+        
         $progress = Progress::with([
             'jadwalBooking.dosen.fakultas',
             'jadwalBooking.dosen.prodi',
@@ -29,10 +34,14 @@ class ProgresController extends Controller
 
     public function editor()
     {
-        $userId = auth()->user()->id;
+        // Catat aktivitas: melihat progress editor
+        ActivityLogService::log('lihat_progress_editor', 'Melihat progress untuk editor');
+        
+        $user = Auth::user();
+        $userId = $user->id;
 
         // Get editor_id for the logged-in user
-        $editor = \App\Models\Editor::where('email', auth()->user()->email)->first();
+        $editor = Editor::where('email', $user->email)->first();
 
         if (!$editor) {
             // If no editor record exists, return empty collection
@@ -57,6 +66,9 @@ class ProgresController extends Controller
      */
     public function create()
     {
+        // Catat aktivitas: membuka form tambah progress
+        ActivityLogService::log('buka_form_tambah_progress', 'Membuka form tambah progress baru');
+        
         $jadwalBookings = JadwalBooking::all();
         $editors = Editor::all();
 
@@ -79,7 +91,10 @@ class ProgresController extends Controller
             'editor_id' => 'required|exists:editors,id',
         ]);
 
-        Progress::create($validated);
+        $progress = Progress::create($validated);
+        
+        // Catat aktivitas: menambahkan progress baru
+        ActivityLogService::create('progress', "Menambahkan progress baru untuk jadwal booking ID {$validated['jadwal_booking_id']} dengan status {$validated['progres']}");
 
         return redirect()->route('progres.index')
             ->with('success', 'Progress berhasil ditambahkan');
@@ -90,6 +105,9 @@ class ProgresController extends Controller
      */
     public function show(Progress $progress)
     {
+        // Catat aktivitas: melihat detail progress
+        ActivityLogService::log('lihat_detail_progress', "Melihat detail progress ID {$progress->id}");
+        
         return view('progres.show', compact('progress'));
     }
 
@@ -98,6 +116,9 @@ class ProgresController extends Controller
      */
     public function edit(Progress $progress)
     {
+        // Catat aktivitas: membuka form edit progress
+        ActivityLogService::log('buka_form_edit_progress', "Membuka form edit progress ID {$progress->id}");
+        
         $jadwalBookings = JadwalBooking::all();
         $editors = Editor::all();
 
@@ -120,7 +141,11 @@ class ProgresController extends Controller
             'editor_id' => 'required|exists:editors,id',
         ]);
 
+        $oldData = $progress->toArray();
         $progress->update($validated);
+        
+        // Catat aktivitas: memperbarui progress
+        ActivityLogService::update('progress', "Memperbarui progress ID {$progress->id}. Data lama: " . json_encode($oldData) . " -> Data baru: " . json_encode($validated));
 
         return redirect()->route('progres.index')
             ->with('success', 'Progress berhasil diperbarui');
@@ -171,10 +196,12 @@ class ProgresController extends Controller
                 'durasi' => $persentase->durasi_video_menit,
                 'progres' => $progresStatus,
                 'keterangan' => $keteranganStatus,
-                'publish_link_youtube' => $persentase->publish_link_youtube,
             ];
             
             $progress->update($updateData);
+            
+            // Catat aktivitas: transfer data dari persentase ke progress
+            ActivityLogService::log('transfer_data', "Mentransfer data dari persentase ke progress ID {$id}");
             
             return response()->json([
                 'success' => true,
@@ -183,7 +210,6 @@ class ProgresController extends Controller
             ]);
             
         } catch (\Exception $e) {
-            \Log::error('Transfer data error: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal mentransfer data: ' . $e->getMessage()
@@ -192,21 +218,13 @@ class ProgresController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Progress $progress)
-    {
-        $progress->delete();
-
-        return redirect()->route('progres.index')
-            ->with('success', 'Progress berhasil dihapus');
-    }
-
-    /**
      * Display data based on jadwal_booking_id
      */
     public function showByJadwal($jadwal_booking_id)
     {
+        // Catat aktivitas: melihat progress berdasarkan jadwal booking
+        ActivityLogService::log('lihat_progress_jadwal', "Melihat progress untuk jadwal booking ID {$jadwal_booking_id}");
+        
         $jadwalBookings = JadwalBooking::with(['booking.dosen.fakultas', 'booking.dosen.prodi', 'booking.mataKuliah', 'booking.studio'])
             ->where('id', $jadwal_booking_id)
             ->get();
@@ -219,6 +237,9 @@ class ProgresController extends Controller
      */
     public function modal($id)
     {
+        // Catat aktivitas: membuka modal progress
+        ActivityLogService::log('buka_modal_progress', "Membuka modal progress ID {$id}");
+        
         $progress = Progress::with([
             'jadwalBooking.dosen.fakultas',
             'jadwalBooking.dosen.prodi',
@@ -286,6 +307,9 @@ class ProgresController extends Controller
             
             $progress->update($updateData);
             
+            // Catat aktivitas: transfer data dari persentase ke progress
+            ActivityLogService::log('transfer_data_persentase', "Mentransfer data dari persentase ke progress ID {$progressId}");
+            
             return response()->json([
                 'success' => true,
                 'message' => 'Data berhasil dipindahkan dari persentase ke progress',
@@ -307,7 +331,7 @@ class ProgresController extends Controller
     {
         try {
             // Get or create editor for current user
-            $user = auth()->user();
+            $user = Auth::user();
             $editor = Editor::firstOrCreate(
                 ['email' => $user->email],
                 ['nama' => $user->name ?? $user->email]
@@ -315,6 +339,9 @@ class ProgresController extends Controller
 
             // Update the progress with the editor
             $progress->update(['editor_id' => $editor->id]);
+            
+            // Catat aktivitas: menetapkan editor untuk progress
+            ActivityLogService::log('assign_editor', "Menetapkan editor {$editor->nama} untuk progress ID {$progress->id}");
 
             return response()->json([
                 'success' => true,
@@ -327,5 +354,19 @@ class ProgresController extends Controller
                 'message' => 'Gagal menambahkan editor: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Progress $progress)
+    {
+        // Catat aktivitas: menghapus progress
+        ActivityLogService::delete('progress', "Menghapus progress ID {$progress->id} untuk jadwal booking ID {$progress->jadwal_booking_id}");
+        
+        $progress->delete();
+
+        return redirect()->route('progres.index')
+            ->with('success', 'Progress berhasil dihapus');
     }
 }

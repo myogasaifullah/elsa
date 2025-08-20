@@ -6,6 +6,7 @@ use App\Models\Editor;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Services\ActivityLogService;
 
 class UserController extends Controller
 {
@@ -82,7 +83,7 @@ class UserController extends Controller
         ]);
 
         // Create user
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'nomor_telepon' => $request->nomor_telepon,
@@ -92,6 +93,9 @@ class UserController extends Controller
             'status' => $request->status,
             'password' => bcrypt($request->password),
         ]);
+
+        // Log aktivitas create user
+        ActivityLogService::create('User', "Menambahkan user baru: {$user->name}");
 
         return redirect()->route('user.index')->with('success', 'User created successfully.');
     }

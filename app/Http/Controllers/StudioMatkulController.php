@@ -9,6 +9,7 @@ use App\Models\Fakultas;
 use App\Models\Prodi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Services\ActivityLogService;
 
 class StudioMatkulController extends Controller
 {
@@ -75,6 +76,8 @@ class StudioMatkulController extends Controller
                 ]);
             }
         }
+
+        ActivityLogService::update('Studio', "Memperbarui studio: {$studio->nama_studio}");
 
         return response()->json(['success' => 'Studio berhasil diperbarui.']);
     }

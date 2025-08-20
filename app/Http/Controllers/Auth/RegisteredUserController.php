@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use App\Services\ActivityLogService;
 
 class RegisteredUserController extends Controller
 {
@@ -23,6 +24,9 @@ class RegisteredUserController extends Controller
     {
         $fakultas = Fakultas::all();
         $prodis = Prodi::all();
+        
+        ActivityLogService::log('view', 'Melihat halaman registrasi user baru');
+        
         return view('auth.register', compact('fakultas', 'prodis'));
     }
 

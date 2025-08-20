@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Progress;
+use App\Services\ActivityLogService;
 use Illuminate\Http\Request;
 
 class LaporanController extends Controller
 {
     public function index()
     {
+        // Catat aktivitas: melihat halaman laporan
+        ActivityLogService::log('lihat_laporan', 'Melihat halaman laporan progress');
+        
         $progress = Progress::with([
             'jadwalBooking.dosen.fakultas',
             'jadwalBooking.dosen.prodi',
