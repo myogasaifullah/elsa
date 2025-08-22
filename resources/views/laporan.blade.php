@@ -17,180 +17,75 @@
     </div><!-- End Page Title -->
     @include('laporan.done')
     
-  
-<div class="card p-4">
-  <h5 class="text-center fw-bold">REKAP VIDEO PEMBELAJARAN DOSEN TETAP</h5>
-  <h6 class="text-center mb-3">UNIVERSITAS TEKNOKRAT INDONESIA</h6>
-
-  <div class="table-responsive mb-4">
-    <table class="table table-bordered text-center align-middle">
-      <thead class="table-warning">
-        <tr>
-          <th>No</th>
-          <th>Fakultas</th>
-          <th>Jumlah Dosen</th>
-          <th>Video Pembelajaran</th>
-          <th>Video MOOC</th>
-          <th>Proses Editing</th>
-          <th>Jumlah Video</th>
-        </tr>
-      </thead>
-      <tbody>
-        @php
-          $fakultasDataTetap = [];
-          foreach($progressTetap as $item) {
-              $dosen = $item->jadwalBooking->dosen;
-              $fakultas = $dosen->fakultas->nama_fakultas ?? 'Tidak Diketahui';
-              $dosenId = $dosen->id;
-              
-              if (!isset($fakultasDataTetap[$fakultas])) {
-                  $fakultasDataTetap[$fakultas] = [
-                      'jumlah_dosen' => \App\Models\Dosen::where('fakultas_id', $dosen->fakultas_id)->count(),
-                      'pembelajaran' => 0,
-                      'mooc' => 0,
-                      'editing' => 0,
-                      'total' => 0
-                  ];
-              }
-              
-              if($item->progres == 'selesai') {
-                  if(str_contains(strtolower($item->judul_video ?? ''), 'mooc')) {
-                      $fakultasDataTetap[$fakultas]['mooc']++;
-                  } else {
-                      $fakultasDataTetap[$fakultas]['pembelajaran']++;
-                  }
-              } elseif($item->progres == 'progres') {
-                  $fakultasDataTetap[$fakultas]['editing']++;
-              }
-              
-              $fakultasDataTetap[$fakultas]['total']++;
-          }
-          
-          $totalDosenTetap = 0;
-          $totalPembelajaran = 0;
-          $totalMooc = 0;
-          $totalEditing = 0;
-          $totalVideo = 0;
-        @endphp
-        
-        @if(count($fakultasDataTetap) > 0)
-          @foreach($fakultasDataTetap as $fakultas => $data)
-            @php
-              $totalDosenTetap += $data['jumlah_dosen'];
-              $totalPembelajaran += $data['pembelajaran'];
-              $totalMooc += $data['mooc'];
-              $totalEditing += $data['editing'];
-              $totalVideo += $data['total'];
-            @endphp
-            <tr>
-              <td>{{ $loop->iteration }}</td>
-              <td class="text-start">{{ $fakultas }}</td>
-              <td>{{ $data['jumlah_dosen'] }}</td>
-              <td>{{ $data['pembelajaran'] }}</td>
-              <td>{{ $data['mooc'] }}</td>
-              <td>{{ $data['editing'] }}</td>
-              <td>{{ $data['total'] }}</td>
-            </tr>
-          @endforeach
-          
-          <tr class="fw-bold">
-            <td colspan="2">Jumlah</td>
-            <td>{{ $totalDosenTetap }}</td>
-            <td>{{ $totalPembelajaran }}</td>
-            <td>{{ $totalMooc }}</td>
-            <td>{{ $totalEditing }}</td>
-            <td>{{ $totalVideo }}</td>
-          </tr>
-        @else
-          <tr>
-            <td colspan="7" class="text-center">Tidak ada data dosen tetap</td>
-          </tr>
-        @endif
-      </tbody>
-    </table>
-  </div>
-
-  <h5 class="text-center fw-bold">REKAP VIDEO PEMBELAJARAN DOSEN TIDAK TETAP</h5>
-  <h6 class="text-center mb-3">UNIVERSITAS TEKNOKRAT INDONESIA</h6>
-
-  <div class="table-responsive">
-    <table class="table table-bordered text-center align-middle">
-      <thead class="table-warning">
-        <tr>
-          <th>No</th>
-          <th>Fakultas</th>
-          <th>Jumlah Dosen</th>
-          <th>Video Pembelajaran</th>
-          <th>Proses Editing</th>
-          <th>Jumlah Video</th>
-        </tr>
-      </thead>
-      <tbody>
-        @php
-          $fakultasDataTidakTetap = [];
-          foreach($progressTidakTetap as $item) {
-              $dosen = $item->jadwalBooking->dosen;
-              $fakultas = $dosen->fakultas->nama_fakultas ?? 'Tidak Diketahui';
-              $dosenId = $dosen->id;
-              
-              if (!isset($fakultasDataTidakTetap[$fakultas])) {
-                  $fakultasDataTidakTetap[$fakultas] = [
-                      'jumlah_dosen' => \App\Models\Dosen::where('fakultas_id', $dosen->fakultas_id)->count(),
-                      'pembelajaran' => 0,
-                      'editing' => 0,
-                      'total' => 0
-                  ];
-              }
-              
-              if($item->progres == 'selesai') {
-                  $fakultasDataTidakTetap[$fakultas]['pembelajaran']++;
-              } elseif($item->progres == 'progres') {
-                  $fakultasDataTidakTetap[$fakultas]['editing']++;
-              }
-              
-              $fakultasDataTidakTetap[$fakultas]['total']++;
-          }
-          
-          $totalDosenTidakTetap = 0;
-          $totalPembelajaranTidakTetap = 0;
-          $totalEditingTidakTetap = 0;
-          $totalVideoTidakTetap = 0;
-        @endphp
-        
-        @if(count($fakultasDataTidakTetap) > 0)
-          @foreach($fakultasDataTidakTetap as $fakultas => $data)
-            @php
-              $totalDosenTidakTetap += $data['jumlah_dosen'];
-              $totalPembelajaranTidakTetap += $data['pembelajaran'];
-              $totalEditingTidakTetap += $data['editing'];
-              $totalVideoTidakTetap += $data['total'];
-            @endphp
-            <tr>
-              <td>{{ $loop->iteration }}</td>
-              <td class="text-start">{{ $fakultas }}</td>
-              <td>{{ $data['jumlah_dosen'] }}</td>
-              <td>{{ $data['pembelajaran'] }}</td>
-              <td>{{ $data['editing'] }}</td>
-              <td>{{ $data['total'] }}</td>
-            </tr>
-          @endforeach
-          
-          <tr class="fw-bold">
-            <td colspan="2">Jumlah</td>
-            <td>{{ $totalDosenTidakTetap }}</td>
-            <td>{{ $totalPembelajaranTidakTetap }}</td>
-            <td>{{ $totalEditingTidakTetap }}</td>
-            <td>{{ $totalVideoTidakTetap }}</td>
-          </tr>
-        @else
-          <tr>
-            <td colspan="6" class="text-center">Tidak ada data dosen tidak tetap</td>
-          </tr>
-        @endif
-      </tbody>
-    </table>
-  </div>
-</div>
+    <!-- Tabel Progres Editor -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Tabel Progres Editor</h5>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>No</th>
+                            <th>Dosen</th>
+                            <th>FAK</th>
+                            <th>Mata Kuliah / Tema</th>
+                            <th>Judul Course</th>
+                            <th>Lokasi</th>
+                            <th>Tanggal Shooting</th>
+                            <th>Jenis Shooting</th>
+                            <th>Target Upload</th>
+                            <th>Editor</th>
+                            <th>Progres</th>
+                            <th>Durasi (Menit)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($progress as $index => $item)
+                            <tr>
+                                <td>{{ ($progress->currentPage() - 1) * $progress->perPage() + $index + 1 }}</td>
+                                <td>{{ $item->jadwalBooking->dosen->nama_dosen ?? '-' }}</td>
+                                <td>{{ $item->jadwalBooking->user->fakultas->nama_fakultas ?? '-' }}</td>
+                                <td>{{ $item->jadwalBooking->nama_mata_kuliah ?? '-' }}</td>
+                                <td>{{ $item->jadwalBooking->judul_course ?? '-' }}</td>
+                                <td>{{ $item->jadwalBooking->studio->nama_studio ??  '-' }}</td>
+                                <td>{{ $item->jadwalBooking->tanggal ? \Carbon\Carbon::parse($item->jadwalBooking->tanggal)->format('d F Y') : '-' }}</td>
+                                <td>{{ $item->jadwalBooking->jenis_kategori ?? '-' }}</td>
+                                <td>{{ $item->target_upload ? \Carbon\Carbon::parse($item->target_upload)->format('d F Y') : '-' }}</td>
+                                <td>{{ $item->editor->nama ?? '-' }}</td>
+                                <td>
+                                    @if($item->progres == 'Belum')
+                                        <span class="badge bg-secondary">Belum</span>
+                                    @elseif($item->progres == 'Progres')
+                                        <span class="badge bg-warning text-dark">Progres</span>
+                                    @elseif($item->progres == 'Selesai')
+                                        <span class="badge bg-success">Selesai</span>
+                                    @else
+                                        <span class="badge bg-info">{{ $item->progres }}</span>
+                                    @endif
+                                </td>
+                                <td>{{ $item->durasi ?? '-' }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="12" class="text-center">Tidak ada data progres</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            <!-- Pagination untuk Tabel Progres Editor -->
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <div class="text-muted">
+                    Menampilkan {{ $progress->firstItem() ?? 0 }} - {{ $progress->lastItem() ?? 0 }} dari {{ $progress->total() }} entri
+                </div>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-end mb-0">
+                        {{ $progress->links('pagination::bootstrap-4') }}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
 
     @include('laporan.mentah')
 </main>
