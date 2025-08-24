@@ -74,13 +74,13 @@
                 </table>
             </div>
             <!-- Pagination untuk Tabel Progres Editor -->
-            <div class="d-flex justify-content-between align-items-center mt-3">
+            <div class="d-flex justify-content-between align-items-center mt-4">
                 <div class="text-muted">
                     Menampilkan {{ $progress->firstItem() ?? 0 }} - {{ $progress->lastItem() ?? 0 }} dari {{ $progress->total() }} entri
                 </div>
                 <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-end mb-0">
-                        {{ $progress->links('pagination::bootstrap-4') }}
+                    <ul class="pagination pagination-sm justify-content-end mb-0">
+                        {{ $progress->onEachSide(1)->links('pagination::bootstrap-4') }}
                     </ul>
                 </nav>
             </div>

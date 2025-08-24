@@ -1,7 +1,13 @@
 <!-- ======= Sidebar ======= -->
 <aside id="sidebar" class="sidebar">
   <ul class="sidebar-nav" id="sidebar-nav">
-
+<!-- home -->
+    <li class="nav-item">
+      <a class="nav-link {{ Request::is('index') ? '' : 'collapsed' }}" href="{{ url('/') }}">
+        <i class="bi bi-house"></i>
+        <span>home</span>
+      </a>
+    </li>
     <!-- Dashboard -->
     <li class="nav-item">
       <a class="nav-link {{ Request::is('dashboard') ? '' : 'collapsed' }}" href="{{ url('dashboard') }}">

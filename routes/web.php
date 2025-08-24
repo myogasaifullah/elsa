@@ -119,9 +119,9 @@ Route::get('/template', function () {
 
 Route::get('/progres/editor', [ProgresController::class, 'editor'])->name('progres.editor');
 
-Route::get('/', function () {
-    return view('welcome');
-});
+use App\Http\Controllers\HomeController;
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 use App\Http\Controllers\DashboardController;
 
