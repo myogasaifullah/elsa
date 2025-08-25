@@ -54,6 +54,7 @@ $monthNames = [
                 </div>
             </div>
 
+            
             <!-- Users by Role Chart -->
             <div class="col-lg-6">
                 <div class="card">
