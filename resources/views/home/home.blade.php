@@ -244,7 +244,7 @@
                                     <tr>
                                         <td>{{ $booking->id }}</td>
                                         <td>{{ $booking->user->name ?? 'N/A' }}</td>
-                                        <td>{{ $booking->studio->nama ?? 'N/A' }}</td>
+                                        <td>{{ $booking->studio->nama_studio ?? 'N/A' }}</td>
                                         <td><span class="badge bg-{{ $booking->status == 'approved' ? 'success' : 'warning' }}">{{ $booking->status }}</span></td>
                                         <td>{{ $booking->created_at ? $booking->created_at->format('d/m/Y H:i') : 'N/A' }}</td>
                                     </tr>
@@ -269,7 +269,7 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Nama</th>
-                                        <th>NIDN</th>
+                                        <th>NUPTK</th>
                                         <th>Email</th>
                                         <th>Status</th>
                                     </tr>
@@ -278,10 +278,10 @@
                                     @foreach($data['dosens'] as $dosen)
                                     <tr>
                                         <td>{{ $dosen->id }}</td>
-                                        <td>{{ $dosen->nama }}</td>
-                                        <td>{{ $dosen->nidn }}</td>
+                                        <td>{{ $dosen->nama_dosen }}</td>
+                                        <td>{{ $dosen->nuptk_dosen }}</td>
                                         <td>{{ $dosen->email }}</td>
-                                        <td><span class="badge bg-{{ $dosen->status == 'active' ? 'success' : 'secondary' }}">{{ $dosen->status }}</span></td>
+                                        <td><span class="badge bg-{{ $dosen->status == 'active' ? 'success' : 'secondary' }}">{{ $dosen->status_dosen }}</span></td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -550,7 +550,7 @@
                     <th>Waktu</th>
                     <th>Nama Pengguna</th>
                     <th>Role</th>
-                    <th>IP Address</th>
+                    <!-- <th>IP Address</th> -->
                     <th>Aktivitas</th>
                   </tr>
                 </thead>
@@ -559,9 +559,9 @@
                   <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $log->created_at }}</td>
-                    <td>{{ $log->user->name ?? 'N/A' }}</td>
+                    <td>{{ $log->user->nama ?? 'N/A' }}</td>
                     <td>{{ $log->user->role ?? 'N/A' }}</td>
-                    <td>N/A</td>
+                    <!-- <td>N/A</td> -->
                     <td>{{ $log->action }} - {{ $log->description }}</td>
                   </tr>
                   @endforeach
