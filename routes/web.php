@@ -117,7 +117,7 @@ Route::get('/template', function () {
     return view('template');
 });
 
-Route::get('/progres/editor', [ProgresController::class, 'editor'])->name('progres.editor');
+Route::get('/editor', [ProgresController::class, 'editor'])->name('progres.editor');
 
 use App\Http\Controllers\HomeController;
 
