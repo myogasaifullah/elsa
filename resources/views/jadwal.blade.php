@@ -112,8 +112,8 @@
               <td>{{ $jadwal->user->name ?? '-' }}</td>
               <td>{{ $jadwal->user->email ?? '-' }}</td>
               <td>{{ $jadwal->user->nomor_telepon ?? '-' }}</td>
-              <td>{{ $jadwal->user->fakultas->nama_fakultas ?? '-' }}</td>
-              <td>{{ $jadwal->user->prodi->nama_prodi ?? '-' }}</td>
+              <td>{{ $jadwal->user->fakultas->singkatan ?? '-' }}</td>
+              <td>{{ $jadwal->user->prodi->singkatan ?? '-' }}</td>
               <td>
                 <button class="btn btn-sm btn-primary btn-editJadwal"
                   data-id="{{ $jadwal->id }}"
@@ -126,15 +126,16 @@
                   data-judul="{{ $jadwal->judul_course }}"
                   data-dosen="{{ $jadwal->dosen_id }}"
                   data-bs-toggle="modal"
-                  data-bs-target="#modalEditJadwal">
-                  Edit
+data-bs-target="#modalEditJadwal"
+    title="Edit">
+    <i class="bi bi-pencil-square"></i>
                 </button>
                 <form action="{{ route('jadwal.destroy', $jadwal->id) }}" method="POST" class="d-inline" id="deleteForm{{ $jadwal->id }}">
                   @csrf
                   @method('DELETE')
-                  <button type="button" class="btn btn-sm btn-danger btn-delete" data-id="{{ $jadwal->id }}">
-                    Hapus
-                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-danger btn-delete" data-id="{{ $jadwal->id }}" title="Hapus">
+      <i class="bi bi-trash"></i>
+    </button>
                 </form>
               </td>
             </tr>
