@@ -54,6 +54,25 @@ Route::get('/', function () {
 
 Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
 
+// Laporan Export Routes
+Route::get('/laporan/export/progress/pdf', [LaporanController::class, 'exportProgressPdf'])->name('laporan.export.progress.pdf');
+Route::get('/laporan/export/progress/excel', [LaporanController::class, 'exportProgressExcel'])->name('laporan.export.progress.excel');
+Route::get('/laporan/export/jadwal/pdf', [LaporanController::class, 'exportJadwalPdf'])->name('laporan.export.jadwal.pdf');
+Route::get('/laporan/export/jadwal/excel', [LaporanController::class, 'exportJadwalExcel'])->name('laporan.export.jadwal.excel');
+Route::get('/laporan/export/mooc/pdf', [LaporanController::class, 'exportMoocPdf'])->name('laporan.export.mooc.pdf');
+Route::get('/laporan/export/mooc/excel', [LaporanController::class, 'exportMoocExcel'])->name('laporan.export.mooc.excel');
+Route::get('/laporan/export/rekap/pdf', [LaporanController::class, 'exportRekapPdf'])->name('laporan.export.rekap.pdf');
+Route::get('/laporan/export/rekap/excel', [LaporanController::class, 'exportRekapExcel'])->name('laporan.export.rekap.excel');
+Route::get('/laporan/export/dosen/pdf', [LaporanController::class, 'exportDosenPdf'])->name('laporan.export.dosen.pdf');
+Route::get('/laporan/export/dosen/excel', [LaporanController::class, 'exportDosenExcel'])->name('laporan.export.dosen.excel');
+Route::get('/laporan/export/fakultas/pdf', [LaporanController::class, 'exportFakultasPdf'])->name('laporan.export.fakultas.pdf');
+Route::get('/laporan/export/fakultas/excel', [LaporanController::class, 'exportFakultasExcel'])->name('laporan.export.fakultas.excel');
+
+Route::get('/test-export', function () {
+    $progress = \App\Models\Progress::with('jadwalBooking.dosen')->get(); // Retrieve actual progress data
+    return view('exports.progress', compact('progress'));
+})->name('test.export');
+
 Route::get('/listuser', [App\Http\Controllers\UserController::class, 'index'])->name('user.index');
 Route::post('/user', [App\Http\Controllers\UserController::class, 'store'])->name('user.store');
 Route::put('/user/{user}', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
