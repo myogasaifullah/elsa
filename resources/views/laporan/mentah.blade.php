@@ -5,6 +5,7 @@
             <h5 class="card-title text-center">LAPORAN JADWAL BOOKING</h5>
             <p class="text-center mb-1">UNIVERSITAS TEKNOKRAT INDONESIA</p>
             
+            
             @php
                 $jadwalBookings = collect();
                 if(isset($progress) && $progress->isNotEmpty()) {
