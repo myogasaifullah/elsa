@@ -188,39 +188,7 @@
 
       </div>
         <!-- Users Data -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Data Users ({{ $data['users']->count() }})</h5>
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Nama</th>
-                                        <th>Email</th>
-                                        <th>Role</th>
-                                        <th>Created At</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($data['users'] as $user)
-                                    <tr>
-                                        <td>{{ $user->id }}</td>
-                                        <td>{{ $user->name }}</td>
-                                        <td>{{ $user->email }}</td>
-                                        <td><span class="badge bg-info">{{ $user->role }}</span></td>
-                                        <td>{{ $user->created_at ? $user->created_at->format('d/m/Y H:i') : 'N/A' }}</td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
 
         <!-- Bookings Data -->
         <div class="row">
@@ -257,76 +225,6 @@
             </div>
         </div>
 
-        <!-- Dosen Data -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Data Dosen ({{ $data['dosens']->count() }})</h5>
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Nama</th>
-                                        <th>NUPTK</th>
-                                        <th>Email</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($data['dosens'] as $dosen)
-                                    <tr>
-                                        <td>{{ $dosen->id }}</td>
-                                        <td>{{ $dosen->nama_dosen }}</td>
-                                        <td>{{ $dosen->nuptk_dosen }}</td>
-                                        <td>{{ $dosen->email }}</td>
-                                        <td><span class="badge bg-{{ $dosen->status == 'active' ? 'success' : 'secondary' }}">{{ $dosen->status_dosen }}</span></td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Editors Data -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Data Editors ({{ $data['editors']->count() }})</h5>
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Nama</th>
-                                        <th>Email</th>
-                                        <th>Specialization</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($data['editors'] as $editor)
-                                    <tr>
-                                        <td>{{ $editor->id }}</td>
-                                        <td>{{ $editor->nama }}</td>
-                                        <td>{{ $editor->email }}</td>
-                                        <td>{{ $editor->specialization }}</td>
-                                        <td><span class="badge bg-{{ $editor->status == 'active' ? 'success' : 'secondary' }}">{{ $editor->status }}</span></td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Fakultas Data -->
         <div class="row">
             <div class="col-12">
@@ -337,18 +235,18 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <!-- <th>ID</th> -->
                                         <th>Nama Fakultas</th>
-                                        <th>Kode</th>
+                                        <!-- <th>Kode</th> -->
                                         <th>Created At</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($data['fakultas'] as $fakultas)
                                     <tr>
-                                        <td>{{ $fakultas->id }}</td>
+                                        <!-- <td>{{ $fakultas->id }}</td> -->
                                         <td>{{ $fakultas->nama_fakultas }}</td>
-                                        <td>{{ $fakultas->kode_fakultas }}</td>
+                                        <!-- <td>{{ $fakultas->kode_fakultas }}</td> -->
                                         <td>{{ $fakultas->created_at ? $fakultas->created_at->format('d/m/Y H:i') : 'N/A' }}</td>
                                     </tr>
                                     @endforeach
@@ -370,9 +268,9 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <!-- <th>ID</th> -->
                                         <th>Nama Prodi</th>
-                                        <th>Kode</th>
+                                        <!-- <th>Kode</th> -->
                                         <th>Fakultas</th>
                                         <th>Created At</th>
                                     </tr>
@@ -380,9 +278,9 @@
                                 <tbody>
                                     @foreach($data['prodis'] as $prodi)
                                     <tr>
-                                        <td>{{ $prodi->id }}</td>
+                                        <!-- <td>{{ $prodi->id }}</td> -->
                                         <td>{{ $prodi->nama_prodi }}</td>
-                                        <td>{{ $prodi->kode_prodi }}</td>
+                                        <!-- <td>{{ $prodi->kode_prodi }}</td> -->
                                         <td>{{ $prodi->fakultas->nama_fakultas ?? 'N/A' }}</td>
                                         <td>{{ $prodi->created_at ? $prodi->created_at->format('d/m/Y H:i') : 'N/A' }}</td>
                                     </tr>
@@ -405,21 +303,21 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <!-- <th>ID</th> -->
                                         <th>Nama Studio</th>
                                         <th>Lokasi</th>
-                                        <th>Kapasitas</th>
-                                        <th>Status</th>
+                                        <!-- <th>Kapasitas</th> -->
+                                        <!-- <th>Status</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($data['studios'] as $studio)
                                     <tr>
-                                        <td>{{ $studio->id }}</td>
-                                        <td>{{ $studio->nama }}</td>
+                                        <!-- <td>{{ $studio->id }}</td> -->
+                                        <td>{{ $studio->nama_studio }}</td>
                                         <td>{{ $studio->lokasi }}</td>
-                                        <td>{{ $studio->kapasitas }}</td>
-                                        <td><span class="badge bg-{{ $studio->status == 'available' ? 'success' : 'secondary' }}">{{ $studio->status }}</span></td>
+                                        <!-- <td>{{ $studio->kapasitas }}</td> -->
+                                        <!-- <td><span class="badge bg-{{ $studio->status == 'available' ? 'success' : 'secondary' }}">{{ $studio->status }}</span></td> -->
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -440,21 +338,21 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <!-- <th>ID</th> -->
                                         <th>Nama Mata Kuliah</th>
-                                        <th>Kode</th>
-                                        <th>SKS</th>
-                                        <th>Semester</th>
+                                        <th>Fakultas</th>
+                                        <th>Prodi</th>
+                                        <!-- <th>Semester</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($data['mata_kuliahs'] as $matkul)
                                     <tr>
-                                        <td>{{ $matkul->id }}</td>
-                                        <td>{{ $matkul->nama_matkul }}</td>
-                                        <td>{{ $matkul->kode_matkul }}</td>
-                                        <td>{{ $matkul->sks }}</td>
-                                        <td>{{ $matkul->semester }}</td>
+                                        <!-- <td>{{ $matkul->id }}</td> -->
+                                        <td>{{ $matkul->nama_mata_kuliah }}</td>
+                                        <td>{{ $matkul->fakultas->nama_fakultas }}</td>
+                                        <td>{{ $matkul->prodi->nama_prodi }}</td>
+                                        <!-- <td>{{ $matkul->semester }}</td> -->
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -475,7 +373,7 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <!-- <th>ID</th> -->
                                         <th>Jadwal Booking</th>
                                         <th>Progress</th>
                                         <th>Editor</th>
@@ -485,11 +383,11 @@
                                 <tbody>
                                     @foreach($data['progresses'] as $progress)
                                     <tr>
-                                        <td>{{ $progress->id }}</td>
-                                        <td>{{ $progress->jadwalBooking->id ?? 'N/A' }}</td>
-                                        <td>{{ $progress->progres }}%</td>
+                                        <!-- <td>{{ $progress->id }}</td> -->
+                                        <td>{{ $progress->jadwalBooking->judul_course ?? 'N/A' }}</td>
+                                        <td>{{ $progress->persentase }}%</td>
                                         <td>{{ $progress->editor->nama ?? 'N/A' }}</td>
-                                        <td><span class="badge bg-{{ $progress->status == 'completed' ? 'success' : 'warning' }}">{{ $progress->status }}</span></td>
+                                        <td><span class="badge bg-{{ $progress->status == 'completed' ? 'success' : 'warning' }}">{{ $progress->keterangan }}</span></td>
                                     </tr>
                                     @endforeach
                                 </tbody>
