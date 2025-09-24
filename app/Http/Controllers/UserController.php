@@ -26,9 +26,9 @@ class UserController extends Controller
         $users = User::with(['fakultas', 'prodi'])->get();
         $fakultas = \App\Models\Fakultas::all();
         $prodis = \App\Models\Prodi::all();
-            $editors = Editor::all();
+        $editors = Editor::all();
 
-        return view('user.listuser', compact('users', 'fakultas', 'prodis','editors'));
+        return view('user', compact('users', 'fakultas', 'prodis','editors'));
     }
 
     /**
@@ -131,51 +131,108 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $userId)
     {
-        // Debugging
-        Log::info('UserController@update called', [
-            'user_id' => $user->id,
-            'request_data' => $request->all()
-        ]);
+        try {
+            // Find the user by ID
+            $user = User::findOrFail($userId);
 
-        // Validation rules
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'nomor_telepon' => 'nullable|string|max:20',
-            'fakultas_id' => 'nullable|exists:fakultas,id',
-            'prodi_id' => 'nullable|exists:prodis,id',
-            'role' => 'required|string|in:Mahasiswa,Dosen,Admin,Editor',
-            'status' => 'required|string|in:active,pending,rejected',
-            'password' => 'nullable|string|min:8|confirmed',
-        ]);
+            // Debugging
+            Log::info('UserController@update called', [
+                'user_id' => $user->id,
+                'request_data' => $request->all(),
+                'request_method' => $request->method(),
+                'content_type' => $request->header('Content-Type'),
+                'all_headers' => $request->headers->all()
+            ]);
 
-        // Update user data
-        $userData = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'nomor_telepon' => $request->nomor_telepon,
-            'fakultas_id' => $request->fakultas_id,
-            'prodi_id' => $request->prodi_id,
-            'role' => $request->role,
-            'status' => $request->status,
-        ];
+            // Validation rules
+            try {
+                $request->validate([
+                    'name' => 'required|string|max:255',
+                    'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+                    'nomor_telepon' => 'nullable|string|max:20',
+                    'fakultas_id' => 'nullable|exists:fakultas,id',
+                    'prodi_id' => 'nullable|exists:prodis,id',
+                    'role' => 'required|string|in:Mahasiswa,Dosen,Admin,Editor',
+                    'status' => 'required|string|in:active,pending,rejected',
+                    'password' => 'nullable|string|min:8',
+                ]);
+            } catch (\Illuminate\Validation\ValidationException $e) {
+                Log::error('Validation failed', [
+                    'user_id' => $user->id,
+                    'errors' => $e->errors(),
+                    'request_data' => $request->all()
+                ]);
 
-        // Only update password if provided
-        if ($request->filled('password')) {
-            $userData['password'] = bcrypt($request->password);
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Validation failed',
+                        'errors' => $e->errors()
+                    ], 422);
+                }
+                throw $e;
+            }
+
+            // Update user data
+            $userData = [
+                'name' => $request->name,
+                'email' => $request->email,
+                'nomor_telepon' => $request->nomor_telepon,
+                'fakultas_id' => $request->fakultas_id,
+                'prodi_id' => $request->prodi_id,
+                'role' => $request->role,
+                'status' => $request->status,
+            ];
+
+            // Only update password if provided
+            if ($request->filled('password')) {
+                $userData['password'] = bcrypt($request->password);
+            }
+
+            Log::info('User data to update', [
+                'user_id' => $user->id,
+                'userData' => $userData
+            ]);
+
+            $user->update($userData);
+
+            // Debugging
+            Log::info('User updated successfully', [
+                'user_id' => $user->id,
+                'updated_data' => $userData,
+                'user_after_update' => $user->fresh()->toArray()
+            ]);
+
+            // Return JSON response for AJAX requests
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'User updated successfully.',
+                    'user' => $user->fresh()
+                ]);
+            }
+
+            return redirect()->route('user.index')->with('success', 'User updated successfully.');
+
+        } catch (\Exception $e) {
+            Log::error('User update failed', [
+                'user_id' => $userId,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'An error occurred while updating the user',
+                    'error' => $e->getMessage()
+                ], 500);
+            }
+
+            return redirect()->route('user.index')->with('error', 'An error occurred while updating the user.');
         }
-
-        $user->update($userData);
-
-        // Debugging
-        Log::info('User updated', [
-            'user_id' => $user->id,
-            'updated_data' => $userData
-        ]);
-
-        return redirect()->route('user.index')->with('success', 'User updated successfully.');
     }
 
     /**

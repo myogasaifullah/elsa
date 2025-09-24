@@ -358,7 +358,7 @@
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Booking</th>
+                                                <!-- <th>Booking</th> -->
                                                 <th>Dosen</th>
                                                 <th>Date</th>
                                                 <th>Time</th>
@@ -367,7 +367,7 @@
                                         <tbody>
                                             @foreach($data['recent_jadwal'] as $jadwal)
                                             <tr>
-                                                <td>{{ $jadwal->id ?? 'N/A' }}</td>
+                                                <!-- <td>{{ $jadwal->id ?? 'N/A' }}</td> -->
                                                 <td>{{ $jadwal->dosen->nama_dosen ?? 'N/A' }}</td>
                                                 <td>{{\Carbon\Carbon::parse($jadwal->tanggal)->format('d/m/Y') }}</td>
                                                 <td>{{ $jadwal->jam }}</td>
@@ -389,7 +389,7 @@
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Jadwal</th>
+                                                <!-- <th>Jadwal</th> -->
                                                 <th>Editor</th>
                                                 <th>Status</th>
                                                 <th>Progress</th>
@@ -398,7 +398,7 @@
                                         <tbody>
                                             @foreach($data['recent_progress'] as $progress)
                                             <tr>
-                                                <td>{{ $progress->jadwalBooking->id ?? 'N/A' }}</td>
+                                                <!-- <td>{{ $progress->jadwalBooking->id ?? 'N/A' }}</td> -->
                                                 <td>{{ $progress->editor->nama ?? 'N/A' }}</td>
                                                 <td><span class="badge bg-info">{{ $progress->status ?? 'Pending' }}</span></td>
                                                 <td>{{ $progress->persentase ?? 0 }}%</td>

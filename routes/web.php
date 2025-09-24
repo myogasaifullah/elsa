@@ -73,9 +73,10 @@ Route::get('/test-export', function () {
     return view('exports.progress', compact('progress'));
 })->name('test.export');
 
-Route::get('/listuser', [App\Http\Controllers\UserController::class, 'index'])->name('user.index');
+Route::get('/user', [App\Http\Controllers\UserController::class, 'index'])->name('user.index');
+Route::get('/listuser', [App\Http\Controllers\UserController::class, 'index'])->name('user.listuser');
 Route::post('/user', [App\Http\Controllers\UserController::class, 'store'])->name('user.store');
-Route::put('/user/{user}', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
+Route::put('/user/{userId}', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
 Route::delete('/user/{user}', [App\Http\Controllers\UserController::class, 'destroy'])->name('user.destroy');
 
 Route::get('/verifikasi', [App\Http\Controllers\UserController::class, 'verifikasi'])->name('user.verifikasi');
