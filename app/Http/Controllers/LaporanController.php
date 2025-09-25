@@ -241,4 +241,19 @@ class LaporanController extends Controller
         $filters = $request->only(['fakultas_date_from', 'fakultas_date_to', 'fakultas_id']);
         return Excel::download(new FakultasExport($filters), 'laporan-fakultas.xlsx');
     }
+
+    // New combined export methods
+    public function exportCombinedFakultasPdf(Request $request)
+    {
+        $filters = $request->only(['fakultas_date_from', 'fakultas_date_to', 'fakultas_id']);
+        $export = new \App\Exports\CombinedFakultasExport($filters);
+
+        return Pdf::loadView('exports.combined_fakultas', $export->view()->getData())->download('laporan-combined-fakultas.pdf');
+    }
+
+    public function exportCombinedFakultasExcel(Request $request)
+    {
+        $filters = $request->only(['fakultas_date_from', 'fakultas_date_to', 'fakultas_id']);
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\CombinedFakultasExport($filters), 'laporan-combined-fakultas.xlsx');
+    }
 }

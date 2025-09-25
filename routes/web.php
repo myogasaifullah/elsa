@@ -11,6 +11,10 @@ use App\Http\Controllers\JadwalBookingController;
 use App\Http\Controllers\StudioMatkulController;
 use App\Http\Controllers\EditorController;
 use App\Http\Controllers\LaporanController;
+
+Route::get('laporan/export/combined-fakultas/pdf', [LaporanController::class, 'exportCombinedFakultasPdf'])->name('laporan.export.combined-fakultas.pdf');
+Route::get('laporan/export/combined-fakultas/excel', [LaporanController::class, 'exportCombinedFakultasExcel'])->name('laporan.export.combined-fakultas.excel');
+
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProgresController;
 
