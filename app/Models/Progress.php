@@ -19,6 +19,7 @@ class Progress extends Model
         'keterangan',
         'durasi',
         'tanggal_upload_youtube',
+        'publish_link_youtube',
         'editor_id',
     ];
 
