@@ -155,30 +155,50 @@
         </div>
         <div class="modal-body">
           <input type="hidden" id="editDosenId" name="id">
-          <input type="text" class="form-control mb-2" id="editNamaDosen" placeholder="Nama Dosen" name="nama_dosen" required>
 
-          <input type="text" class="form-control mb-2" id="editNuptkDosen" placeholder="NUPTK Dosen" name="nuptk_dosen" required>
+          <div class="mb-3">
+            <label for="editNamaDosen" class="form-label">Nama Dosen</label>
+            <input type="text" class="form-control" id="editNamaDosen" name="nama_dosen" required>
+          </div>
 
-          <input type="number" class="form-control mb-2" id="editTargetVideoDosen" placeholder="Target Video Dosen" name="target_video_dosen" required>
+          <div class="mb-3">
+            <label for="editNuptkDosen" class="form-label">NUPTK Dosen</label>
+            <input type="text" class="form-control" id="editNuptkDosen" name="nuptk_dosen" required>
+          </div>
 
-          <select class="form-select mb-2" id="editStatusDosen" name="status_dosen" required>
-            <option selected disabled>Pilih Status</option>
-            <option value="tetap">Tetap</option>
-            <option value="tidak_tetap">Tidak Tetap</option>
-          </select>
+          <div class="mb-3">
+            <label for="editTargetVideoDosen" class="form-label">Target Video Dosen</label>
+            <input type="number" class="form-control" id="editTargetVideoDosen" name="target_video_dosen" required>
+          </div>
 
-          <select class="form-select mb-2" id="editFakultasId" name="fakultas_id" required>
-            <option selected disabled>Pilih Fakultas</option>
-            @foreach($fakultas as $f)
-              <option value="{{ $f->id }}">{{ $f->nama_fakultas }}</option>
-            @endforeach
-          </select>
-          <select class="form-select" id="editProdiId" name="prodi_id" required>
-            <option selected disabled>Pilih Prodi</option>
-            @foreach($prodis as $p)
-              <option value="{{ $p->id }}">{{ $p->nama_prodi }}</option>
-            @endforeach
-          </select>
+          <div class="mb-3">
+            <label for="editStatusDosen" class="form-label">Status Dosen</label>
+            <select class="form-select" id="editStatusDosen" name="status_dosen" required>
+              <option selected disabled>Pilih Status</option>
+              <option value="tetap">Tetap</option>
+              <option value="tidak_tetap">Tidak Tetap</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="editFakultasId" class="form-label">Fakultas</label>
+            <select class="form-select" id="editFakultasId" name="fakultas_id" required>
+              <option selected disabled>Pilih Fakultas</option>
+              @foreach($fakultas as $f)
+                <option value="{{ $f->id }}">{{ $f->nama_fakultas }}</option>
+              @endforeach
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="editProdiId" class="form-label">Prodi</label>
+            <select class="form-select" id="editProdiId" name="prodi_id" required>
+              <option selected disabled>Pilih Prodi</option>
+              @foreach($prodis as $p)
+                <option value="{{ $p->id }}">{{ $p->nama_prodi }}</option>
+              @endforeach
+            </select>
+          </div>
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>

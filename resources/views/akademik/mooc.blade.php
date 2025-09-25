@@ -85,13 +85,21 @@
         </div>
         <div class="modal-body">
           <input type="hidden" id="editMoocId" name="id">
-          <input type="text" class="form-control mb-2" id="editJudulMooc" placeholder="Judul MOOC" name="judul_mooc" required>
-          <select class="form-select" id="editDosenMoocId" name="dosen_id" required>
-            <option selected disabled>Pilih Dosen</option>
-            @foreach($dosens as $d)
-              <option value="{{ $d->id }}">{{ $d->nama_dosen }}</option>
-            @endforeach
-          </select>
+
+          <div class="mb-3">
+            <label for="editJudulMooc" class="form-label">Judul MOOC</label>
+            <input type="text" class="form-control" id="editJudulMooc" name="judul_mooc" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="editDosenMoocId" class="form-label">Dosen</label>
+            <select class="form-select" id="editDosenMoocId" name="dosen_id" required>
+              <option selected disabled>Pilih Dosen</option>
+              @foreach($dosens as $d)
+                <option value="{{ $d->id }}">{{ $d->nama_dosen }}</option>
+              @endforeach
+            </select>
+          </div>
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
