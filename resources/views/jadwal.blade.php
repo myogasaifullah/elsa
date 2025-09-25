@@ -77,8 +77,8 @@
               <th scope="col">Dosen</th>
               <th scope="col">Status</th>
               <th scope="col">User Name</th>
-              <th scope="col">Email</th>
-              <th scope="col">Telepon</th>
+              <!-- <th scope="col">Email</th>
+              <th scope="col">Telepon</th> -->
               <th scope="col">Fakultas</th>
               <th scope="col">Prodi</th>
               <th scope="col">Action</th>
@@ -110,8 +110,8 @@
                 @endif
               </td>
               <td>{{ $jadwal->user->name ?? '-' }}</td>
-              <td>{{ $jadwal->user->email ?? '-' }}</td>
-              <td>{{ $jadwal->user->nomor_telepon ?? '-' }}</td>
+              <!-- <td>{{ $jadwal->user->email ?? '-' }}</td>
+              <td>{{ $jadwal->user->nomor_telepon ?? '-' }}</td> -->
               <td>{{ $jadwal->user->fakultas->singkatan ?? '-' }}</td>
               <td>{{ $jadwal->user->prodi->singkatan ?? '-' }}</td>
               <td>
