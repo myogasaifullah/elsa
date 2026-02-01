@@ -45,10 +45,10 @@
               <th scope="col">Dosen</th>
               <th scope="col">Status</th>
               <th scope="col">User Name</th>
-              <th scope="col">Email</th>
+              <!-- <th scope="col">Email</th>
               <th scope="col">Telepon</th>
               <th scope="col">Fakultas</th>
-              <th scope="col">Prodi</th>
+              <th scope="col">Prodi</th> -->
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -82,12 +82,15 @@
                 @endif
               </td>
               <td>{{ $booking->user->name ?? '-' }}</td>
-              <td>{{ $booking->user->email ?? '-' }}</td>
+              <!-- <td>{{ $booking->user->email ?? '-' }}</td>
               <td>{{ $booking->user->nomor_telepon ?? '-' }}</td>
               <td>{{ $booking->user->fakultas->nama_fakultas ?? '-' }}</td>
-              <td>{{ $booking->user->prodi->nama_prodi ?? '-' }}</td>
+              <td>{{ $booking->user->prodi->nama_prodi ?? '-' }}</td> -->
               <td>
                 <div class="d-flex gap-1">
+                  <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" style="display: inline" data-bs-target="#detailModal{{ $booking->id }}">
+                    <i class="bi bi-eye"></i> Detail
+                  </button>
                   <form action="{{ route('booking.approve', $booking) }}" method="POST" style="display: inline;">
                     @csrf
                     <button type="submit" class="btn btn-sm btn-success">
@@ -103,6 +106,53 @@
                 </div>
               </td>
             </tr>
+
+            <!-- Detail Modal -->
+            <div class="modal fade" id="detailModal{{ $booking->id }}" tabindex="-1" aria-labelledby="detailModalLabel{{ $booking->id }}" aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="detailModalLabel{{ $booking->id }}">Detail Booking</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p><strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($booking->tanggal)->format('d/m/Y') }}</p>
+                        <p><strong>Jam:</strong> {{ $booking->jam }}</p>
+                        <p><strong>Jenis Kategori:</strong> {{ $booking->jenis_kategori }}</p>
+                        <p><strong>Kategori MOOC:</strong> {{ $booking->kategori_mooc ?? '-' }}</p>
+                        <p><strong>Studio:</strong> {{ $booking->studio->nama_studio }}</p>
+                        <p><strong>Mata Kuliah:</strong> {{ $booking->nama_mata_kuliah }}</p>
+                        <p><strong>Judul Course:</strong> {{ $booking->judul_course }}</p>
+                        <p><strong>Dosen:</strong> {{ $booking->dosen->nama_dosen ?? '-' }}</p>
+                      </div>
+                      <div class="col-md-6">
+                        <p><strong>Status:</strong>
+                          @if($booking->status == 'pending')
+                          <span class="badge bg-warning text-dark">Pending</span>
+                          @elseif($booking->status == 'approved')
+                          <span class="badge bg-success">Approved</span>
+                          @elseif($booking->status == 'rejected')
+                          <span class="badge bg-danger">Rejected</span>
+                          @else
+                          <span class="badge bg-secondary">{{ $booking->status }}</span>
+                          @endif
+                        </p>
+                        <p><strong>User Name:</strong> {{ $booking->user->name ?? '-' }}</p>
+                        <p><strong>Email:</strong> {{ $booking->user->email ?? '-' }}</p>
+                        <p><strong>Telepon:</strong> {{ $booking->user->nomor_telepon ?? '-' }}</p>
+                        <p><strong>Fakultas:</strong> {{ $booking->user->fakultas->nama_fakultas ?? '-' }}</p>
+                        <p><strong>Prodi:</strong> {{ $booking->user->prodi->nama_prodi ?? '-' }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
             @empty
             <tr>
               <td colspan="16" class="text-center">Tidak ada booking pending</td>
