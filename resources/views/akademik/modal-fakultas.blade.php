@@ -14,6 +14,10 @@
             <input type="text" class="form-control" name="nama_fakultas" required>
           </div>
           <div class="mb-3">
+            <label for="kode_fakultas" class="form-label">Kode Fakultas</label>
+            <input type="text" class="form-control" name="kode_fakultas">
+          </div>
+          <div class="mb-3">
             <label for="singkatan" class="form-label">Singkatan</label>
             <input type="text" class="form-control" name="singkatan">
           </div>
@@ -44,6 +48,10 @@
             <input type="text" class="form-control" name="nama_fakultas" id="edit_nama_fakultas" required>
           </div>
           <div class="mb-3">
+            <label for="edit_kode_fakultas" class="form-label">Kode Fakultas</label>
+            <input type="text" class="form-control" name="kode_fakultas" id="edit_kode_fakultas">
+          </div>
+          <div class="mb-3">
             <label for="edit_singkatan" class="form-label">Singkatan</label>
             <input type="text" class="form-control" name="singkatan" id="edit_singkatan">
           </div>
@@ -58,14 +66,16 @@
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.btn-edit').forEach(button => {
-      button.addEventListener('click', function () {
+      button.addEventListener('click', function() {
         const id = this.dataset.id;
         const nama = this.dataset.nama;
+        const kode = this.dataset.kode;
         const singkatan = this.dataset.singkatan;
 
         document.getElementById('edit_nama_fakultas').value = nama;
+        document.getElementById('edit_kode_fakultas').value = kode;
         document.getElementById('edit_singkatan').value = singkatan;
         document.getElementById('formEditFakultas').action = `/fakultas/${id}`;
 

@@ -15,10 +15,15 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="kode_prodi" class="form-label">Kode Prodi</label>
+                        <input type="text" class="form-control" name="kode_prodi">
+                    </div>
+
+                    <div class="mb-3">
                         <label for="fakultas_id" class="form-label">Fakultas</label>
                         <select class="form-control" name="fakultas_id" required>
                             @foreach($fakultas as $f)
-                                <option value="{{ $f->id }}">{{ $f->nama_fakultas }}</option>
+                            <option value="{{ $f->id }}">{{ $f->nama_fakultas }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -56,6 +61,11 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="edit_kode_prodi" class="form-label">Kode Prodi</label>
+                        <input type="text" class="form-control" name="kode_prodi" id="edit_kode_prodi">
+                    </div>
+
+                    <div class="mb-3">
                         <label for="edit_singkatan_prodi" class="form-label">Singkatan</label>
                         <input type="text" class="form-control" name="singkatan" id="edit_singkatan_prodi">
                     </div>
@@ -64,14 +74,14 @@
                         <label for="edit_id_fakultas" class="form-label">Fakultas</label>
                         <select class="form-control" name="fakultas_id" id="edit_id_fakultas" required>
                             @foreach($fakultas as $f)
-                                <option value="{{ $f->id }}">{{ $f->nama_fakultas }}</option>
+                            <option value="{{ $f->id }}">{{ $f->nama_fakultas }}</option>
                             @endforeach
                         </select>
                     </div>
                 </div>
 
                 <div class="modal-footer">
-          <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                     <button type="submit" class="btn btn-primary">Perbarui</button>
                 </div>
             </div>
@@ -80,16 +90,18 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.btn-edit-prodi').forEach(button => {
-            button.addEventListener('click', function () {
+            button.addEventListener('click', function() {
                 const id = this.dataset.id;
                 const nama = this.dataset.nama;
+                const kode = this.dataset.kode;
                 const singkatan = this.dataset.singkatan;
                 const idFakultas = this.dataset.fakultas;
-                
+
 
                 document.getElementById('edit_nama_prodi').value = nama;
+                document.getElementById('edit_kode_prodi').value = kode;
                 document.getElementById('edit_singkatan_prodi').value = singkatan;
                 document.getElementById('edit_id_fakultas').value = idFakultas;
                 document.getElementById('formEditProdi').action = `/prodi/${id}`;

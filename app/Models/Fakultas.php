@@ -13,6 +13,7 @@ class Fakultas extends Model
 
     protected $fillable = [
         'nama_fakultas',
+        'kode_fakultas',
         'singkatan',
     ];
 

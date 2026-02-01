@@ -31,6 +31,7 @@
             <tr>
               <th>#</th>
               <th>Nama Fakultas</th>
+              <th>Kode Fakultas</th>
               <th>Singkatan</th>
               <th>Action</th>
             </tr>
@@ -40,19 +41,21 @@
             <tr>
               <td>{{ $index + 1 }}</td>
               <td>{{ $f->nama_fakultas }}</td>
+              <td>{{ $f->kode_fakultas }}</td>
               <td>{{ $f->singkatan }}</td>
               <td>
                 <button type="button" class="btn btn-sm btn-primary btn-edit"
                   data-id="{{ $f->id }}"
                   data-nama="{{ $f->nama_fakultas }}"
+                  data-kode="{{ $f->kode_fakultas }}"
                   data-singkatan="{{ $f->singkatan }}">
                   Edit
                 </button>
                 <form action="{{ route('fakultas.destroy', $f->id) }}" method="POST" class="form-hapus-fakultas d-inline">
-  @csrf
-  @method('DELETE')
-  <button type="button" class="btn btn-sm btn-danger btn-hapusfakultas">Hapus</button>
-</form>
+                  @csrf
+                  @method('DELETE')
+                  <button type="button" class="btn btn-sm btn-danger btn-hapusfakultas">Hapus</button>
+                </form>
 
               </td>
             </tr>
@@ -80,6 +83,7 @@
               <th>#</th>
               <th>Nama Fakultas</th>
               <th>Nama Prodi</th>
+              <th>Kode Prodi</th>
               <th>Singkatan</th>
               <th>Action</th>
             </tr>
@@ -90,20 +94,40 @@
               <td>{{ $index + 1 }}</td>
               <td>{{ $p->fakultas->nama_fakultas }}</td>
               <td>{{ $p->nama_prodi }}</td>
+              <td>{{ $p->kode_prodi }}</td>
               <td>{{ $p->singkatan }}</td>
-              <td>
-                <button type="button" class="btn btn-sm btn-primary btn-edit-prodi"
+              <td class="text-center">
+                {{-- Edit --}}
+                <button
+                  type="button"
+                  class="btn btn-sm btn-primary btn-edit-prodi"
+                  title="Edit"
+                  aria-label="Edit"
                   data-id="{{ $p->id }}"
                   data-nama="{{ $p->nama_prodi }}"
+                  data-kode="{{ $p->kode_prodi }}"
                   data-singkatan="{{ $p->singkatan }}"
                   data-fakultas="{{ $p->fakultas_id }}">
-                  Edit
+                  <i class="bi bi-pencil-square"></i>
                 </button>
-               <form action="{{ route('prodi.destroy', $p->id) }}" method="POST" class="form-hapus-prodi d-inline">
-  @csrf
-  @method('DELETE')
-  <button type="button" class="btn btn-sm btn-danger btn-hapusprodi">Hapus</button>
-</form>
+
+                {{-- Hapus --}}
+                <form
+                  action="{{ route('prodi.destroy', $p->id) }}"
+                  method="POST"
+                  class="form-hapus-prodi d-inline">
+                  @csrf
+                  @method('DELETE')
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-danger btn-hapusprodi"
+                    title="Hapus"
+                    aria-label="Hapus">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </form>
+              </td>
+
 
               </td>
             </tr>
@@ -122,10 +146,10 @@
 @include('layout.footer')
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', function() {
     // Konfirmasi hapus Fakultas
     document.querySelectorAll('.btn-hapusfakultas').forEach(button => {
-      button.addEventListener('click', function (e) {
+      button.addEventListener('click', function(e) {
         const form = button.closest('.form-hapus-fakultas');
         Swal.fire({
           title: 'Hapus Fakultas?',
@@ -144,7 +168,7 @@
 
     // Konfirmasi hapus Prodi
     document.querySelectorAll('.btn-hapusprodi').forEach(button => {
-      button.addEventListener('click', function (e) {
+      button.addEventListener('click', function(e) {
         const form = button.closest('.form-hapus-prodi');
         Swal.fire({
           title: 'Hapus Program Studi?',
