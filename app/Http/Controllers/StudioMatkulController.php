@@ -19,7 +19,7 @@ class StudioMatkulController extends Controller
         $mataKuliah = MataKuliah::with(['fakultas', 'prodi'])->get();
         $fakultas = Fakultas::all();
         $prodis = Prodi::all();
-        
+
         return view('akademik.studio-matkul', compact('studios', 'mataKuliah', 'fakultas', 'prodis'));
     }
 
@@ -85,13 +85,13 @@ class StudioMatkulController extends Controller
     public function destroyStudio($id)
     {
         $studio = Studio::findOrFail($id);
-        
+
         // Hapus gambar terkait
         foreach ($studio->gambarStudio as $gambar) {
             Storage::disk('public')->delete($gambar->path);
             $gambar->delete();
         }
-        
+
         $studio->delete();
 
         return response()->json(['success' => 'Studio berhasil dihapus.']);
@@ -103,6 +103,9 @@ class StudioMatkulController extends Controller
             'fakultas_id' => 'required|exists:fakultas,id',
             'prodi_id' => 'required|exists:prodis,id',
             'nama_mata_kuliah' => 'required|string|max:255',
+            'kode_matakuliah' => 'required|string|max:255',
+            'sks' => 'required|integer|min:1',
+            'keterangan' => 'required|in:wajib,pilihan',
         ]);
 
         MataKuliah::create($request->all());
@@ -116,6 +119,9 @@ class StudioMatkulController extends Controller
             'fakultas_id' => 'required|exists:fakultas,id',
             'prodi_id' => 'required|exists:prodis,id',
             'nama_mata_kuliah' => 'required|string|max:255',
+            'kode_matakuliah' => 'required|string|max:255',
+            'sks' => 'required|integer|min:1',
+            'keterangan' => 'required|in:wajib,pilihan',
         ]);
 
         $mataKuliah = MataKuliah::findOrFail($id);
@@ -131,7 +137,7 @@ class StudioMatkulController extends Controller
 
         return response()->json(['success' => 'Mata kuliah berhasil dihapus.']);
     }
-    
+
     public function destroyGambarStudio($id)
     {
         try {

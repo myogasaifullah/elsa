@@ -12,6 +12,9 @@ class MataKuliah extends Model
         'fakultas_id',
         'prodi_id',
         'nama_mata_kuliah',
+        'kode_matakuliah',
+        'sks',
+        'keterangan',
     ];
 
     public function fakultas()

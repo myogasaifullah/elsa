@@ -14,7 +14,10 @@
              <th scope="col">#</th>
              <th scope="col">Fakultas</th>
              <th scope="col">Prodi</th>
+             <th scope="col">Kode</th>
              <th scope="col">Mata Kuliah</th>
+             <th scope="col">SKS</th>
+             <th scope="col">Keterangan</th>
              <th scope="col">Action</th>
            </tr>
          </thead>
@@ -24,13 +27,19 @@
              <th scope="row">{{ $loop->iteration }}</th>
              <td>{{ $matkul->fakultas->nama_fakultas }}</td>
              <td>{{ $matkul->prodi->nama_prodi }}</td>
+             <td>{{ $matkul->kode_matakuliah }}</td>
              <td>{{ $matkul->nama_mata_kuliah }}</td>
+             <td>{{ $matkul->sks }}</td>
+             <td>{{ ucfirst($matkul->keterangan) }}</td>
              <td>
                <button class="btn btn-sm btn-primary btn-editmatkul"
                  data-id="{{ $matkul->id }}"
                  data-fakultas="{{ $matkul->fakultas_id }}"
                  data-prodi="{{ $matkul->prodi_id }}"
-                 data-nama="{{ $matkul->nama_mata_kuliah }}">
+                 data-kode="{{ $matkul->kode_matakuliah }}"
+                 data-nama="{{ $matkul->nama_mata_kuliah }}"
+                 data-sks="{{ $matkul->sks }}"
+                 data-keterangan="{{ $matkul->keterangan }}">
                  Edit
                </button>
                <button class="btn btn-sm btn-danger btn-hapusmatkul" data-id="{{ $matkul->id }}">
@@ -76,8 +85,24 @@
              </select>
            </div>
            <div class="mb-3">
+             <label class="form-label">Kode Mata Kuliah</label>
+             <input type="text" class="form-control" name="kode_matakuliah" id="kodeMatkul" placeholder="Contoh: IF101" required>
+           </div>
+           <div class="mb-3">
              <label class="form-label">Nama Mata Kuliah</label>
              <input type="text" class="form-control" name="nama_mata_kuliah" id="namaMatkul" placeholder="Contoh: Pemrograman Web" required>
+           </div>
+           <div class="mb-3">
+             <label class="form-label">SKS</label>
+             <input type="number" class="form-control" name="sks" id="sksMatkul" min="1" placeholder="Contoh: 3" required>
+           </div>
+           <div class="mb-3">
+             <label class="form-label">Keterangan</label>
+             <select class="form-select" name="keterangan" id="keteranganMatkul" required>
+               <option selected disabled>Pilih Keterangan</option>
+               <option value="wajib">Wajib</option>
+               <option value="pilihan">Pilihan</option>
+             </select>
            </div>
          </div>
          <div class="modal-footer">
@@ -122,8 +147,24 @@
              </select>
            </div>
            <div class="mb-3">
+             <label class="form-label">Kode Mata Kuliah</label>
+             <input type="text" class="form-control" name="kode_matakuliah" id="editKodeMatkul" required>
+           </div>
+           <div class="mb-3">
              <label class="form-label">Nama Mata Kuliah</label>
              <input type="text" class="form-control" name="nama_mata_kuliah" id="editNamaMatkul" required>
+           </div>
+           <div class="mb-3">
+             <label class="form-label">SKS</label>
+             <input type="number" class="form-control" name="sks" id="editSksMatkul" min="1" required>
+           </div>
+           <div class="mb-3">
+             <label class="form-label">Keterangan</label>
+             <select class="form-select" name="keterangan" id="editKeteranganMatkul" required>
+               <option selected disabled>Pilih Keterangan</option>
+               <option value="wajib">Wajib</option>
+               <option value="pilihan">Pilihan</option>
+             </select>
            </div>
          </div>
          <div class="modal-footer">
@@ -197,7 +238,10 @@
          document.getElementById('editFakultasMatkul').value = this.getAttribute('data-fakultas');
          document.getElementById('hiddenEditFakultasMatkul').value = this.getAttribute('data-fakultas');
          document.getElementById('editProdiMatkul').value = this.getAttribute('data-prodi');
+         document.getElementById('editKodeMatkul').value = this.getAttribute('data-kode');
          document.getElementById('editNamaMatkul').value = this.getAttribute('data-nama');
+         document.getElementById('editSksMatkul').value = this.getAttribute('data-sks');
+         document.getElementById('editKeteranganMatkul').value = this.getAttribute('data-keterangan');
          new bootstrap.Modal(document.getElementById('modalEditMatkul')).show();
        });
      });
