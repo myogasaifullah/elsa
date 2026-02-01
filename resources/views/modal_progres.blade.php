@@ -28,17 +28,17 @@
                             <table class="table table-bordered table-striped align-middle">
                                 <thead class="table-light text-center">
                                     <tr>
-                                        <th>No</th>
+                                        <!-- <th>No</th>
                                         <th>Dosen</th>
                                         <th>Fakultas</th>
                                         <th>Prodi</th>
                                         <th>Mata Kuliah</th>
-                                        <th>Kategori MOOC</th>
+                                        <th>Kategori MOOC</th> -->
                                         <th>Judul Course</th>
-                                        <th>Studio</th>
+                                        <!-- <th>Studio</th> -->
                                         <th>Tanggal Shooting</th>
-                                        <th>Waktu</th>
-                                        <th>Jenis Kategori</th>
+                                        <!-- <th>Waktu</th> -->
+                                        <!-- <th>Jenis Kategori</th> -->
                                         <th>Target Upload</th>
                                         <th>Persentase</th>
                                         <th>Progres</th>
@@ -47,23 +47,23 @@
                                         <th>Tautan Video</th>
                                         <th>Tgl Upload YouTube</th>
                                         <th>Editor</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                        <!-- <th>Status</th> -->
+                                        <!-- <th>Action</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>1</td>
+                                        <!-- <td>1</td>
                                         <td>{{ $progress->jadwalBooking->dosen->nama_dosen ?? $progress->jadwalBooking->booking->dosen->nama ?? '-' }}</td>
                                         <td>{{ $progress->jadwalBooking->user->fakultas->nama_fakultas ?? $progress->jadwalBooking->booking->dosen->fakultas->nama ?? '-' }}</td>
                                         <td>{{ $progress->jadwalBooking->user->prodi->nama_prodi ?? $progress->jadwalBooking->booking->dosen->prodi->nama ?? '-' }}</td>
                                         <td>{{ $progress->jadwalBooking->nama_mata_kuliah ?? $progress->jadwalBooking->booking->mataKuliah->nama ?? '-' }}</td>
-                                        <td>{{ $progress->jadwalBooking->kategori_mooc ?? $progress->jadwalBooking->booking->kategori_mooc ?? '-' }}</td>
+                                        <td>{{ $progress->jadwalBooking->kategori_mooc ?? $progress->jadwalBooking->booking->kategori_mooc ?? '-' }}</td> -->
                                         <td>{{ $progress->jadwalBooking->judul_course ?? $progress->jadwalBooking->booking->judul_course ?? '-' }}</td>
-                                        <td>{{ $progress->jadwalBooking->studio->nama_studio ?? $progress->jadwalBooking->studio->nama ?? '-' }}</td>
+                                        <!-- <td>{{ $progress->jadwalBooking->studio->nama_studio ?? $progress->jadwalBooking->studio->nama ?? '-' }}</td> -->
                                         <td>{{ $progress->jadwalBooking->tanggal ?? $progress->jadwalBooking->tanggal_shooting ?? '-' }}</td>
-                                        <td>{{ $progress->jadwalBooking->jam ?? $progress->jadwalBooking->waktu ?? '-' }}</td>
-                                        <td>{{ $progress->jadwalBooking->jenis_kategori ?? $progress->jadwalBooking->booking->jenis_kategori ?? '-' }}</td>
+                                        <!-- <td>{{ $progress->jadwalBooking->jam ?? $progress->jadwalBooking->waktu ?? '-' }}</td>
+                                        <td>{{ $progress->jadwalBooking->jenis_kategori ?? $progress->jadwalBooking->booking->jenis_kategori ?? '-' }}</td> -->
                                         <td>{{ $progress->target_upload ? \Carbon\Carbon::parse($progress->target_upload)->format('d/m/Y') : '-' }}</td>
                                         <td>
                                             <div class="progress">
@@ -108,12 +108,12 @@
                                             {{ $progress->editor->nama }}
                                             @endif
                                         </td>
-                                        <td class="text-center">
+                                        <!-- <td class="text-center">
                                             <span class="badge bg-success text-white">Sudah Shooting</span>
-                                        </td>
-                                        <td class="text-center">
+                                        </td> -->
+                                        <!-- <td class="text-center">
                                             <a href="{{ route('progres.edit', $progress->id) }}" class="btn btn-primary btn-sm">Edit</a>
-                                        </td>
+                                        </td> -->
                                     </tr>
                                 </tbody>
                             </table>
