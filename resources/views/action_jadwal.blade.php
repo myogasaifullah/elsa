@@ -1,6 +1,6 @@
 <!-- Modal Tambah Jadwal -->
 <div class="modal fade" id="modalTambahJadwal" tabindex="-1" aria-labelledby="modalTambahJadwalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <form action="{{ route('jadwal.store') }}" method="POST" id="formTambahJadwal">
         @csrf
@@ -9,71 +9,79 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
         </div>
         <div class="modal-body">
-          <div class="mb-3">
-            <label class="form-label">Tanggal</label>
-            <input type="date" class="form-control" name="tanggal" id="tambahTanggal" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Jam Mulai</label>
-            <input type="time" class="form-control" name="jam_mulai" id="tambahJamMulai" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Jam Selesai</label>
-            <input type="time" class="form-control" name="jam_selesai" id="tambahJamSelesai" required>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Tanggal</label>
+              <input type="date" class="form-control" name="tanggal" id="tambahTanggal" required>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Jam Mulai</label>
+              <input type="time" class="form-control" name="jam_mulai" id="tambahJamMulai" required>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Jam Selesai</label>
+              <input type="time" class="form-control" name="jam_selesai" id="tambahJamSelesai" required>
+            </div>
           </div>
           <div class="alert alert-danger d-none" id="errorTambahJumat" role="alert">
             <i class="bi bi-exclamation-triangle-fill me-2"></i>
             Maaf, pada hari Jumat jam 11.00 WIB - 13.00 WIB tidak dapat digunakan karena waktu sholat Jumat.
           </div>
-          <div class="mb-3">
-            <label class="form-label">Jenis Kategori</label>
-            <select class="form-select" name="jenis_kategori" id="jenisKategori" required>
-              <option selected disabled>Pilih Kategori</option>
-              <option value="Lomba">Lomba</option>
-              <option value="Marketing">Marketing</option>
-              <option value="E-Learning">E-Learning</option>
-              <option value="Mooc">Mooc</option>
-            </select>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Jenis Kategori</label>
+              <select class="form-select" name="jenis_kategori" id="jenisKategori" required>
+                <option selected disabled>Pilih Kategori</option>
+                <option value="Lomba">Lomba</option>
+                <option value="Marketing">Marketing</option>
+                <option value="E-Learning">E-Learning</option>
+                <option value="Mooc">Mooc</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3 d-none" id="kategoriMoocGroup">
+              <label class="form-label">Kategori MOOC</label>
+              <select class="form-select" name="kategori_mooc" id="kategoriMooc">
+                <option selected disabled>Pilih Kategori MOOC</option>
+                @foreach($moocs as $mooc)
+                <option value="{{ $mooc->judul_mooc }}">{{ $mooc->judul_mooc }}</option>
+                @endforeach
+              </select>
+            </div>
           </div>
-          <div class="mb-3 d-none" id="kategoriMoocGroup">
-            <label class="form-label">Kategori MOOC</label>
-            <select class="form-select" name="kategori_mooc" id="kategoriMooc">
-              <option selected disabled>Pilih Kategori MOOC</option>
-              @foreach($moocs as $mooc)
-              <option value="{{ $mooc->judul_mooc }}">{{ $mooc->judul_mooc }}</option>
-              @endforeach
-            </select>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Studio</label>
+              <select class="form-select" name="studio_id" id="tambahStudio" required>
+                <option selected disabled>Pilih Studio</option>
+                @foreach($studios as $studio)
+                <option value="{{ $studio->id }}">{{ $studio->nama_studio }}</option>
+                @endforeach
+              </select>
+            </div>
+            <div class="col-md-6 mb-3" id="namaMataKuliahGroup">
+              <label class="form-label">Nama Mata Kuliah</label>
+              <select class="form-select" name="nama_mata_kuliah" id="tambahNamaMataKuliah">
+                <option selected disabled>Pilih Mata Kuliah</option>
+                @foreach($mataKuliahs as $mataKuliah)
+                <option value="{{ $mataKuliah->nama_mata_kuliah }}">{{ $mataKuliah->nama_mata_kuliah }}</option>
+                @endforeach
+              </select>
+            </div>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Studio</label>
-            <select class="form-select" name="studio_id" id="tambahStudio" required>
-              <option selected disabled>Pilih Studio</option>
-              @foreach($studios as $studio)
-              <option value="{{ $studio->id }}">{{ $studio->nama_studio }}</option>
-              @endforeach
-            </select>
-          </div>
-          <div class="mb-3" id="namaMataKuliahGroup">
-            <label class="form-label">Nama Mata Kuliah</label>
-            <select class="form-select" name="nama_mata_kuliah" id="tambahNamaMataKuliah">
-              <option selected disabled>Pilih Mata Kuliah</option>
-              @foreach($mataKuliahs as $mataKuliah)
-              <option value="{{ $mataKuliah->nama_mata_kuliah }}">{{ $mataKuliah->nama_mata_kuliah }}</option>
-              @endforeach
-            </select>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Judul Course</label>
-            <input type="text" class="form-control" name="judul_course" id="tambahJudulCourse" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Dosen</label>
-            <select class="form-select" name="dosen_id" id="tambahDosen" required>
-              <option selected disabled>Pilih Dosen</option>
-              @foreach($dosens as $dosen)
-              <option value="{{ $dosen->id }}">{{ $dosen->nama_dosen }}</option>
-              @endforeach
-            </select>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Judul Course</label>
+              <input type="text" class="form-control" name="judul_course" id="tambahJudulCourse" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Dosen</label>
+              <select class="form-select" name="dosen_id" id="tambahDosen" required>
+                <option selected disabled>Pilih Dosen</option>
+                @foreach($dosens as $dosen)
+                <option value="{{ $dosen->id }}">{{ $dosen->nama_dosen }}</option>
+                @endforeach
+              </select>
+            </div>
           </div>
         </div>
         <div class="modal-footer">
@@ -87,7 +95,7 @@
 
 <!-- Modal Edit Jadwal -->
 <div class="modal fade" id="modalEditJadwal" tabindex="-1" aria-labelledby="modalEditJadwalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <form action="" method="POST" id="formEditJadwal">
         @csrf
@@ -98,71 +106,79 @@
         </div>
         <div class="modal-body">
           <input type="hidden" name="id" id="editId">
-          <div class="mb-3">
-            <label class="form-label">Tanggal</label>
-            <input type="date" class="form-control" name="tanggal" id="editTanggal" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Jam Mulai</label>
-            <input type="time" class="form-control" name="jam_mulai" id="editJamMulai" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Jam Selesai</label>
-            <input type="time" class="form-control" name="jam_selesai" id="editJamSelesai" required>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Tanggal</label>
+              <input type="date" class="form-control" name="tanggal" id="editTanggal" required>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Jam Mulai</label>
+              <input type="time" class="form-control" name="jam_mulai" id="editJamMulai" required>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label">Jam Selesai</label>
+              <input type="time" class="form-control" name="jam_selesai" id="editJamSelesai" required>
+            </div>
           </div>
           <div class="alert alert-danger d-none" id="errorEditJumat" role="alert">
             <i class="bi bi-exclamation-triangle-fill me-2"></i>
             Maaf, pada hari Jumat jam 11.00 WIB - 13.00 WIB tidak dapat digunakan karena waktu sholat Jumat.
           </div>
-          <div class="mb-3">
-            <label class="form-label">Jenis Kategori</label>
-            <select class="form-select" name="jenis_kategori" id="editJenisKategori" required>
-              <option selected disabled>Pilih Kategori</option>
-              <option value="Lomba">Lomba</option>
-              <option value="Marketing">Marketing</option>
-              <option value="E-Learning">E-Learning</option>
-              <option value="Mooc">Mooc</option>
-            </select>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Jenis Kategori</label>
+              <select class="form-select" name="jenis_kategori" id="editJenisKategori" required>
+                <option selected disabled>Pilih Kategori</option>
+                <option value="Lomba">Lomba</option>
+                <option value="Marketing">Marketing</option>
+                <option value="E-Learning">E-Learning</option>
+                <option value="Mooc">Mooc</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3 d-none" id="editKategoriMoocGroup">
+              <label class="form-label">Kategori MOOC</label>
+              <select class="form-select" name="kategori_mooc" id="editKategoriMooc">
+                <option selected disabled>Pilih Kategori MOOC</option>
+                @foreach($moocs as $mooc)
+                <option value="{{ $mooc->judul_mooc }}">{{ $mooc->judul_mooc }}</option>
+                @endforeach
+              </select>
+            </div>
           </div>
-          <div class="mb-3 d-none" id="editKategoriMoocGroup">
-            <label class="form-label">Kategori MOOC</label>
-            <select class="form-select" name="kategori_mooc" id="editKategoriMooc">
-              <option selected disabled>Pilih Kategori MOOC</option>
-              @foreach($moocs as $mooc)
-              <option value="{{ $mooc->judul_mooc }}">{{ $mooc->judul_mooc }}</option>
-              @endforeach
-            </select>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Studio</label>
+              <select class="form-select" name="studio_id" id="editStudio" required>
+                <option selected disabled>Pilih Studio</option>
+                @foreach($studios as $studio)
+                <option value="{{ $studio->id }}">{{ $studio->nama_studio }}</option>
+                @endforeach
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Nama Mata Kuliah</label>
+              <select class="form-select" name="nama_mata_kuliah" id="editNamaMataKuliah" required>
+                <option selected disabled>Pilih Mata Kuliah</option>
+                @foreach($mataKuliahs as $mataKuliah)
+                <option value="{{ $mataKuliah->nama_mata_kuliah }}">{{ $mataKuliah->nama_mata_kuliah }}</option>
+                @endforeach
+              </select>
+            </div>
           </div>
-          <div class="mb-3">
-            <label class="form-label">Studio</label>
-            <select class="form-select" name="studio_id" id="editStudio" required>
-              <option selected disabled>Pilih Studio</option>
-              @foreach($studios as $studio)
-              <option value="{{ $studio->id }}">{{ $studio->nama_studio }}</option>
-              @endforeach
-            </select>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Nama Mata Kuliah</label>
-            <select class="form-select" name="nama_mata_kuliah" id="editNamaMataKuliah" required>
-              <option selected disabled>Pilih Mata Kuliah</option>
-              @foreach($mataKuliahs as $mataKuliah)
-              <option value="{{ $mataKuliah->nama_mata_kuliah }}">{{ $mataKuliah->nama_mata_kuliah }}</option>
-              @endforeach
-            </select>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Judul Course</label>
-            <input type="text" class="form-control" name="judul_course" id="editJudulCourse" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Dosen</label>
-            <select class="form-select" name="dosen_id" id="editDosen" required>
-              <option selected disabled>Pilih Dosen</option>
-              @foreach($dosens as $dosen)
-              <option value="{{ $dosen->id }}">{{ $dosen->nama_dosen }}</option>
-              @endforeach
-            </select>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Judul Course</label>
+              <input type="text" class="form-control" name="judul_course" id="editJudulCourse" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Dosen</label>
+              <select class="form-select" name="dosen_id" id="editDosen" required>
+                <option selected disabled>Pilih Dosen</option>
+                @foreach($dosens as $dosen)
+                <option value="{{ $dosen->id }}">{{ $dosen->nama_dosen }}</option>
+                @endforeach
+              </select>
+            </div>
           </div>
         </div>
         <div class="modal-footer">
