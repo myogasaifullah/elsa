@@ -15,7 +15,7 @@
             </ol>
         </nav>
     </div>
-    
+
     <section class="section">
         <div class="row">
             <div class="col-lg-12">
@@ -125,24 +125,24 @@
     </section>
 
     <!-- Card for the Progress bar -->
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h5 class="card-title">Persentase Progres</h5>
-                    <div class="progress">
-                        <div id="progressBarPersentase" class="progress-bar progress-bar-striped bg-success" 
-                             role="progressbar" 
-                             style="width: {{ $existingPersentase->persentase ?? 0 }}%" 
-                             aria-valuenow="{{ $existingPersentase->persentase ?? 0 }}" 
-                             aria-valuemin="0" 
-                             aria-valuemax="100">
-                            {{ $existingPersentase->persentase ?? 0 }}%
-                        </div>
-                    </div>
-                    <div class="mt-2">
-                        <small class="text-muted">Perhitungan otomatis berdasarkan catatan yang terisi</small>
-                    </div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Persentase Progres</h5>
+            <div class="progress">
+                <div id="progressBarPersentase" class="progress-bar progress-bar-striped bg-success"
+                    role="progressbar"
+                    style="width: {{ $existingPersentase->persentase ?? 0 }}%"
+                    aria-valuenow="{{ $existingPersentase->persentase ?? 0 }}"
+                    aria-valuemin="0"
+                    aria-valuemax="100">
+                    {{ $existingPersentase->persentase ?? 0 }}%
                 </div>
             </div>
+            <div class="mt-2">
+                <small class="text-muted">Perhitungan otomatis berdasarkan catatan yang terisi</small>
+            </div>
+        </div>
+    </div>
 
     <!-- Button to transfer data from persentase to progress -->
     @if($existingPersentase)
@@ -157,47 +157,47 @@
             </p>
         </div>
     </div>
-    
+
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const transferButton = document.getElementById('transferDataButton');
-        
-        if (transferButton) {
-            transferButton.addEventListener('click', function() {
-                const progressId = this.getAttribute('data-progress-id');
-                
-                if (confirm('Apakah Anda yakin ingin mentransfer data dari persentase ke progress?')) {
-                    transferButton.disabled = true;
-                    transferButton.innerHTML = '<i class="bi bi-arrow-down-up"></i> Memproses...';
-                    
-                    fetch(`/progres/transfer-data/${progressId}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Data berhasil ditransfer!');
-                            location.reload();
-                        } else {
-                            alert('Gagal mentransfer data: ' + data.message);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Terjadi kesalahan saat mentransfer data');
-                    })
-                    .finally(() => {
-                        transferButton.disabled = false;
-                        transferButton.innerHTML = '<i class="bi bi-arrow-down-up"></i> Transfer Data dari Persentase';
-                    });
-                }
-            });
-        }
-    });
+        document.addEventListener('DOMContentLoaded', function() {
+            const transferButton = document.getElementById('transferDataButton');
+
+            if (transferButton) {
+                transferButton.addEventListener('click', function() {
+                    const progressId = this.getAttribute('data-progress-id');
+
+                    if (confirm('Apakah Anda yakin ingin mentransfer data dari persentase ke progress?')) {
+                        transferButton.disabled = true;
+                        transferButton.innerHTML = '<i class="bi bi-arrow-down-up"></i> Memproses...';
+
+                        fetch(`/progres/transfer-data/${progressId}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    alert('Data berhasil ditransfer!');
+                                    location.reload();
+                                } else {
+                                    alert('Gagal mentransfer data: ' + data.message);
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('Terjadi kesalahan saat mentransfer data');
+                            })
+                            .finally(() => {
+                                transferButton.disabled = false;
+                                transferButton.innerHTML = '<i class="bi bi-arrow-down-up"></i> Transfer Data dari Persentase';
+                            });
+                    }
+                });
+            }
+        });
     </script>
     @endif
 
@@ -232,7 +232,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingPublish">
                     <button class="accordion-button" type="button" data-toggle="collapse" data-target="#collapsePublish" aria-expanded="true" aria-controls="collapsePublish">
-                        Target & Tanggal Publish
+                        Target & Tanggal Publish (Wajib isi target terlebih dahulu)
                     </button>
                 </h2>
                 <div id="collapsePublish" class="accordion-collapse collapse show" aria-labelledby="headingPublish" data-parent="#accordionProgres">
@@ -247,7 +247,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Target & Tanggal Publish</h5>
+                            <h5 class="modal-title">Target & Tanggal Publish (Wajib isi target terlebih dahulu)</h5>
                             <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -270,10 +270,10 @@
                                 </div>
                             </div>
                         </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                <button type="submit" class="btn btn-primary">{{ $existingPersentase ? 'Update' : 'Simpan' }}</button>
-            </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                            <button type="submit" class="btn btn-primary">{{ $existingPersentase ? 'Update' : 'Simpan' }}</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -332,7 +332,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingCatatan1">
                     <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan1" aria-expanded="false" aria-controls="collapseCatatan1">
-                        Pra-produksi
+                        1. Pra-produksi (10%)
                     </button>
                 </h2>
                 <div id="collapseCatatan1" class="accordion-collapse collapse" aria-labelledby="headingCatatan1" data-parent="#accordionProgres">
@@ -347,7 +347,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Pra-produksi</h5>
+                            <h5 class="modal-title">1. Pra-produksi (10%)</h5>
                             <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -374,7 +374,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingCatatan2">
                     <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan2" aria-expanded="false" aria-controls="collapseCatatan2">
-                        Import dan Organisasi Materi
+                        2. Import dan Organisasi Materi (5%)
                     </button>
                 </h2>
                 <div id="collapseCatatan2" class="accordion-collapse collapse" aria-labelledby="headingCatatan2" data-parent="#accordionProgres">
@@ -389,7 +389,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Catatan Import dan Organisasi Materi</h5>
+                            <h5 class="modal-title">2. Import dan Organisasi Materi (5%)</h5>
                             <button type="button" class="btn-close" data-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
@@ -415,7 +415,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingCatatan3">
                     <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan3" aria-expanded="false" aria-controls="collapseCatatan3">
-                        Rough Cut
+                        3. Rough Cut (15%)
                     </button>
                 </h2>
                 <div id="collapseCatatan3" class="accordion-collapse collapse" aria-labelledby="headingCatatan3" data-parent="#accordionProgres">
@@ -430,7 +430,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Rough Cut</h5>
+                            <h5 class="modal-title">3. Rough Cut (15%)</h5>
                             <button type="button" class="btn-close" data-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
@@ -457,7 +457,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingCatatan4">
                     <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan4" aria-expanded="false" aria-controls="collapseCatatan4">
-                        Fine Cut (Cutting Halus)
+                        4. Fine Cut (Cutting Halus) (15%)
                     </button>
                 </h2>
                 <div id="collapseCatatan4" class="accordion-collapse collapse" aria-labelledby="headingCatatan4" data-parent="#accordionProgres">
@@ -472,7 +472,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Fine Cut (Cutting Halus)</h5>
+                            <h5 class="modal-title">4. Fine Cut (Cutting Halus) (15%)</h5>
                             <button type="button" class="btn-close" data-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
@@ -499,7 +499,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingCatatan5">
                     <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan5" aria-expanded="false" aria-controls="collapseCatatan5">
-                        Penambahan Elemen Grafis & Visual
+                        5. Penambahan Elemen Grafis & Visual (20%)
                     </button>
                 </h2>
                 <div id="collapseCatatan5" class="accordion-collapse collapse" aria-labelledby="headingCatatan5" data-parent="#accordionProgres">
@@ -514,7 +514,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Penambahan Elemen Grafis & Visual</h5>
+                            <h5 class="modal-title">5. Penambahan Elemen Grafis & Visual (20%)</h5>
                             <button type="button" class="btn-close" data-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
@@ -541,7 +541,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingCatatan6">
                     <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan6" aria-expanded="false" aria-controls="collapseCatatan6">
-                        Penyuntingan Audio
+                        6. Penyuntingan Audio (10%)
                     </button>
                 </h2>
                 <div id="collapseCatatan6" class="accordion-collapse collapse" aria-labelledby="headingCatatan6" data-parent="#accordionProgres">
@@ -556,7 +556,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Penyuntingan Audio</h5>
+                            <h5 class="modal-title">6. Penyuntingan Audio (10%)</h5>
                             <button type="button" class="btn-close" data-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
@@ -583,7 +583,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingCatatan7">
                     <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan7" aria-expanded="false" aria-controls="collapseCatatan7">
-                        Penyisipan Subtitle atau Teks Narasi
+                        7. Penyisipan Subtitle atau Teks Narasi (10%)
                     </button>
                 </h2>
                 <div id="collapseCatatan7" class="accordion-collapse collapse" aria-labelledby="headingCatatan7" data-parent="#accordionProgres">
@@ -598,7 +598,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Penyisipan Subtitle atau Teks Narasi</h5>
+                            <h5 class="modal-title">7. Penyisipan Subtitle atau Teks Narasi (10%)</h5>
                             <button type="button" class="btn-close" data-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
@@ -623,7 +623,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingCatatan8">
                     <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan8" aria-expanded="false" aria-controls="collapseCatatan8">
-                        Quality Control (QC) dan Revisi
+                        8. Quality Control (QC) dan Revisi (5%)
                     </button>
                 </h2>
                 <div id="collapseCatatan8" class="accordion-collapse collapse" aria-labelledby="headingCatatan8" data-parent="#accordionProgres">
@@ -638,7 +638,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Quality Control (QC) dan Revisi</h5>
+                            <h5 class="modal-title">8. Quality Control (QC) dan Revisi (5%)</h5>
                             <button type="button" class="btn-close" data-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
@@ -663,7 +663,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingCatatan9">
                     <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan9" aria-expanded="false" aria-controls="collapseCatatan9">
-                        Export dan Finalisasi
+                        9. Export dan Finalisasi (5%)
                     </button>
                 </h2>
                 <div id="collapseCatatan9" class="accordion-collapse collapse" aria-labelledby="headingCatatan9" data-parent="#accordionProgres">
@@ -678,7 +678,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Export dan Finalisasi</h5>
+                            <h5 class="modal-title">9. Export dan Finalisasi (5%)</h5>
                             <button type="button" class="btn-close" data-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
@@ -704,7 +704,7 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingCatatan10">
                     <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan10" aria-expanded="false" aria-controls="collapseCatatan10">
-                        Pasca Produksi
+                        10. Pasca Produksi (5%)
                     </button>
                 </h2>
                 <div id="collapseCatatan10" class="accordion-collapse collapse" aria-labelledby="headingCatatan10" data-parent="#accordionProgres">
@@ -719,7 +719,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Pasca Produksi</h5>
+                            <h5 class="modal-title">10. Pasca Produksi (5%)</h5>
                             <button type="button" class="btn-close" data-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
@@ -749,45 +749,51 @@
 @include('layout.footer')
 
 <script>
-// Fungsi untuk mendapatkan persentase berdasarkan nomor catatan
-function getPersentaseCatatan(catatanNumber) {
-    const persentaseMap = {
-        1: 10, 6: 10, 7: 10,
-        2: 5, 8: 5, 9: 5, 10: 5,
-        3: 15, 4: 15,
-        5: 20
-    };
-    return persentaseMap[catatanNumber] || 0;
-}
+    // Fungsi untuk mendapatkan persentase berdasarkan nomor catatan
+    function getPersentaseCatatan(catatanNumber) {
+        const persentaseMap = {
+            1: 10,
+            6: 10,
+            7: 10,
+            2: 5,
+            8: 5,
+            9: 5,
+            10: 5,
+            3: 15,
+            4: 15,
+            5: 20
+        };
+        return persentaseMap[catatanNumber] || 0;
+    }
 
-// Fungsi untuk menghitung persentase otomatis
-function calculatePercentage() {
-    let totalPercentage = 0;
-    
-    for (let i = 1; i <= 10; i++) {
-        const catatanField = document.getElementById(`catatan${i}`);
-        if (catatanField && catatanField.value && catatanField.value.trim() !== '') {
-            totalPercentage += getPersentaseCatatan(i);
+    // Fungsi untuk menghitung persentase otomatis
+    function calculatePercentage() {
+        let totalPercentage = 0;
+
+        for (let i = 1; i <= 10; i++) {
+            const catatanField = document.getElementById(`catatan${i}`);
+            if (catatanField && catatanField.value && catatanField.value.trim() !== '') {
+                totalPercentage += getPersentaseCatatan(i);
+            }
+        }
+
+        // Pastikan tidak melebihi 100%
+        totalPercentage = Math.min(totalPercentage, 100);
+
+        // Update hidden input
+        document.getElementById('persentase').value = totalPercentage;
+
+        // Update progress bar
+        const progressBar = document.getElementById('progressBarPersentase');
+        if (progressBar) {
+            progressBar.style.width = totalPercentage + '%';
+            progressBar.setAttribute('aria-valuenow', totalPercentage);
+            progressBar.textContent = totalPercentage + '%';
         }
     }
-    
-    // Pastikan tidak melebihi 100%
-    totalPercentage = Math.min(totalPercentage, 100);
-    
-    // Update hidden input
-    document.getElementById('persentase').value = totalPercentage;
-    
-    // Update progress bar
-    const progressBar = document.getElementById('progressBarPersentase');
-    if (progressBar) {
-        progressBar.style.width = totalPercentage + '%';
-        progressBar.setAttribute('aria-valuenow', totalPercentage);
-        progressBar.textContent = totalPercentage + '%';
-    }
-}
 
-// Hitung persentase saat halaman dimuat
-document.addEventListener('DOMContentLoaded', function() {
-    calculatePercentage();
-});
+    // Hitung persentase saat halaman dimuat
+    document.addEventListener('DOMContentLoaded', function() {
+        calculatePercentage();
+    });
 </script>
