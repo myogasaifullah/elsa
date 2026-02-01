@@ -64,6 +64,8 @@ class JadwalBookingController extends Controller
 
     public function update(Request $request, JadwalBooking $jadwal)
     {
+        $this->authorize('update', $jadwal);
+
         $request->validate([
             'tanggal' => 'required|date|after_or_equal:today',
             'jam_mulai' => 'required|date_format:H:i',

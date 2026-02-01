@@ -136,6 +136,7 @@
                   title="Detail">
                   <i class="bi bi-eye"></i>
                 </button>
+                @can('update', $jadwal)
                 <button class="btn btn-sm btn-primary btn-editJadwal"
                   data-id="{{ $jadwal->id }}"
                   data-tanggal="{{ $jadwal->tanggal }}"
@@ -147,11 +148,12 @@
                   data-judul="{{ $jadwal->judul_course }}"
                   data-dosen="{{ $jadwal->dosen_id }}"
                   data-bs-toggle="modal"
-
                   data-bs-target="#modalEditJadwal"
                   title="Edit">
                   <i class="bi bi-pencil-square"></i>
                 </button>
+                @endcan
+                @can('delete', $jadwal)
                 <form action="{{ route('jadwal.destroy', $jadwal->id) }}" method="POST" class="d-inline" id="deleteForm{{ $jadwal->id }}">
                   @csrf
                   @method('DELETE')
@@ -159,6 +161,7 @@
                     <i class="bi bi-trash"></i>
                   </button>
                 </form>
+                @endcan
               </td>
             </tr>
             @empty
