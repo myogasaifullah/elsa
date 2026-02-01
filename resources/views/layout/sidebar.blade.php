@@ -99,6 +99,9 @@
     <!-- Laporan -->
     <li class="nav-item"> <a class="nav-link {{ Request::is('laporan') ? '' : 'collapsed' }}" href="{{ url('laporan') }}"> <i class="bi bi-file-earmark"></i> <span>Laporan</span> </a> </li>
 
+    <!-- Arsip -->
+    <li class="nav-item"> <a class="nav-link {{ Request::is('arsip*') ? '' : 'collapsed' }}" href="{{ url('arsip') }}"> <i class="bi bi-archive"></i> <span>Arsip</span> </a> </li>
+
     {{-- ================= MAHASISWA ================= --}}
     @elseif(Auth::check() && in_array(strtolower(Auth::user()->role), ['mahasiswa','']))
 
