@@ -55,14 +55,15 @@
               <td>{{ $dosen->fakultas->nama_fakultas }}</td>
               <td>{{ $dosen->prodi->nama_prodi }}</td>
               <td>
-                <button class="btn btn-sm btn-primary btn-edit-dosen" 
-                        data-id="{{ $dosen->id }}"
-                        data-nama="{{ $dosen->nama_dosen }}"
-                        data-nuptk="{{ $dosen->nuptk_dosen }}"
-                        data-target="{{ $dosen->target_video_dosen }}"
-                        data-status="{{ $dosen->status_dosen }}"
-                        data-fakultas="{{ $dosen->fakultas_id }}"
-                        data-prodi="{{ $dosen->prodi_id }}">
+                <button class="btn btn-sm btn-primary btn-edit-dosen"
+                  data-id="{{ $dosen->id }}"
+                  data-nama="{{ $dosen->nama_dosen }}"
+                  data-nuptk="{{ $dosen->nuptk_dosen }}"
+                  data-target="{{ $dosen->target_video_dosen }}"
+                  data-status="{{ $dosen->status_dosen }}"
+                  data-fakultas="{{ $dosen->fakultas_id }}"
+                  data-fakultas-name="{{ $dosen->fakultas->nama_fakultas }}"
+                  data-prodi="{{ $dosen->prodi_id }}">
                   Edit
                 </button>
                 <button class="btn btn-sm btn-danger btn-hapus-dosen" data-id="{{ $dosen->id }}">Hapus</button>
@@ -76,7 +77,7 @@
     </div>
   </div>
 
-  
+
   <!-- Modal Tambah Dosen -->
   <div class="modal fade" id="modalTambahDosen" tabindex="-1" aria-labelledby="modalTambahDosenLabel">
     <div class="modal-dialog">
@@ -114,12 +115,8 @@
 
             <div class="mb-3">
               <label for="fakultas_id" class="form-label">Fakultas</label>
-              <select class="form-select" id="fakultas_id" name="fakultas_id" required>
-                <option selected disabled>Pilih Fakultas</option>
-                @foreach($fakultas as $f)
-                  <option value="{{ $f->id }}">{{ $f->nama_fakultas }}</option>
-                @endforeach
-              </select>
+              <input type="text" class="form-control" id="fakultas_id_display" readonly>
+              <input type="hidden" id="fakultas_id" name="fakultas_id">
             </div>
 
             <div class="mb-3">
@@ -127,7 +124,7 @@
               <select class="form-select" id="prodi_id" name="prodi_id" required>
                 <option selected disabled>Pilih Prodi</option>
                 @foreach($prodis as $p)
-                  <option value="{{ $p->id }}">{{ $p->nama_prodi }}</option>
+                <option value="{{ $p->id }}" data-fakultas-id="{{ $p->fakultas_id }}" data-fakultas-name="{{ $p->fakultas->nama_fakultas }}">{{ $p->nama_prodi }}</option>
                 @endforeach
               </select>
             </div>
@@ -142,140 +139,155 @@
   </div>
 
 
- <!-- Modal Edit Dosen -->
-<div class="modal fade" id="modalEditDosen" tabindex="-1" aria-labelledby="modalEditDosenLabel">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form id="formEditDosen">
-        @csrf
-        @method('PUT')
-        <div class="modal-header">
-          <h5 class="modal-title">Edit Dosen</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <input type="hidden" id="editDosenId" name="id">
-
-          <div class="mb-3">
-            <label for="editNamaDosen" class="form-label">Nama Dosen</label>
-            <input type="text" class="form-control" id="editNamaDosen" name="nama_dosen" required>
+  <!-- Modal Edit Dosen -->
+  <div class="modal fade" id="modalEditDosen" tabindex="-1" aria-labelledby="modalEditDosenLabel">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="formEditDosen">
+          @csrf
+          @method('PUT')
+          <div class="modal-header">
+            <h5 class="modal-title">Edit Dosen</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
+          <div class="modal-body">
+            <input type="hidden" id="editDosenId" name="id">
 
-          <div class="mb-3">
-            <label for="editNuptkDosen" class="form-label">NUPTK Dosen</label>
-            <input type="text" class="form-control" id="editNuptkDosen" name="nuptk_dosen" required>
-          </div>
+            <div class="mb-3">
+              <label for="editNamaDosen" class="form-label">Nama Dosen</label>
+              <input type="text" class="form-control" id="editNamaDosen" name="nama_dosen" required>
+            </div>
 
-          <div class="mb-3">
-            <label for="editTargetVideoDosen" class="form-label">Target Video Dosen</label>
-            <input type="number" class="form-control" id="editTargetVideoDosen" name="target_video_dosen" required>
-          </div>
+            <div class="mb-3">
+              <label for="editNuptkDosen" class="form-label">NUPTK Dosen</label>
+              <input type="text" class="form-control" id="editNuptkDosen" name="nuptk_dosen" required>
+            </div>
 
-          <div class="mb-3">
-            <label for="editStatusDosen" class="form-label">Status Dosen</label>
-            <select class="form-select" id="editStatusDosen" name="status_dosen" required>
-              <option selected disabled>Pilih Status</option>
-              <option value="tetap">Tetap</option>
-              <option value="tidak_tetap">Tidak Tetap</option>
-            </select>
-          </div>
+            <div class="mb-3">
+              <label for="editTargetVideoDosen" class="form-label">Target Video Dosen</label>
+              <input type="number" class="form-control" id="editTargetVideoDosen" name="target_video_dosen" required>
+            </div>
 
-          <div class="mb-3">
-            <label for="editFakultasId" class="form-label">Fakultas</label>
-            <select class="form-select" id="editFakultasId" name="fakultas_id" required>
-              <option selected disabled>Pilih Fakultas</option>
-              @foreach($fakultas as $f)
-                <option value="{{ $f->id }}">{{ $f->nama_fakultas }}</option>
-              @endforeach
-            </select>
-          </div>
+            <div class="mb-3">
+              <label for="editStatusDosen" class="form-label">Status Dosen</label>
+              <select class="form-select" id="editStatusDosen" name="status_dosen" required>
+                <option selected disabled>Pilih Status</option>
+                <option value="tetap">Tetap</option>
+                <option value="tidak_tetap">Tidak Tetap</option>
+              </select>
+            </div>
 
-          <div class="mb-3">
-            <label for="editProdiId" class="form-label">Prodi</label>
-            <select class="form-select" id="editProdiId" name="prodi_id" required>
-              <option selected disabled>Pilih Prodi</option>
-              @foreach($prodis as $p)
-                <option value="{{ $p->id }}">{{ $p->nama_prodi }}</option>
-              @endforeach
-            </select>
+            <div class="mb-3">
+              <label for="editFakultasId" class="form-label">Fakultas</label>
+              <input type="text" class="form-control" id="editFakultasIdDisplay" readonly>
+              <input type="hidden" id="editFakultasId" name="fakultas_id">
+            </div>
+
+            <div class="mb-3">
+              <label for="editProdiId" class="form-label">Prodi</label>
+              <select class="form-select" id="editProdiId" name="prodi_id" required>
+                <option selected disabled>Pilih Prodi</option>
+                @foreach($prodis as $p)
+                <option value="{{ $p->id }}" data-fakultas-id="{{ $p->fakultas_id }}" data-fakultas-name="{{ $p->fakultas->nama_fakultas }}">{{ $p->nama_prodi }}</option>
+                @endforeach
+              </select>
+            </div>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-          <button class="btn btn-primary" type="submit">Simpan</button>
-        </div>
-      </form>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+            <button class="btn btn-primary" type="submit">Simpan</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
-</div>
 
-@include('akademik.mooc')
+  @include('akademik.mooc')
 
 </main><!-- End #main -->
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', function() {
+    // Auto-fill fakultas when prodi is selected for add dosen
+    document.getElementById('prodi_id').addEventListener('change', function() {
+      const selectedOption = this.options[this.selectedIndex];
+      const fakultasId = selectedOption.getAttribute('data-fakultas-id');
+      const fakultasName = selectedOption.getAttribute('data-fakultas-name');
+      document.getElementById('fakultas_id').value = fakultasId;
+      document.getElementById('fakultas_id_display').value = fakultasName;
+    });
+
+    // Auto-fill fakultas when prodi is selected for edit dosen
+    document.getElementById('editProdiId').addEventListener('change', function() {
+      const selectedOption = this.options[this.selectedIndex];
+      const fakultasId = selectedOption.getAttribute('data-fakultas-id');
+      const fakultasName = selectedOption.getAttribute('data-fakultas-name');
+      document.getElementById('editFakultasId').value = fakultasId;
+      document.getElementById('editFakultasIdDisplay').value = fakultasName;
+    });
+
     // Submit form tambah dosen
     document.getElementById('formTambahDosen').addEventListener('submit', function(e) {
       e.preventDefault();
       var formData = new FormData(this);
-      
+
       fetch("{{ route('dosen.store') }}", {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        if(data.success) {
-          location.reload();
-        } else {
-          alert('Terjadi kesalahan: ' + JSON.stringify(data));
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('Terjadi kesalahan saat menyimpan data.');
-      });
+          method: 'POST',
+          body: formData,
+          headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            location.reload();
+          } else {
+            alert('Terjadi kesalahan: ' + JSON.stringify(data));
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Terjadi kesalahan saat menyimpan data.');
+        });
     });
 
     // Submit form tambah mooc
     document.getElementById('formTambahMooc').addEventListener('submit', function(e) {
       e.preventDefault();
       var formData = new FormData(this);
-      
+
       fetch("{{ route('mooc.store') }}", {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        if(data.success) {
-          location.reload();
-        } else {
-          alert('Terjadi kesalahan: ' + JSON.stringify(data));
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('Terjadi kesalahan saat menyimpan data.');
-      });
+          method: 'POST',
+          body: formData,
+          headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            location.reload();
+          } else {
+            alert('Terjadi kesalahan: ' + JSON.stringify(data));
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Terjadi kesalahan saat menyimpan data.');
+        });
     });
 
     // Edit Dosen
     document.querySelectorAll('.btn-edit-dosen').forEach(btn => {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', function() {
         const id = this.getAttribute('data-id');
         const nama = this.getAttribute('data-nama');
         const nuptk = this.getAttribute('data-nuptk');
         const target = this.getAttribute('data-target');
         const status = this.getAttribute('data-status');
         const fakultas = this.getAttribute('data-fakultas');
+        const fakultasName = this.getAttribute('data-fakultas-name');
         const prodi = this.getAttribute('data-prodi');
 
         document.getElementById('editDosenId').value = id;
@@ -284,6 +296,7 @@
         document.getElementById('editTargetVideoDosen').value = target;
         document.getElementById('editStatusDosen').value = status;
         document.getElementById('editFakultasId').value = fakultas;
+        document.getElementById('editFakultasIdDisplay').value = fakultasName;
         document.getElementById('editProdiId').value = prodi;
 
         new bootstrap.Modal(document.getElementById('modalEditDosen')).show();
@@ -295,32 +308,32 @@
       e.preventDefault();
       var id = document.getElementById('editDosenId').value;
       var formData = new FormData(this);
-      
+
       fetch(`/dosen/${id}`, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-          'X-HTTP-Method-Override': 'PUT'
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        if(data.success) {
-          location.reload();
-        } else {
-          alert('Terjadi kesalahan: ' + JSON.stringify(data));
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('Terjadi kesalahan saat menyimpan data.');
-      });
+          method: 'POST',
+          body: formData,
+          headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'X-HTTP-Method-Override': 'PUT'
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            location.reload();
+          } else {
+            alert('Terjadi kesalahan: ' + JSON.stringify(data));
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Terjadi kesalahan saat menyimpan data.');
+        });
     });
 
     // Edit MOOC
     document.querySelectorAll('.btn-edit-mooc').forEach(btn => {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', function() {
         const id = this.getAttribute('data-id');
         const judul = this.getAttribute('data-judul');
         const dosen = this.getAttribute('data-dosen');
@@ -338,27 +351,27 @@
       e.preventDefault();
       var id = document.getElementById('editMoocId').value;
       var formData = new FormData(this);
-      
+
       fetch(`/mooc/${id}`, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-          'X-HTTP-Method-Override': 'PUT'
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        if(data.success) {
-          location.reload();
-        } else {
-          alert('Terjadi kesalahan: ' + JSON.stringify(data));
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('Terjadi kesalahan saat menyimpan data.');
-      });
+          method: 'POST',
+          body: formData,
+          headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'X-HTTP-Method-Override': 'PUT'
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            location.reload();
+          } else {
+            alert('Terjadi kesalahan: ' + JSON.stringify(data));
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Terjadi kesalahan saat menyimpan data.');
+        });
     });
 
     // Hapus Dosen
@@ -375,23 +388,23 @@
         }).then((result) => {
           if (result.isConfirmed) {
             fetch(`/dosen/${id}`, {
-              method: 'DELETE',
-              headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-              }
-            })
-            .then(response => response.json())
-            .then(data => {
-              if(data.success) {
-                location.reload();
-              } else {
-                alert('Terjadi kesalahan: ' + JSON.stringify(data));
-              }
-            })
-            .catch(error => {
-              console.error('Error:', error);
-              alert('Terjadi kesalahan saat menghapus data.');
-            });
+                method: 'DELETE',
+                headers: {
+                  'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+              })
+              .then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                  location.reload();
+                } else {
+                  alert('Terjadi kesalahan: ' + JSON.stringify(data));
+                }
+              })
+              .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat menghapus data.');
+              });
           }
         });
       });
@@ -411,23 +424,23 @@
         }).then((result) => {
           if (result.isConfirmed) {
             fetch(`/mooc/${id}`, {
-              method: 'DELETE',
-              headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-              }
-            })
-            .then(response => response.json())
-            .then(data => {
-              if(data.success) {
-                location.reload();
-              } else {
-                alert('Terjadi kesalahan: ' + JSON.stringify(data));
-              }
-            })
-            .catch(error => {
-              console.error('Error:', error);
-              alert('Terjadi kesalahan saat menghapus data.');
-            });
+                method: 'DELETE',
+                headers: {
+                  'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+              })
+              .then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                  location.reload();
+                } else {
+                  alert('Terjadi kesalahan: ' + JSON.stringify(data));
+                }
+              })
+              .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat menghapus data.');
+              });
           }
         });
       });
