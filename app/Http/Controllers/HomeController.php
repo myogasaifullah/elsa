@@ -41,10 +41,10 @@ class HomeController extends Controller
             'persentases' => Persentase::all(),
             'prodis' => Prodi::all(),
             'progresses' => Progress::all(),
-            'studios' => Studio::all(),
+            'studios' => Studio::with('gambarStudio')->get(),
             'activity_logs' => ActivityLog::with('user')->get(),
             'logs' => ActivityLog::with('user')->get(),
-            
+
             // Statistik jumlah data
             'counts' => [
                 'users' => User::count(),
@@ -76,7 +76,7 @@ class HomeController extends Controller
     public function show($model, $id)
     {
         $modelClass = 'App\\Models\\' . ucfirst($model);
-        
+
         if (class_exists($modelClass)) {
             $data = $modelClass::findOrFail($id);
             return view('home-detail', compact('data', 'model'));
@@ -171,15 +171,48 @@ class HomeController extends Controller
             // Data untuk Area Chart
             'area_chart_data' => [
                 'prices' => [
-                    8107.85, 8128.0, 8122.9, 8165.5, 8340.7, 8423.7, 8423.5, 8514.3, 
-                    8481.85, 8487.7, 8506.9, 8626.2, 8668.95, 8602.3, 8607.55, 8512.9, 
-                    8496.25, 8600.65, 8881.1, 9340.85
+                    8107.85,
+                    8128.0,
+                    8122.9,
+                    8165.5,
+                    8340.7,
+                    8423.7,
+                    8423.5,
+                    8514.3,
+                    8481.85,
+                    8487.7,
+                    8506.9,
+                    8626.2,
+                    8668.95,
+                    8602.3,
+                    8607.55,
+                    8512.9,
+                    8496.25,
+                    8600.65,
+                    8881.1,
+                    9340.85
                 ],
                 'dates' => [
-                    "13 Nov 2017", "14 Nov 2017", "15 Nov 2017", "16 Nov 2017", "17 Nov 2017",
-                    "20 Nov 2017", "21 Nov 2017", "22 Nov 2017", "23 Nov 2017", "24 Nov 2017",
-                    "27 Nov 2017", "28 Nov 2017", "29 Nov 2017", "30 Nov 2017", "01 Dec 2017",
-                    "04 Dec 2017", "05 Dec 2017", "06 Dec 2017", "07 Dec 2017", "08 Dec 2017"
+                    "13 Nov 2017",
+                    "14 Nov 2017",
+                    "15 Nov 2017",
+                    "16 Nov 2017",
+                    "17 Nov 2017",
+                    "20 Nov 2017",
+                    "21 Nov 2017",
+                    "22 Nov 2017",
+                    "23 Nov 2017",
+                    "24 Nov 2017",
+                    "27 Nov 2017",
+                    "28 Nov 2017",
+                    "29 Nov 2017",
+                    "30 Nov 2017",
+                    "01 Dec 2017",
+                    "04 Dec 2017",
+                    "05 Dec 2017",
+                    "06 Dec 2017",
+                    "07 Dec 2017",
+                    "08 Dec 2017"
                 ]
             ],
 
@@ -228,15 +261,16 @@ class HomeController extends Controller
                     ->groupBy('month')
                     ->pluck('total', 'month')
                     ->toArray(),
-                    
+
                 // Users by role
                 'users_by_role' => User::selectRaw('role, COUNT(*) as total')
                     ->groupBy('role')
                     ->pluck('total', 'role')
                     ->toArray(),
-                    
+
                 // Progress by persentase range
-                'progress_by_persentase' => Progress::selectRaw('
+                'progress_by_persentase' => Progress::selectRaw(
+                    '
                     CASE 
                         WHEN persentase = 0 THEN "0%"
                         WHEN persentase > 0 AND persentase <= 25 THEN "1-25%"
@@ -251,19 +285,19 @@ class HomeController extends Controller
                     ->groupBy('progress_range')
                     ->pluck('total', 'progress_range')
                     ->toArray(),
-                    
+
                 // Studios count
                 'studios_count' => Studio::count(),
-                    
+
                 // Dosen by status_dosen
                 'dosens_by_status' => Dosen::selectRaw('status_dosen, COUNT(*) as total')
                     ->groupBy('status_dosen')
                     ->pluck('total', 'status_dosen')
                     ->toArray(),
-                    
+
                 // Editors count
                 'editors_count' => Editor::count(),
-                    
+
                 // Activity by day (last 7 days)
                 'activity_by_day' => ActivityLog::selectRaw('DATE(created_at) as date, COUNT(*) as count')
                     ->where('created_at', '>=', now()->subDays(7))

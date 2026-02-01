@@ -24,6 +24,13 @@
       </a>
     </li>
 
+    <!-- Editor -->
+    <li class="nav-item">
+      <a class="nav-link {{ Request::is('editor*') ? '' : 'collapsed' }}" href="{{ url('editor') }}">
+        <i class="bi bi-card-list"></i><span>Editor</span>
+      </a>
+    </li>
+
     <!-- User -->
     <li class="nav-item"> <a class="nav-link {{ Request::is('listuser', 'verifikasi') ? '' : 'collapsed' }}" data-bs-target="#user-nav" data-bs-toggle="collapse" href="#"> <i class="bi bi-person"></i><span>User</span><i class="bi bi-chevron-down ms-auto"></i> </a>
       <ul id="user-nav" class="nav-content collapse {{ Request::is('listuser', 'verifikasi') ? 'show' : '' }}" data-bs-parent="#sidebar-nav">
@@ -89,13 +96,6 @@
       </a>
     </li>
 
-    <!-- Editor -->
-    <li class="nav-item">
-      <a class="nav-link {{ Request::is('editor*') ? '' : 'collapsed' }}" href="{{ url('editor') }}">
-        <i class="bi bi-card-list"></i><span>Editor</span>
-      </a>
-    </li>
-
     <!-- Laporan -->
     <li class="nav-item"> <a class="nav-link {{ Request::is('laporan') ? '' : 'collapsed' }}" href="{{ url('laporan') }}"> <i class="bi bi-file-earmark"></i> <span>Laporan</span> </a> </li>
 
@@ -155,8 +155,8 @@
     </li>
 
     <li class="nav-item">
-      <a href="{{ url('studio-matkul') }}" class="nav-link {{ Request::is('studio-matkul*') ? 'active' : '' }}">
-        <i class="bi bi-layout-text-window-reverse"></i><span>Studio-Matkul</span>
+      <a class="nav-link {{ Request::is('studio-matkul*') ? '' : 'collapsed' }}" href="{{ url('studio-matkul') }}">
+        <i class="bi bi-layout-text-window-reverse"></i><span>Mata Kuliah</span>
       </a>
     </li>
 
@@ -177,6 +177,13 @@
       </a>
     </li>
 
+    <!-- Editor -->
+    <li class="nav-item">
+      <a class="nav-link {{ Request::is('editor*') ? '' : 'collapsed' }}" href="{{ url('editor') }}">
+        <i class="bi bi-card-list"></i><span>Editor</span>
+      </a>
+    </li>
+
     <!-- Progres -->
     <li class="nav-item">
       <a class="nav-link {{ Request::is('progres*') ? '' : 'collapsed' }}" href="{{ url('progres') }}">
@@ -184,12 +191,6 @@
       </a>
     </li>
 
-    <!-- Editor -->
-    <li class="nav-item">
-      <a class="nav-link {{ Request::is('editor*') ? '' : 'collapsed' }}" href="{{ url('editor') }}">
-        <i class="bi bi-card-list"></i><span>Editor</span>
-      </a>
-    </li>
 
     @endif
 
