@@ -147,3 +147,11 @@ z<!DOCTYPE html>
     </nav><!-- End Icons Navigation -->
 
   </header><!-- End Header -->
+
+  <script>
+    $(document).ready(function() {
+      $('.toggle-sidebar-btn').on('click', function() {
+        $('body').toggleClass('toggle-sidebar');
+      });
+    });
+  </script>

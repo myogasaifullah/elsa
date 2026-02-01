@@ -82,98 +82,107 @@
 </html>
 
 <style>
-    #verifikasiTable_wrapper .btn {
-        font-size: 0.85rem;
-        padding: 5px 10px;
-    }
+  #verifikasiTable_wrapper .btn {
+    font-size: 0.85rem;
+    padding: 5px 10px;
+  }
 
-    #verifikasiTable_wrapper .dataTables_filter input {
-        border-radius: 0.375rem;
-        border: 1px solid #ced4da;
-        padding: 4px 8px;
-        font-size: 0.9rem;
-    }
+  #verifikasiTable_wrapper .dataTables_filter input {
+    border-radius: 0.375rem;
+    border: 1px solid #ced4da;
+    padding: 4px 8px;
+    font-size: 0.9rem;
+  }
 
-    #verifikasiTable thead th {
-        background-color: #f8f9fa;
-        color: #495057;
-        font-weight: 600;
-    }
+  #verifikasiTable thead th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+  }
 
-    .badge {
-        font-size: 0.75rem;
-        padding: 4px 8px;
-        border-radius: 0.4rem;
-    }
+  .badge {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    border-radius: 0.4rem;
+  }
 
-    .card-title span {
-        font-weight: normal;
-        font-size: 0.85rem;
-        color: #6c757d;
-    }
+  .card-title span {
+    font-weight: normal;
+    font-size: 0.85rem;
+    color: #6c757d;
+  }
 
-    /* Pastikan header tetap di atas */
-    #header {
-        z-index: 1000;
-        position: fixed;
-        top: 0;
-        width: 100%;
-    }
+  /* Pastikan header tetap di atas */
+  #header {
+    z-index: 1000;
+    position: fixed;
+    top: 0;
+    width: 100%;
+  }
 
-    /* Sidebar berada di bawah header */
+  /* Sidebar berada di bawah header */
+  #sidebar {
+    top: 60px;
+    /* Sesuaikan dengan tinggi header */
+    z-index: 998;
+    /* Lebih rendah dari header */
+    position: fixed;
+    height: calc(100vh - 60px);
+    /* Sisakan ruang header */
+    overflow-y: auto;
+  }
+
+  /* Atur margin konten utama */
+  main.main {
+    margin-left: 260px !important;
+    /* sesuai lebar sidebar */
+    padding-top: 70px !important;
+    /* beri ruang untuk header */
+  }
+
+  @media (max-width: 991px) {
     #sidebar {
-        top: 60px;
-        /* Sesuaikan dengan tinggi header */
-        z-index: 998;
-        /* Lebih rendah dari header */
-        position: fixed;
-        height: calc(100vh - 60px);
-        /* Sisakan ruang header */
-        overflow-y: auto;
+      width: 260px;
+      left: 0;
+      background: #fff;
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
     }
 
-    /* Atur margin konten utama */
     main.main {
-        margin-left: 260px !important;
-        /* sesuai lebar sidebar */
-        padding-top: 70px !important;
-        /* beri ruang untuk header */
+      margin-left: 260px !important;
+      padding-top: 70px !important;
+    }
+  }
+
+  /* Tambahkan untuk DESKTOP (di atas 992px) */
+  @media (min-width: 992px) {
+    #sidebar {
+      width: 260px;
+      position: fixed;
+      left: 0;
+      top: 60px;
+      height: calc(100vh - 60px);
+      background: #fff;
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+      z-index: 998;
     }
 
-    @media (max-width: 991px) {
-        #sidebar {
-            width: 260px;
-            left: 0;
-            background: #fff;
-            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
-        }
-
-        main.main {
-            margin-left: 260px !important;
-            padding-top: 70px !important;
-        }
+    main.main {
+      margin-left: 260px !important;
+      padding-top: 70px !important;
+      padding-left: 20px;
+      padding-right: 20px;
+      background-color: #f8f9fc;
+      min-height: 100vh;
     }
 
-    /* Tambahkan untuk DESKTOP (di atas 992px) */
-    @media (min-width: 992px) {
-        #sidebar {
-            width: 260px;
-            position: fixed;
-            left: 0;
-            top: 60px;
-            height: calc(100vh - 60px);
-            background: #fff;
-            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
-            z-index: 998;
-        }
-
-        main.main {
-            margin-left: 260px !important;
-            padding-top: 70px !important;
-            padding-left: 20px;
-            padding-right: 20px;
-            background-color: #f8f9fc;
-            min-height: 100vh;
-        }
+    /* Toggle sidebar functionality */
+    .toggle-sidebar #sidebar {
+      left: -260px;
     }
+
+    .toggle-sidebar main.main {
+      margin-left: 0 !important;
+    }
+  }
 </style>
