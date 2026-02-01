@@ -112,6 +112,7 @@ Route::post('/booking/{booking}/approve', [App\Http\Controllers\BookingControlle
 Route::post('/booking/{booking}/reject', [App\Http\Controllers\BookingController::class, 'reject'])->name('booking.reject');
 
 Route::get('/booking', [JadwalBookingController::class, 'scheduledBookings'])->name('booking.index');
+Route::get('/jadwal/{jadwal}', [JadwalBookingController::class, 'show'])->name('jadwal.show');
 Route::post('/jadwal/{jadwal}/done', [JadwalBookingController::class, 'markAsDone'])->name('jadwal.done');
 Route::get('/jadwal/approved-events', [JadwalBookingController::class, 'getApprovedEvents'])->name('jadwal.approved-events');
 

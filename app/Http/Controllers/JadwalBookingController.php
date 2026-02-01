@@ -135,25 +135,49 @@ class JadwalBookingController extends Controller
             $jadwal->update(['status' => 'sudah shooting']);
 
             // Catat aktivitas: menandai jadwal sebagai sudah shooting
-            ActivityLogService::log('mark_as_done', "Menandai jadwal booking ID {$jadwal->id} sebagai sudah shooting");
+            try {
+                ActivityLogService::log('mark_as_done', "Menandai jadwal booking ID {$jadwal->id} sebagai sudah shooting");
+            } catch (\Exception $e) {
+                \Log::error('Error logging activity in markAsDone: ' . $e->getMessage());
+                // Continue without failing the operation
+            }
 
-            // Create progress entry with the jadwal_booking_id
-            $progress = \App\Models\Progress::create([
-                'jadwal_booking_id' => $jadwal->id,
-                'target_upload' => now()->addDays(7),
-                'persentase' => 0.00,
-                'progres' => 'belum',
-                'keterangan' => 'belum terbit',
-                'durasi' => null,
-                'tanggal_upload_youtube' => null,
-                'editor_id' => null,
-            ]);
+            $progressCreated = false;
+            try {
+                // Create progress entry with the jadwal_booking_id
+                $progress = \App\Models\Progress::create([
+                    'jadwal_booking_id' => $jadwal->id,
+                    'target_upload' => now()->addDays(7),
+                    'persentase' => 0.00,
+                    'progres' => 'belum',
+                    'keterangan' => 'belum terbit',
+                    'durasi' => null,
+                    'tanggal_upload_youtube' => null,
+                    'editor_id' => null,
+                ]);
+                $progressCreated = true;
+            } catch (\Exception $e) {
+                \Log::error('Error creating progress in markAsDone: ' . $e->getMessage(), [
+                    'jadwal_id' => $jadwal->id,
+                    'trace' => $e->getTraceAsString()
+                ]);
+                // Continue without failing the whole operation
+            }
+
+            $message = $progressCreated
+                ? 'Booking berhasil ditandai sebagai sudah shooting dan progress berhasil dibuat.'
+                : 'Booking berhasil ditandai sebagai sudah shooting, namun gagal membuat progress.';
 
             return response()->json([
                 'success' => true,
-                'message' => 'Booking berhasil ditandai sebagai sudah shooting dan progress berhasil dibuat.'
+                'message' => $message
             ]);
         } catch (\Exception $e) {
+            \Log::error('Error in markAsDone: ' . $e->getMessage(), [
+                'jadwal_id' => $jadwal->id,
+                'trace' => $e->getTraceAsString()
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal menandai booking: ' . $e->getMessage()
@@ -189,6 +213,34 @@ class JadwalBookingController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to mark booking as done: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Show a specific booking
+     */
+    public function show(JadwalBooking $jadwal)
+    {
+        // Catat aktivitas: melihat detail jadwal booking
+        ActivityLogService::log('lihat_detail_jadwal_booking', "Melihat detail jadwal booking ID {$jadwal->id}");
+
+        $jadwal->load(['user.fakultas', 'user.prodi', 'dosen', 'studio']);
+
+        return response()->json([
+            'tanggal' => \Carbon\Carbon::parse($jadwal->tanggal)->format('d/m/Y'),
+            'jam' => $jadwal->jam,
+            'nama' => $jadwal->user->name ?? '-',
+            'email' => $jadwal->user->email ?? '-',
+            'telpon' => $jadwal->user->nomor_telepon ?? '-',
+            'fakultas' => $jadwal->user->fakultas->nama_fakultas ?? '-',
+            'prodi' => $jadwal->user->prodi->nama_prodi ?? '-',
+            'dosen' => $jadwal->dosen->nama_dosen ?? '-',
+            'jenis_kategori' => $jadwal->jenis_kategori,
+            'kategori_mooc' => $jadwal->kategori_mooc,
+            'studio' => $jadwal->studio->nama_studio ?? '-',
+            'mata_kuliah' => $jadwal->nama_mata_kuliah,
+            'judul_course' => $jadwal->judul_course,
+            'status' => $jadwal->status === 'approved' ? 'Belum Shooting' : ($jadwal->status === 'sudah shooting' ? 'Sudah Shooting' : $jadwal->status),
+        ]);
     }
 
     /**
