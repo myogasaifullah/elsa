@@ -85,12 +85,12 @@
                       data-user-prodi-id="{{ $user->prodi_id }}"
                       data-user-role="{{ $user->role }}"
                       data-user-status="{{ $user->status }}">
-                Edit
+                <i class="bi bi-pencil-square"></i>
               </button>
               <form action="{{ route('user.destroy', $user) }}" method="POST" class="d-inline">
                 @csrf
                 @method('DELETE')
-                <button type="button" class="btn btn-sm btn-danger btn-hapus">Hapus</button>
+                <button type="button" class="btn btn-sm btn-danger btn-hapus"><i class="bi bi-trash"></i></button>
               </form>
             </td>
           </tr>
