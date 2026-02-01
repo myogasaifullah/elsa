@@ -79,8 +79,8 @@
               <th scope="col">User Name</th>
               <!-- <th scope="col">Email</th>
               <th scope="col">Telepon</th> -->
-              <th scope="col">Fakultas</th>
-              <th scope="col">Prodi</th>
+              <!-- <th scope="col">Fakultas</th> -->
+              <!-- <th scope="col">Prodi</th> -->
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -112,9 +112,30 @@
               <td>{{ $jadwal->user->name ?? '-' }}</td>
               <!-- <td>{{ $jadwal->user->email ?? '-' }}</td>
               <td>{{ $jadwal->user->nomor_telepon ?? '-' }}</td> -->
-              <td>{{ $jadwal->user->fakultas->singkatan ?? '-' }}</td>
-              <td>{{ $jadwal->user->prodi->singkatan ?? '-' }}</td>
+              <!-- <td>{{ $jadwal->user->fakultas->singkatan ?? '-' }}</td> -->
+              <!-- <td>{{ $jadwal->user->prodi->singkatan ?? '-' }}</td> -->
               <td>
+                <button class="btn btn-sm btn-info btn-detailJadwal"
+                  data-id="{{ $jadwal->id }}"
+                  data-tanggal="{{ \Carbon\Carbon::parse($jadwal->tanggal)->format('d/m/Y') }}"
+                  data-jam="{{ $jadwal->jam }}"
+                  data-jenis="{{ $jadwal->jenis_kategori }}"
+                  data-kategori="{{ $jadwal->kategori_mooc ?? '-' }}"
+                  data-studio="{{ $jadwal->studio->nama_studio }}"
+                  data-matkul="{{ $jadwal->nama_mata_kuliah }}"
+                  data-judul="{{ $jadwal->judul_course }}"
+                  data-dosen="{{ $jadwal->dosen->nama_dosen ?? '-' }}"
+                  data-status="{{ $jadwal->status }}"
+                  data-username="{{ $jadwal->user->name ?? '-' }}"
+                  data-email="{{ $jadwal->user->email ?? '-' }}"
+                  data-telepon="{{ $jadwal->user->nomor_telepon ?? '-' }}"
+                  data-fakultas="{{ $jadwal->user->fakultas->singkatan ?? '-' }}"
+                  data-prodi="{{ $jadwal->user->prodi->singkatan ?? '-' }}"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalDetailJadwal"
+                  title="Detail">
+                  <i class="bi bi-eye"></i>
+                </button>
                 <button class="btn btn-sm btn-primary btn-editJadwal"
                   data-id="{{ $jadwal->id }}"
                   data-tanggal="{{ $jadwal->tanggal }}"
@@ -128,15 +149,15 @@
                   data-bs-toggle="modal"
 
                   data-bs-target="#modalEditJadwal"
-    title="Edit">
-    <i class="bi bi-pencil-square"></i>
+                  title="Edit">
+                  <i class="bi bi-pencil-square"></i>
                 </button>
                 <form action="{{ route('jadwal.destroy', $jadwal->id) }}" method="POST" class="d-inline" id="deleteForm{{ $jadwal->id }}">
                   @csrf
                   @method('DELETE')
                   <button type="button" class="btn btn-sm btn-outline-danger btn-delete" data-id="{{ $jadwal->id }}" title="Hapus">
-      <i class="bi bi-trash"></i>
-    </button>
+                    <i class="bi bi-trash"></i>
+                  </button>
                 </form>
               </td>
             </tr>
@@ -153,81 +174,88 @@
 
   @include('components.delete-confirmation-modal')
 
-     @include('action_jadwal')
+  @include('action_jadwal')
 
 
 
-@include('layout.footer')
+  @include('layout.footer')
 
-<!-- ======================== Init Script ======================== -->
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const calendarEl = document.getElementById('calendar');
-    let calendar; // buat variabel global
+  <!-- ======================== Init Script ======================== -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const calendarEl = document.getElementById('calendar');
+      let calendar; // buat variabel global
 
-    if (calendarEl) {
-      calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        height: 530,
-        locale: 'id',
-        headerToolbar: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
-        },
-        events: {
-          url: '/jadwal-approved', // endpoint backend
-          method: 'GET',
-          failure: function() {
-            alert('Gagal memuat data');
+      if (calendarEl) {
+        calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          height: 530,
+          locale: 'id',
+          headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
           },
-          success: function(data) {
-            console.log('Events received:', data); // Log the received events
-            data.forEach(event => {
-              console.log('Event:', event); // Log each event
-              console.log('Event properties:', event.extendedProps); // Log event properties
-            });
+          events: '/jadwal-approved',
+
+          eventClick: function(info) {
+            const event = info.event;
+            const props = event.extendedProps;
+            alert(
+              'Judul: ' + event.title + '\n' +
+              'Mata Kuliah: ' + props.mata_kuliah + '\n' +
+              'Studio: ' + props.studio + '\n' +
+              'Dosen: ' + props.dosen + '\n' +
+              'Jam: ' + props.jam + '\n' +
+              'Tanggal: ' + event.start.toLocaleDateString('id-ID') + '\n' +
+              'Jenis: ' + props.jenis + '\n' +
+              'Status: ' + props.status
+            );
+          },
+          eventMouseEnter: function(info) {
+            info.el.style.cursor = 'pointer';
+          },
+          eventMouseLeave: function(info) {
+            info.el.style.cursor = 'default';
           }
-        },
+        });
 
-        eventClick: function(info) {
-          const event = info.event;
-          const props = event.extendedProps;
-          alert(
-            'Judul: ' + event.title + '\n' +
-            'Mata Kuliah: ' + props.mata_kuliah + '\n' +
-            'Studio: ' + props.studio + '\n' +
-            'Dosen: ' + props.dosen + '\n' +
-            'Jam: ' + props.jam + '\n' +
-            'Tanggal: ' + event.start.toLocaleDateString('id-ID') + '\n' +
-            'Jenis: ' + props.jenis + '\n' +
-            'Status: ' + props.status
-          );
-        },
-        eventMouseEnter: function(info) {
-          info.el.style.cursor = 'pointer';
-        },
-        eventMouseLeave: function(info) {
-          info.el.style.cursor = 'default';
-        }
-      });
-
-      calendar.render();
-    }
-
-    const miniCal = document.getElementById('mini-calendar');
-    if (miniCal) {
-      new Datepicker(miniCal, {
-        calendarInline: true,
-        todayHighlight: true,
-        format: 'yyyy-mm-dd'
-      });
-    }
-
-    setInterval(() => {
-      if (calendar) {
-        calendar.refetchEvents();
+        calendar.render();
       }
-    }, 30000);
-  });
-</script>
+
+      const miniCal = document.getElementById('mini-calendar');
+      if (miniCal) {
+        new Datepicker(miniCal, {
+          calendarInline: true,
+          todayHighlight: true,
+          format: 'yyyy-mm-dd'
+        });
+      }
+
+      setInterval(() => {
+        if (calendar) {
+          calendar.refetchEvents();
+        }
+      }, 30000);
+
+      // Handle Detail Button Click
+      document.querySelectorAll('.btn-detailJadwal').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.getElementById('detailTanggal').textContent = this.dataset.tanggal;
+          document.getElementById('detailJam').textContent = this.dataset.jam;
+          document.getElementById('detailJenis').textContent = this.dataset.jenis;
+          document.getElementById('detailKategori').textContent = this.dataset.kategori;
+          document.getElementById('detailStudio').textContent = this.dataset.studio;
+          document.getElementById('detailMatkul').textContent = this.dataset.matkul;
+          document.getElementById('detailJudul').textContent = this.dataset.judul;
+          document.getElementById('detailDosen').textContent = this.dataset.dosen;
+          document.getElementById('detailStatus').textContent = this.dataset.status;
+          document.getElementById('detailUsername').textContent = this.dataset.username;
+          document.getElementById('detailEmail').textContent = this.dataset.email;
+          document.getElementById('detailTelepon').textContent = this.dataset.telepon;
+          document.getElementById('detailFakultas').textContent = this.dataset.fakultas;
+          document.getElementById('detailProdi').textContent = this.dataset.prodi;
+        });
+      });
+    });
+  </script>

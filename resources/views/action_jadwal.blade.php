@@ -43,7 +43,7 @@
               <select class="form-select" name="kategori_mooc" id="kategoriMooc">
                 <option selected disabled>Pilih Kategori MOOC</option>
                 @foreach($moocs as $mooc)
-                <option value="{{ $mooc->judul_mooc }}">{{ $mooc->judul_mooc }}</option>
+                <option value="{{ $mooc->judul_mooc }}" data-dosen-id="{{ $mooc->dosen_id }}">{{ $mooc->judul_mooc }}</option>
                 @endforeach
               </select>
             </div>
@@ -211,6 +211,95 @@
   });
 </script>
 
+<!-- Modal Detail Jadwal -->
+<div class="modal fade" id="modalDetailJadwal" tabindex="-1" aria-labelledby="modalDetailJadwalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Detail Jadwal</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Tanggal:</label>
+            <p id="detailTanggal"></p>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Jam:</label>
+            <p id="detailJam"></p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Jenis Kategori:</label>
+            <p id="detailJenis"></p>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Kategori MOOC:</label>
+            <p id="detailKategori"></p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Studio:</label>
+            <p id="detailStudio"></p>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Mata Kuliah:</label>
+            <p id="detailMatkul"></p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Judul Course:</label>
+            <p id="detailJudul"></p>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Dosen:</label>
+            <p id="detailDosen"></p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Status:</label>
+            <p id="detailStatus"></p>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">User Name:</label>
+            <p id="detailUsername"></p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Email:</label>
+            <p id="detailEmail"></p>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Telepon:</label>
+            <p id="detailTelepon"></p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Fakultas:</label>
+            <p id="detailFakultas"></p>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Prodi:</label>
+            <p id="detailProdi"></p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 
 
 </main>
@@ -299,6 +388,16 @@
         kategoriMoocGroup.classList.remove('d-none');
       } else {
         kategoriMoocGroup.classList.add('d-none');
+      }
+    });
+
+    // Auto-fill dosen when MOOC is selected
+    const kategoriMooc = document.getElementById('kategoriMooc');
+    kategoriMooc?.addEventListener('change', function() {
+      const selectedOption = this.options[this.selectedIndex];
+      const dosenId = selectedOption.getAttribute('data-dosen-id');
+      if (dosenId) {
+        document.getElementById('tambahDosen').value = dosenId;
       }
     });
 

@@ -15,8 +15,8 @@ class JadwalBookingController extends Controller
         // Catat aktivitas: melihat halaman jadwal booking
         ActivityLogService::log('lihat_jadwal_booking', 'Melihat daftar jadwal booking');
 
-        $jadwals = JadwalBooking::with(['user.fakultas', 'user.prodi', 'dosen'])->latest()->get();
-        $moocs = \App\Models\Mooc::all();
+        $jadwals = JadwalBooking::with(['user.fakultas', 'user.prodi', 'dosen'])->where('status', '!=', 'sudah shooting')->latest()->get();
+        $moocs = \App\Models\Mooc::with('dosen')->get();
         $mataKuliahs = \App\Models\MataKuliah::all();
         $dosens = \App\Models\Dosen::all();
         $studios = Studio::all();
