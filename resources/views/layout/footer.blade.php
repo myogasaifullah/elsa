@@ -143,14 +143,41 @@
   @media (max-width: 991px) {
     #sidebar {
       width: 260px;
-      left: 0;
+      left: -260px;
+      /* Hidden by default on mobile */
       background: #fff;
       box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+      transition: left 0.3s ease;
+      /* Smooth transition */
     }
 
     main.main {
-      margin-left: 260px !important;
+      margin-left: 0 !important;
+      /* No margin on mobile by default */
       padding-top: 70px !important;
+      transition: margin-left 0.3s ease;
+      /* Smooth transition */
+    }
+
+    /* When sidebar is toggled open on mobile */
+    .toggle-sidebar #sidebar {
+      left: 0;
+    }
+
+    .toggle-sidebar main.main {
+      margin-left: 260px !important;
+    }
+
+    /* Overlay for mobile when sidebar is open */
+    .toggle-sidebar::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 997;
     }
   }
 

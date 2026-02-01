@@ -1,12 +1,6 @@
 @extends('layout.header')
 
-@section('title', 'Dashboard')
-
-@include('layout.sidebar')
-
-@extends('layout.header')
-
-@section('title', 'Dashboard')
+@section('title', 'Progres')
 
 @include('layout.sidebar')
 

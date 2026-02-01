@@ -63,114 +63,116 @@
           </button>
         </div>
 
-        <table class="table table-borderless datatable">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Tanggal</th>
-              <th scope="col">Jam</th>
-              <th scope="col">Jenis Kategori</th>
-              <th scope="col">Kategori MOOC</th>
-              <th scope="col">Studio</th>
-              <th scope="col">Mata Kuliah</th>
-              <th scope="col">Judul Course</th>
-              <th scope="col">Dosen</th>
-              <th scope="col">Status</th>
-              <th scope="col">User Name</th>
-              <!-- <th scope="col">Email</th>
-              <th scope="col">Telepon</th> -->
-              <!-- <th scope="col">Fakultas</th> -->
-              <!-- <th scope="col">Prodi</th> -->
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            @forelse($jadwals as $index => $jadwal)
-            <tr>
-              <th scope="row">{{ $index + 1 }}</th>
-              <td>{{ \Carbon\Carbon::parse($jadwal->tanggal)->format('d/m/Y') }}</td>
-              <td>{{ $jadwal->jam }}</td>
-              <td>{{ $jadwal->jenis_kategori }}</td>
-              <td>{{ $jadwal->kategori_mooc ?? '-' }}</td>
-              <td>{{ $jadwal->studio->nama_studio }}</td>
-              <td>{{ $jadwal->nama_mata_kuliah }}</td>
-              <td>{{ $jadwal->judul_course }}</td>
-              <td>{{ $jadwal->dosen->nama_dosen ?? '-' }}</td>
-              <td>
-                @if($jadwal->status == 'pending')
-                <span class="badge bg-warning text-dark">
-                  <i class="bi bi-hourglass-split me-1"></i> Pending
-                </span>
-                @elseif($jadwal->status == 'schedule')
-                <span class="badge bg-success">
-                  <i class="bi bi-calendar-check me-1"></i> Schedule
-                </span>
-                @else
-                <span class="badge bg-secondary">{{ $jadwal->status }}</span>
-                @endif
-              </td>
-              <td>{{ $jadwal->user->name ?? '-' }}</td>
-              <!-- <td>{{ $jadwal->user->email ?? '-' }}</td>
+        <div class="table-responsive">
+          <table class="table table-borderless datatable">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Tanggal</th>
+                <th scope="col">Jam</th>
+                <th scope="col">Jenis Kategori</th>
+                <th scope="col">Kategori MOOC</th>
+                <th scope="col">Studio</th>
+                <th scope="col">Mata Kuliah</th>
+                <th scope="col">Judul Course</th>
+                <th scope="col">Dosen</th>
+                <th scope="col">Status</th>
+                <th scope="col">User Name</th>
+                <!-- <th scope="col">Email</th>
+                <th scope="col">Telepon</th> -->
+                <!-- <th scope="col">Fakultas</th> -->
+                <!-- <th scope="col">Prodi</th> -->
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              @forelse($jadwals as $index => $jadwal)
+              <tr>
+                <th scope="row">{{ $index + 1 }}</th>
+                <td>{{ \Carbon\Carbon::parse($jadwal->tanggal)->format('d/m/Y') }}</td>
+                <td>{{ $jadwal->jam }}</td>
+                <td>{{ $jadwal->jenis_kategori }}</td>
+                <td>{{ $jadwal->kategori_mooc ?? '-' }}</td>
+                <td>{{ $jadwal->studio->nama_studio }}</td>
+                <td>{{ $jadwal->nama_mata_kuliah }}</td>
+                <td>{{ $jadwal->judul_course }}</td>
+                <td>{{ $jadwal->dosen->nama_dosen ?? '-' }}</td>
+                <td>
+                  @if($jadwal->status == 'pending')
+                  <span class="badge bg-warning text-dark">
+                    <i class="bi bi-hourglass-split me-1"></i> Pending
+                  </span>
+                  @elseif($jadwal->status == 'schedule')
+                  <span class="badge bg-success">
+                    <i class="bi bi-calendar-check me-1"></i> Schedule
+                  </span>
+                  @else
+                  <span class="badge bg-secondary">{{ $jadwal->status }}</span>
+                  @endif
+                </td>
+                <td>{{ $jadwal->user->name ?? '-' }}</td>
+                <!-- <td>{{ $jadwal->user->email ?? '-' }}</td>
               <td>{{ $jadwal->user->nomor_telepon ?? '-' }}</td> -->
-              <!-- <td>{{ $jadwal->user->fakultas->singkatan ?? '-' }}</td> -->
-              <!-- <td>{{ $jadwal->user->prodi->singkatan ?? '-' }}</td> -->
-              <td>
-                <button class="btn btn-sm btn-info btn-detailJadwal"
-                  data-id="{{ $jadwal->id }}"
-                  data-tanggal="{{ \Carbon\Carbon::parse($jadwal->tanggal)->format('d/m/Y') }}"
-                  data-jam="{{ $jadwal->jam }}"
-                  data-jenis="{{ $jadwal->jenis_kategori }}"
-                  data-kategori="{{ $jadwal->kategori_mooc ?? '-' }}"
-                  data-studio="{{ $jadwal->studio->nama_studio }}"
-                  data-matkul="{{ $jadwal->nama_mata_kuliah }}"
-                  data-judul="{{ $jadwal->judul_course }}"
-                  data-dosen="{{ $jadwal->dosen->nama_dosen ?? '-' }}"
-                  data-status="{{ $jadwal->status }}"
-                  data-username="{{ $jadwal->user->name ?? '-' }}"
-                  data-email="{{ $jadwal->user->email ?? '-' }}"
-                  data-telepon="{{ $jadwal->user->nomor_telepon ?? '-' }}"
-                  data-fakultas="{{ $jadwal->user->fakultas->singkatan ?? '-' }}"
-                  data-prodi="{{ $jadwal->user->prodi->singkatan ?? '-' }}"
-                  data-bs-toggle="modal"
-                  data-bs-target="#modalDetailJadwal"
-                  title="Detail">
-                  <i class="bi bi-eye"></i>
-                </button>
-                @can('update', $jadwal)
-                <button class="btn btn-sm btn-primary btn-editJadwal"
-                  data-id="{{ $jadwal->id }}"
-                  data-tanggal="{{ $jadwal->tanggal }}"
-                  data-jam="{{ $jadwal->jam }}"
-                  data-jenis="{{ $jadwal->jenis_kategori }}"
-                  data-kategori="{{ $jadwal->kategori_mooc }}"
-                  data-studio="{{ $jadwal->studio_id }}"
-                  data-matkul="{{ $jadwal->nama_mata_kuliah }}"
-                  data-judul="{{ $jadwal->judul_course }}"
-                  data-dosen="{{ $jadwal->dosen_id }}"
-                  data-bs-toggle="modal"
-                  data-bs-target="#modalEditJadwal"
-                  title="Edit">
-                  <i class="bi bi-pencil-square"></i>
-                </button>
-                @endcan
-                @can('delete', $jadwal)
-                <form action="{{ route('jadwal.destroy', $jadwal->id) }}" method="POST" class="d-inline" id="deleteForm{{ $jadwal->id }}">
-                  @csrf
-                  @method('DELETE')
-                  <button type="button" class="btn btn-sm btn-outline-danger btn-delete" data-id="{{ $jadwal->id }}" title="Hapus">
-                    <i class="bi bi-trash"></i>
+                <!-- <td>{{ $jadwal->user->fakultas->singkatan ?? '-' }}</td> -->
+                <!-- <td>{{ $jadwal->user->prodi->singkatan ?? '-' }}</td> -->
+                <td>
+                  <button class="btn btn-sm btn-info btn-detailJadwal"
+                    data-id="{{ $jadwal->id }}"
+                    data-tanggal="{{ \Carbon\Carbon::parse($jadwal->tanggal)->format('d/m/Y') }}"
+                    data-jam="{{ $jadwal->jam }}"
+                    data-jenis="{{ $jadwal->jenis_kategori }}"
+                    data-kategori="{{ $jadwal->kategori_mooc ?? '-' }}"
+                    data-studio="{{ $jadwal->studio->nama_studio }}"
+                    data-matkul="{{ $jadwal->nama_mata_kuliah }}"
+                    data-judul="{{ $jadwal->judul_course }}"
+                    data-dosen="{{ $jadwal->dosen->nama_dosen ?? '-' }}"
+                    data-status="{{ $jadwal->status }}"
+                    data-username="{{ $jadwal->user->name ?? '-' }}"
+                    data-email="{{ $jadwal->user->email ?? '-' }}"
+                    data-telepon="{{ $jadwal->user->nomor_telepon ?? '-' }}"
+                    data-fakultas="{{ $jadwal->user->fakultas->singkatan ?? '-' }}"
+                    data-prodi="{{ $jadwal->user->prodi->singkatan ?? '-' }}"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalDetailJadwal"
+                    title="Detail">
+                    <i class="bi bi-eye"></i>
                   </button>
-                </form>
-                @endcan
-              </td>
-            </tr>
-            @empty
-            <tr>
-              <td colspan="15" class="text-center">Tidak ada jadwal booking</td>
-            </tr>
-            @endforelse
-          </tbody>
-        </table>
+                  @can('update', $jadwal)
+                  <button class="btn btn-sm btn-primary btn-editJadwal"
+                    data-id="{{ $jadwal->id }}"
+                    data-tanggal="{{ $jadwal->tanggal }}"
+                    data-jam="{{ $jadwal->jam }}"
+                    data-jenis="{{ $jadwal->jenis_kategori }}"
+                    data-kategori="{{ $jadwal->kategori_mooc }}"
+                    data-studio="{{ $jadwal->studio_id }}"
+                    data-matkul="{{ $jadwal->nama_mata_kuliah }}"
+                    data-judul="{{ $jadwal->judul_course }}"
+                    data-dosen="{{ $jadwal->dosen_id }}"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalEditJadwal"
+                    title="Edit">
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                  @endcan
+                  @can('delete', $jadwal)
+                  <form action="{{ route('jadwal.destroy', $jadwal->id) }}" method="POST" class="d-inline" id="deleteForm{{ $jadwal->id }}">
+                    @csrf
+                    @method('DELETE')
+                    <button type="button" class="btn btn-sm btn-outline-danger btn-delete" data-id="{{ $jadwal->id }}" title="Hapus">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </form>
+                  @endcan
+                </td>
+              </tr>
+              @empty
+              <tr>
+                <td colspan="15" class="text-center">Tidak ada jadwal booking</td>
+              </tr>
+              @endforelse
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>

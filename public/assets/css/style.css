@@ -1265,18 +1265,50 @@ h6 {
     object-position: center;
   }
 
-    .calendar-wrapper {
+  .calendar-wrapper {
     display: flex;
     gap: 24px;
   }
 
   .calendar-sidebar {
     width: 260px;
+    flex-shrink: 0;
   }
 
   .calendar-content {
-    width: 1200px;
-    /* ubah sesuai kebutuhan */
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Responsive untuk tablet dan mobile */
+  @media (max-width: 991px) {
+    .calendar-wrapper {
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .calendar-sidebar {
+      width: 100%;
+    }
+
+    .calendar-content {
+      width: 100%;
+    }
+  }
+
+  /* Responsive untuk mobile kecil */
+  @media (max-width: 576px) {
+    .calendar-wrapper {
+      gap: 12px;
+    }
+
+    .calendar-sidebar .card {
+      margin-bottom: 12px;
+    }
+
+    .calendar-content {
+      padding: 12px;
+    }
   }
 
   .event-filters label {
