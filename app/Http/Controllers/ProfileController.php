@@ -35,24 +35,36 @@ class ProfileController extends Controller
     {
         ActivityLogService::log('profile_update', 'User memperbarui informasi profile');
 
-        $request->validate([
+        $validationRules = [
             'name' => 'required|string|max:255',
             'nomor_telepon' => 'nullable|string|max:20',
             'fakultas_id' => 'required|exists:fakultas,id',
             'prodi_id' => 'required|exists:prodis,id',
-            'role' => 'required|string|in:Mahasiswa,Dosen,Admin',
             'email' => 'required|string|email|max:255|unique:users,email,' . $request->user()->id,
-        ]);
+        ];
+
+        // Only allow role update if the logged-in user is Admin
+        if (Auth::user()->role === 'Admin') {
+            $validationRules['role'] = 'required|string|in:Mahasiswa,Dosen,Admin';
+        }
+
+        $request->validate($validationRules);
 
         $user = $request->user();
-        $user->update([
+        $updateData = [
             'name' => $request->name,
             'nomor_telepon' => $request->nomor_telepon,
             'fakultas_id' => $request->fakultas_id,
             'prodi_id' => $request->prodi_id,
-            'role' => $request->role,
             'email' => $request->email,
-        ]);
+        ];
+
+        // Only update role if the logged-in user is Admin
+        if (Auth::user()->role === 'Admin') {
+            $updateData['role'] = $request->role;
+        }
+
+        $user->update($updateData);
 
         return redirect()->route('profile.edit')->with('status', 'profile-updated');
     }
