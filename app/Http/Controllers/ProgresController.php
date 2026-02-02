@@ -57,7 +57,7 @@ class ProgresController extends Controller
             ])
                 ->where('editor_id', $editor->id)
                 ->orderBy('created_at', 'desc')
-                ->get();
+                ->paginate(10); // Add pagination with 10 items per page
 
             // Get progress data for current month based on target_upload
             $progressThisMonth = Progress::with([

@@ -20,7 +20,6 @@
         <div class="row">
             <div class="col-lg-12">
 
-                
 
                 @if(isset($showAlert) && $showAlert)
                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -174,7 +173,7 @@
                         <h5 class="card-title">Tabel Progres Produksi </h5>
 
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped align-middle">
+                            <table class="table table-borderless datatable">
                                 <thead class="table-light text-center">
                                     <tr>
                                         <th>No</th>
