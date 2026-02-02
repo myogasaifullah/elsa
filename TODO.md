@@ -1,14 +1,20 @@
-# TODO for CRUD Kode Fakultas
+# TODO: Tambahkan Tabel Data Bulan Ini di editor.blade.php
 
-- [x] Create migration to add kode_fakultas column to fakultas table
-- [x] Run migration to update database
-- [x] Update Fakultas model to include kode_fakultas in fillable
-- [x] Update FakultasProdiController storeFakultas method to include kode_fakultas validation and creation
-- [x] Update FakultasProdiController updateFakultas method to include kode_fakultas validation and update
-- [x] Update FakultasProdiController destroyFakultas method to include kode_fakultas in log
-- [x] Update fakultas-prodi.blade.php table header to include Kode Fakultas column
-- [x] Update fakultas-prodi.blade.php table body to display kode_fakultas and pass to edit button
-- [x] Update modal-fakultas.blade.php add modal to include kode_fakultas input
-- [x] Update modal-fakultas.blade.php edit modal to include kode_fakultas input
-- [x] Update modal-fakultas.blade.php JavaScript to set kode_fakultas value in edit modal
-- [x] Fix updateFakultas method to include kode_fakultas in validation and update
+## Completed Tasks
+
+- [x] Analyze the editor.blade.php file and understand its structure
+- [x] Identify the ProgresController editor() method handling the view
+- [x] Modify ProgresController to fetch progress data for the current month based on target_upload
+- [x] Add a new table section in editor.blade.php to display current month progress data
+- [x] Pass the new $progressThisMonth variable to the view
+
+## Summary
+
+Successfully added a second table to the editor.blade.php page that displays progress data for the current month only. The table includes all the same columns as the original table (Dosen, Judul Course, Tanggal Shooting, etc.) and uses the same styling and functionality.
+
+### Changes Made:
+
+1. **ProgresController.php**: Modified the `editor()` method to query and pass `$progressThisMonth` data filtered by current month and year.
+2. **editor.blade.php**: Added a new card section with a table displaying the current month's progress data.
+
+The implementation ensures that editors can now view both their overall progress and specifically the progress for the current month in separate tables on the same page.

@@ -7,11 +7,11 @@
 <main id="main" class="main">
 
     <div class="pagetitle">
-        <h1>Progres</h1>
+        <h1>Editor</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item active">Progres</li>
+                <li class="breadcrumb-item active">Editor</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -20,9 +20,158 @@
         <div class="row">
             <div class="col-lg-12">
 
+                
+
+                @if(isset($showAlert) && $showAlert)
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Perhatian!</strong> Jumlah konten yang sudah terbit bulan ini kurang dari 10. Silakan tingkatkan produktivitas Anda.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
+
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Tabel Progres Produksi Bulan Ini</h5>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped align-middle">
+                                <thead class="table-light text-center">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Dosen</th>
+                                        <th>Judul Course</th>
+                                        <th>Tanggal Shooting</th>
+                                        <th>Target Upload</th>
+                                        <th>Persentase</th>
+                                        <th>Progres</th>
+                                        <th>Keterangan</th>
+                                        <th>Durasi (Menit)</th>
+                                        <th>Tautan Video</th>
+                                        <th>Tgl Upload YouTube</th>
+                                        <th>Editor</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @forelse($progressThisMonth as $index => $item)
+                                    <tr>
+                                        <td class="text-center">{{ $index + 1 }}</td>
+                                        <td>{{ $item->jadwalBooking->dosen->nama_dosen ?? '-' }}</td>
+                                        <td>{{ $item->jadwalBooking->judul_course ?? '-' }}</td>
+                                        <td>{{ $item->jadwalBooking->tanggal ?? '-' }}</td>
+                                        <td>{{ $item->target_upload ? \Carbon\Carbon::parse($item->target_upload)->format('d/m/Y') : '-' }}</td>
+
+                                        {{-- Persentase --}}
+                                        <td>
+                                            <div class="progress">
+                                                <div class="progress-bar bg-info" style="width: {{ $item->persentase }}%">
+                                                    {{ $item->persentase }}%
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        {{-- Progres --}}
+                                        <td class="text-center">
+                                            <span class="badge
+                                                @if($item->progres == 'belum') bg-secondary
+                                                @elseif($item->progres == 'progres') bg-warning text-dark
+                                                @else bg-success
+                                                @endif">
+                                                {{ ucfirst($item->progres) }}
+                                            </span>
+                                        </td>
+
+                                        {{-- Keterangan --}}
+                                        <td class="text-center">
+                                            <span class="badge
+                                                @if($item->keterangan == 'belum terbit') bg-danger
+                                                @else bg-success
+                                                @endif">
+                                                {{ ucfirst(str_replace('_', ' ', $item->keterangan)) }}
+                                            </span>
+                                        </td>
+
+                                        <td class="text-center">{{ $item->durasi ?? '-' }}</td>
+
+                                        <td class="text-center">
+                                            @if($item->publish_link_youtube)
+                                            <a href="{{ $item->publish_link_youtube }}" target="_blank" class="btn btn-sm btn-primary">
+                                                Lihat
+                                            </a>
+                                            @else
+                                            -
+                                            @endif
+                                        </td>
+
+                                        <td class="text-center">
+                                            {{ $item->tanggal_upload_youtube ? \Carbon\Carbon::parse($item->tanggal_upload_youtube)->format('d/m/Y') : '-' }}
+                                        </td>
+
+                                        {{-- Editor --}}
+                                        <td class="text-center">
+                                            {{ auth()->user()->name }}
+                                        </td>
+
+                                        {{-- Action --}}
+                                        <td class="text-center">
+                                            {{-- Detail --}}
+                                            <button
+                                                type="button"
+                                                class="btn btn-sm btn-info"
+                                                title="Detail"
+                                                aria-label="Detail"
+                                                data-toggle="modal"
+                                                data-target="#detailModal"
+                                                onclick="showDetail(this)"
+
+                                                data-dosen="{{ $item->jadwalBooking->dosen->nama_dosen ?? '-' }}"
+                                                data-fakultas="{{ $item->jadwalBooking->user->fakultas->nama_fakultas ?? '-' }}"
+                                                data-prodi="{{ $item->jadwalBooking->user->prodi->nama_prodi ?? '-' }}"
+                                                data-mata-kuliah="{{ $item->jadwalBooking->nama_mata_kuliah ?? '-' }}"
+                                                data-kategori-mooc="{{ $item->jadwalBooking->kategori_mooc ?? '-' }}"
+                                                data-judul-course="{{ $item->jadwalBooking->judul_course ?? '-' }}"
+                                                data-studio="{{ $item->jadwalBooking->studio->nama_studio ?? '-' }}"
+                                                data-tanggal-shooting="{{ $item->jadwalBooking->tanggal ?? '-' }}"
+                                                data-waktu="{{ $item->jadwalBooking->jam ?? '-' }}"
+                                                data-jenis-kategori="{{ $item->jadwalBooking->jenis_kategori ?? '-' }}"
+                                                data-target-upload="{{ $item->target_upload ? \Carbon\Carbon::parse($item->target_upload)->format('d/m/Y') : '-' }}"
+                                                data-persentase="{{ $item->persentase }}"
+                                                data-progres="{{ ucfirst($item->progres) }}"
+                                                data-keterangan="{{ ucfirst(str_replace('_', ' ', $item->keterangan)) }}"
+                                                data-durasi="{{ $item->durasi ?? '-' }}"
+                                                data-publish-link="{{ $item->publish_link_youtube ?? '' }}"
+                                                data-tanggal-upload-youtube="{{ $item->tanggal_upload_youtube ? \Carbon\Carbon::parse($item->tanggal_upload_youtube)->format('d/m/Y') : '-' }}"
+                                                data-editor="{{ auth()->user()->name }}"
+                                                data-status="Sudah Shooting">
+                                                <i class="bi bi-info-circle"></i>
+                                            </button>
+
+                                            {{-- Edit --}}
+                                            <a
+                                                href="{{ url('modal-progres/' . $item->id) }}"
+                                                class="btn btn-sm btn-primary"
+                                                title="Edit"
+                                                aria-label="Edit">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                        </td>
+
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="13" class="text-center">Tidak ada data progress bulan ini</td>
+                                    </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Tabel Progres Produksi MOOC</h5>
+                        <h5 class="card-title">Tabel Progres Produksi </h5>
 
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped align-middle">
@@ -159,6 +308,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>

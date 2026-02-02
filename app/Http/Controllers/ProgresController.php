@@ -19,13 +19,14 @@ class ProgresController extends Controller
     {
         // Catat aktivitas: melihat daftar progress
         ActivityLogService::log('lihat_progress', 'Melihat daftar semua progress');
-        
+
         $progress = Progress::with([
             'jadwalBooking.dosen.fakultas',
             'jadwalBooking.dosen.prodi',
             'jadwalBooking.studio',
             'editor'
         ])
+            ->where('keterangan', '!=', 'sudah terbit')
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -36,7 +37,7 @@ class ProgresController extends Controller
     {
         // Catat aktivitas: melihat progress editor
         ActivityLogService::log('lihat_progress_editor', 'Melihat progress untuk editor');
-        
+
         $user = Auth::user();
         $userId = $user->id;
 
@@ -46,6 +47,7 @@ class ProgresController extends Controller
         if (!$editor) {
             // If no editor record exists, return empty collection
             $progress = collect();
+            $progressThisMonth = collect();
         } else {
             $progress = Progress::with([
                 'jadwalBooking.dosen.fakultas',
@@ -56,9 +58,26 @@ class ProgresController extends Controller
                 ->where('editor_id', $editor->id)
                 ->orderBy('created_at', 'desc')
                 ->get();
+
+            // Get progress data for current month based on target_upload
+            $progressThisMonth = Progress::with([
+                'jadwalBooking.dosen.fakultas',
+                'jadwalBooking.dosen.prodi',
+                'jadwalBooking.studio',
+                'editor'
+            ])
+                ->where('editor_id', $editor->id)
+                ->whereMonth('target_upload', now()->month)
+                ->whereYear('target_upload', now()->year)
+                ->orderBy('target_upload', 'desc')
+                ->get();
+
+            // Check if published content is less than 10 for alert
+            $publishedCount = $progressThisMonth->where('keterangan', 'sudah terbit')->count();
+            $showAlert = $publishedCount < 10;
         }
 
-        return view('editor', compact('progress'));
+        return view('editor', compact('progress', 'progressThisMonth', 'showAlert'));
     }
 
     /**
@@ -68,7 +87,7 @@ class ProgresController extends Controller
     {
         // Catat aktivitas: membuka form tambah progress
         ActivityLogService::log('buka_form_tambah_progress', 'Membuka form tambah progress baru');
-        
+
         $jadwalBookings = JadwalBooking::all();
         $editors = Editor::all();
 
@@ -92,7 +111,7 @@ class ProgresController extends Controller
         ]);
 
         $progress = Progress::create($validated);
-        
+
         // Catat aktivitas: menambahkan progress baru
         ActivityLogService::create('progress', "Menambahkan progress baru untuk jadwal booking ID {$validated['jadwal_booking_id']} dengan status {$validated['progres']}");
 
@@ -107,7 +126,7 @@ class ProgresController extends Controller
     {
         // Catat aktivitas: melihat detail progress
         ActivityLogService::log('lihat_detail_progress', "Melihat detail progress ID {$progress->id}");
-        
+
         return view('progres.show', compact('progress'));
     }
 
@@ -118,7 +137,7 @@ class ProgresController extends Controller
     {
         // Catat aktivitas: membuka form edit progress
         ActivityLogService::log('buka_form_edit_progress', "Membuka form edit progress ID {$progress->id}");
-        
+
         $jadwalBookings = JadwalBooking::all();
         $editors = Editor::all();
 
@@ -143,7 +162,7 @@ class ProgresController extends Controller
 
         $oldData = $progress->toArray();
         $progress->update($validated);
-        
+
         // Catat aktivitas: memperbarui progress
         ActivityLogService::update('progress', "Memperbarui progress ID {$progress->id}. Data lama: " . json_encode($oldData) . " -> Data baru: " . json_encode($validated));
 
@@ -159,21 +178,21 @@ class ProgresController extends Controller
         try {
             // Find the progress record
             $progress = Progress::findOrFail($id);
-            
+
             // Find the related persentase record
             $persentase = Persentase::where('id_progres', $id)->first();
-            
+
             if (!$persentase) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Data persentase tidak ditemukan untuk progress ini'
                 ], 404);
             }
-            
+
             // Determine progress status based on percentage
             $persentaseValue = $persentase->persentase ?? 0;
             $progresStatus = 'belum';
-            
+
             if ($persentaseValue == 0) {
                 $progresStatus = 'belum';
             } elseif ($persentaseValue == 100) {
@@ -181,13 +200,13 @@ class ProgresController extends Controller
             } else {
                 $progresStatus = 'progres';
             }
-            
+
             // Determine keterangan based on YouTube link
             $keteranganStatus = 'belum terbit';
             if (!empty($persentase->publish_link_youtube)) {
                 $keteranganStatus = 'sudah terbit';
             }
-            
+
             // Update progress with data from persentase
             $updateData = [
                 'persentase' => $persentaseValue,
@@ -198,18 +217,17 @@ class ProgresController extends Controller
                 'progres' => $progresStatus,
                 'keterangan' => $keteranganStatus,
             ];
-            
+
             $progress->update($updateData);
-            
+
             // Catat aktivitas: transfer data dari persentase ke progress
             ActivityLogService::log('transfer_data', "Mentransfer data dari persentase ke progress ID {$id}");
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Data berhasil ditransfer dari persentase ke progress',
                 'data' => $updateData
             ]);
-            
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -225,7 +243,7 @@ class ProgresController extends Controller
     {
         // Catat aktivitas: melihat progress berdasarkan jadwal booking
         ActivityLogService::log('lihat_progress_jadwal', "Melihat progress untuk jadwal booking ID {$jadwal_booking_id}");
-        
+
         $jadwalBookings = JadwalBooking::with(['booking.dosen.fakultas', 'booking.dosen.prodi', 'booking.mataKuliah', 'booking.studio'])
             ->where('id', $jadwal_booking_id)
             ->get();
@@ -240,7 +258,7 @@ class ProgresController extends Controller
     {
         // Catat aktivitas: membuka modal progress
         ActivityLogService::log('buka_modal_progress', "Membuka modal progress ID {$id}");
-        
+
         $progress = Progress::with([
             'jadwalBooking.dosen.fakultas',
             'jadwalBooking.dosen.prodi',
@@ -262,21 +280,21 @@ class ProgresController extends Controller
         try {
             // Find the progress record
             $progress = Progress::findOrFail($progressId);
-            
+
             // Find the related persentase record
             $persentase = Persentase::where('id_progres', $progressId)->first();
-            
+
             if (!$persentase) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Data persentase tidak ditemukan untuk progress ini'
                 ], 404);
             }
-            
+
             // Determine progress status based on percentage
             $persentaseValue = $persentase->persentase ?? 0;
             $progresStatus = 'belum';
-            
+
             if ($persentaseValue == 0) {
                 $progresStatus = 'belum';
             } elseif ($persentaseValue == 100) {
@@ -284,13 +302,13 @@ class ProgresController extends Controller
             } else {
                 $progresStatus = 'progres';
             }
-            
+
             // Determine keterangan based on YouTube link
             $keteranganStatus = 'belum terbit';
             if (!empty($persentase->publish_link_youtube)) {
                 $keteranganStatus = 'sudah terbit';
             }
-            
+
             // Update progress with data from persentase
             $updateData = [
                 'persentase' => $persentaseValue,
@@ -301,18 +319,17 @@ class ProgresController extends Controller
                 'progres' => $progresStatus,
                 'keterangan' => $keteranganStatus,
             ];
-            
+
             $progress->update($updateData);
-            
+
             // Catat aktivitas: transfer data dari persentase ke progress
             ActivityLogService::log('transfer_data_persentase', "Mentransfer data dari persentase ke progress ID {$progressId}");
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Data berhasil dipindahkan dari persentase ke progress',
                 'data' => $updateData
             ]);
-            
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -336,7 +353,7 @@ class ProgresController extends Controller
 
             // Update the progress with the editor
             $progress->update(['editor_id' => $editor->id]);
-            
+
             // Catat aktivitas: menetapkan editor untuk progress
             ActivityLogService::log('assign_editor', "Menetapkan editor {$editor->nama} untuk progress ID {$progress->id}");
 
@@ -360,7 +377,7 @@ class ProgresController extends Controller
     {
         // Catat aktivitas: menghapus progress
         ActivityLogService::delete('progress', "Menghapus progress ID {$progress->id} untuk jadwal booking ID {$progress->jadwal_booking_id}");
-        
+
         $progress->delete();
 
         return redirect()->route('progres.index')
