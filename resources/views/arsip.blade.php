@@ -136,6 +136,7 @@
                                         <th>Waktu</th>
                                         <th>Jenis Kategori</th>
                                         <th>Status</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
 
@@ -239,10 +240,24 @@
                                             Sudah Shooting
                                         </td>
 
+                                        {{-- Actions --}}
+                                        <td class="text-center">
+                                            <button class="btn btn-sm btn-warning me-1" onclick="editArsip({{ $item->id }})">
+                                                <i class="bi bi-pencil"></i> Edit
+                                            </button>
+                                            <form action="{{ route('arsip.destroy', $item->id) }}" method="POST" style="display: inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                                    <i class="bi bi-trash"></i> Hapus
+                                                </button>
+                                            </form>
+                                        </td>
+
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="13" class="text-center">Tidak ada data arsip progress</td>
+                                        <td colspan="21" class="text-center">Tidak ada data arsip progress</td>
                                     </tr>
                                     @endforelse
                                 </tbody>
@@ -307,6 +322,194 @@
 </div>
 
 @include('layout.footer')
+
+<!-- Modal Edit Arsip -->
+<div class="modal fade" id="editArsipModal" tabindex="-1" aria-labelledby="editArsipModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editArsipModalLabel">Edit Data Arsip</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editArsipForm" action="" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <!-- Data Dosen -->
+                            <div class="mb-3">
+                                <label for="edit_dosen_id" class="form-label">Dosen</label>
+                                <select class="form-select" id="edit_dosen_id" name="dosen_id">
+                                    <option value="">Pilih Dosen</option>
+                                    @foreach(\App\Models\Dosen::all() as $dosen)
+                                    <option value="{{ $dosen->id }}">{{ $dosen->nama_dosen }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <!-- Data Fakultas -->
+                            <div class="mb-3">
+                                <label for="edit_fakultas_id" class="form-label">Fakultas</label>
+                                <select class="form-select" id="edit_fakultas_id" name="fakultas_id">
+                                    <option value="">Pilih Fakultas</option>
+                                    @foreach(\App\Models\Fakultas::all() as $fakultas)
+                                    <option value="{{ $fakultas->id }}">{{ $fakultas->nama_fakultas }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <!-- Data Prodi -->
+                            <div class="mb-3">
+                                <label for="edit_prodi_id" class="form-label">Prodi</label>
+                                <select class="form-select" id="edit_prodi_id" name="prodi_id">
+                                    <option value="">Pilih Prodi</option>
+                                    @foreach(\App\Models\Prodi::all() as $prodi)
+                                    <option value="{{ $prodi->id }}">{{ $prodi->nama_prodi }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <!-- Data Mata Kuliah -->
+                            <div class="mb-3">
+                                <label for="edit_mata_kuliah_id" class="form-label">Mata Kuliah</label>
+                                <select class="form-select" id="edit_mata_kuliah_id" name="mata_kuliah_id">
+                                    <option value="">Pilih Mata Kuliah</option>
+                                    @foreach(\App\Models\MataKuliah::all() as $mataKuliah)
+                                    <option value="{{ $mataKuliah->id }}">{{ $mataKuliah->nama_mata_kuliah }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <!-- Data Judul Course -->
+                            <div class="mb-3">
+                                <label for="edit_judul_course" class="form-label">Judul Course</label>
+                                <input type="text" class="form-control" id="edit_judul_course" name="judul_course">
+                            </div>
+                            <!-- Data Kategori MOOC -->
+                            <div class="mb-3" id="editMoocField" style="display: none;">
+                                <label for="edit_kategori_mooc" class="form-label">Kategori MOOC</label>
+                                <select class="form-select" id="edit_kategori_mooc" name="kategori_mooc">
+                                    <option value="">Pilih Kategori MOOC</option>
+                                    @foreach(\App\Models\Mooc::all() as $mooc)
+                                    <option value="{{ $mooc->judul_mooc }}">{{ $mooc->judul_mooc }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <!-- Data Studio -->
+                            <div class="mb-3">
+                                <label for="edit_studio_id" class="form-label">Studio</label>
+                                <select class="form-select" id="edit_studio_id" name="studio_id">
+                                    <option value="">Pilih Studio</option>
+                                    @foreach(\App\Models\Studio::all() as $studio)
+                                    <option value="{{ $studio->id }}">{{ $studio->nama_studio }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <!-- Data Tanggal Shooting -->
+                            <div class="mb-3">
+                                <label for="edit_tanggal_shooting" class="form-label">Tanggal Shooting</label>
+                                <input type="date" class="form-control" id="edit_tanggal_shooting" name="tanggal_shooting">
+                            </div>
+                            <!-- Data Jam Mulai -->
+                            <div class="mb-3">
+                                <label for="edit_jam_mulai" class="form-label">Jam Mulai</label>
+                                <input type="time" class="form-control" id="edit_jam_mulai" name="jam_mulai">
+                            </div>
+                            <!-- Data Jam Selesai -->
+                            <div class="mb-3">
+                                <label for="edit_jam_selesai" class="form-label">Jam Selesai</label>
+                                <input type="time" class="form-control" id="edit_jam_selesai" name="jam_selesai">
+                            </div>
+                            <!-- Data Jenis Kategori -->
+                            <div class="mb-3">
+                                <label for="edit_jenis_kategori" class="form-label">Jenis Kategori</label>
+                                <select class="form-select" id="edit_jenis_kategori" name="jenis_kategori">
+                                    <option value="">Pilih Jenis Kategori</option>
+                                    <option value="Lomba">Lomba</option>
+                                    <option value="E-Learning">E-Learning</option>
+                                    <option value="MOOC">MOOC</option>
+                                    <option value="Marketing">Marketing</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <!-- Data Target Upload -->
+                            <div class="mb-3">
+                                <label for="edit_target_upload" class="form-label">Target Upload</label>
+                                <input type="date" class="form-control" id="edit_target_upload" name="target_upload">
+                            </div>
+                            <!-- Data Persentase -->
+                            <div class="mb-3">
+                                <label for="edit_persentase" class="form-label">Persentase</label>
+                                <input type="number" class="form-control" id="edit_persentase" name="persentase" min="0" max="100" required>
+                            </div>
+                            <!-- Data Progres -->
+                            <div class="mb-3">
+                                <label for="edit_progres" class="form-label">Progres</label>
+                                <select class="form-select" id="edit_progres" name="progres" required>
+                                    <option value="">Pilih Progres</option>
+                                    <option value="belum">Belum</option>
+                                    <option value="progres">Sedang Progres</option>
+                                    <option value="selesai">Selesai</option>
+                                </select>
+                            </div>
+                            <!-- Data Keterangan -->
+                            <div class="mb-3">
+                                <label for="edit_keterangan" class="form-label">Keterangan</label>
+                                <select class="form-select" id="edit_keterangan" name="keterangan" required>
+                                    <option value="">Pilih Keterangan</option>
+                                    <option value="belum terbit">Belum Terbit</option>
+                                    <option value="sudah terbit">Sudah Terbit</option>
+                                </select>
+                            </div>
+                            <!-- Data Durasi -->
+                            <div class="mb-3">
+                                <label for="edit_durasi" class="form-label">Durasi (Menit)</label>
+                                <input type="number" class="form-control" id="edit_durasi" name="durasi" min="0">
+                            </div>
+                            <!-- Data Tautan Video -->
+                            <div class="mb-3">
+                                <label for="edit_publish_link_youtube" class="form-label">Tautan Video YouTube</label>
+                                <input type="url" class="form-control" id="edit_publish_link_youtube" name="publish_link_youtube">
+                            </div>
+                            <!-- Data Tgl Upload YouTube -->
+                            <div class="mb-3">
+                                <label for="edit_tanggal_upload_youtube" class="form-label">Tanggal Upload YouTube</label>
+                                <input type="date" class="form-control" id="edit_tanggal_upload_youtube" name="tanggal_upload_youtube">
+                            </div>
+                            <!-- Data Editor -->
+                            <div class="mb-3">
+                                <label for="edit_editor_id" class="form-label">Editor</label>
+                                <select class="form-select" id="edit_editor_id" name="editor_id" required>
+                                    <option value="">Pilih Editor</option>
+                                    @foreach(\App\Models\Editor::all() as $editor)
+                                    <option value="{{ $editor->id }}">{{ $editor->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const editJenisKategoriSelect = document.getElementById('edit_jenis_kategori');
+        const editMoocField = document.getElementById('editMoocField');
+
+        editJenisKategoriSelect.addEventListener('change', function() {
+            if (this.value === 'MOOC') {
+                editMoocField.style.display = 'block';
+            } else {
+                editMoocField.style.display = 'none';
+            }
+        });
+    });
+</script>
 
 <!-- Initialize DataTable after all scripts are loaded -->
 <script>
@@ -422,7 +625,7 @@
                     ],
                     columnDefs: [{
                         orderable: false,
-                        targets: [19] // Status column not sortable
+                        targets: [20] // Actions column not sortable
                     }],
                     stateSave: true, // Save table state in localStorage
                     stateDuration: 60 * 60 * 24 * 7, // Save for 7 days
@@ -438,9 +641,9 @@
                     const status = $(this).data('status');
 
                     if (status === 'all') {
-                        table.column(6).search('').draw(); // Clear filter for Progres column
+                        table.column(7).search('').draw(); // Clear filter for Progres column (now column 7)
                     } else {
-                        table.column(6).search(status).draw(); // Filter by status in Progres column
+                        table.column(7).search(status).draw(); // Filter by status in Progres column
                     }
 
                     // Update active state
@@ -454,9 +657,9 @@
                     const keterangan = $(this).data('keterangan');
 
                     if (keterangan === 'all') {
-                        table.column(7).search('').draw(); // Clear filter for Keterangan column
+                        table.column(8).search('').draw(); // Clear filter for Keterangan column (now column 8)
                     } else {
-                        table.column(7).search(keterangan).draw(); // Filter by keterangan in Keterangan column
+                        table.column(8).search(keterangan).draw(); // Filter by keterangan in Keterangan column
                     }
 
                     // Update active state
@@ -562,5 +765,55 @@
             const modal = new bootstrap.Modal(document.getElementById('detailModal'));
             modal.show();
         }
+    }
+
+    function editArsip(id) {
+        fetch(`/arsip/${id}/edit`)
+            .then(response => response.json())
+            .then(data => {
+                const progress = data.progress;
+                const jadwalBooking = data.jadwal_booking;
+
+                // Populate form fields with existing data
+                document.getElementById('edit_dosen_id').value = jadwalBooking?.dosen_id || '';
+                document.getElementById('edit_fakultas_id').value = jadwalBooking?.dosen?.fakultas?.id || '';
+                document.getElementById('edit_prodi_id').value = jadwalBooking?.dosen?.prodi?.id || '';
+                document.getElementById('edit_mata_kuliah_id').value = jadwalBooking?.mata_kuliah_id || '';
+                document.getElementById('edit_judul_course').value = jadwalBooking?.judul_course || '';
+                document.getElementById('edit_kategori_mooc').value = jadwalBooking?.kategori_mooc || '';
+                document.getElementById('edit_studio_id').value = jadwalBooking?.studio_id || '';
+                document.getElementById('edit_tanggal_shooting').value = jadwalBooking?.tanggal || '';
+                const jamParts = jadwalBooking?.jam ? jadwalBooking.jam.split(' - ') : ['', ''];
+                document.getElementById('edit_jam_mulai').value = jamParts[0] || '';
+                document.getElementById('edit_jam_selesai').value = jamParts[1] || '';
+                document.getElementById('edit_jenis_kategori').value = jadwalBooking?.jenis_kategori || '';
+                document.getElementById('edit_target_upload').value = progress.target_upload || '';
+                document.getElementById('edit_persentase').value = progress.persentase || '';
+                document.getElementById('edit_progres').value = progress.progres || '';
+                document.getElementById('edit_keterangan').value = progress.keterangan || '';
+                document.getElementById('edit_durasi').value = progress.durasi || '';
+                document.getElementById('edit_publish_link_youtube').value = progress.publish_link_youtube || '';
+                document.getElementById('edit_tanggal_upload_youtube').value = progress.tanggal_upload_youtube || '';
+                document.getElementById('edit_editor_id').value = progress.editor_id || '';
+
+                // Handle MOOC field visibility based on jenis_kategori
+                const jenisKategori = jadwalBooking?.jenis_kategori;
+                const moocField = document.getElementById('editMoocField');
+                if (jenisKategori === 'MOOC') {
+                    moocField.style.display = 'block';
+                } else {
+                    moocField.style.display = 'none';
+                }
+
+                // Set form action
+                document.getElementById('editArsipForm').action = `/arsip/${id}`;
+
+                // Show modal
+                if (typeof bootstrap !== 'undefined') {
+                    const modal = new bootstrap.Modal(document.getElementById('editArsipModal'));
+                    modal.show();
+                }
+            })
+            .catch(error => console.error('Error fetching data:', error));
     }
 </script>
