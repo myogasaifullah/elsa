@@ -8,6 +8,8 @@ use App\Models\Fakultas;
 use App\Models\Prodi;
 use Illuminate\Http\Request;
 use App\Services\ActivityLogService;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\DosenImport;
 
 class DosenMoocController extends Controller
 {
@@ -17,10 +19,10 @@ class DosenMoocController extends Controller
         $moocs = Mooc::with('dosen')->get();
         $fakultas = Fakultas::all();
         $prodis = Prodi::all();
-        
+
         // Log aktivitas akses halaman dosen dan mooc
         ActivityLogService::log('view', 'Mengakses halaman manajemen dosen dan MOOC');
-        
+
         return view('akademik.dosen-mooc', compact('dosens', 'moocs', 'fakultas', 'prodis'));
     }
 
@@ -117,5 +119,23 @@ class DosenMoocController extends Controller
         ActivityLogService::delete('MOOC', "Menghapus MOOC: {$judulMooc} untuk dosen {$dosen->nama_dosen} (ID: {$moocId})");
 
         return response()->json(['success' => 'MOOC berhasil dihapus']);
+    }
+
+    public function importDosen(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        try {
+            Excel::import(new DosenImport, $request->file('file'));
+
+            // Log aktivitas import dosen
+            ActivityLogService::create('Dosen', 'Mengimpor data dosen dari file Excel');
+
+            return response()->json(['success' => 'Data dosen berhasil diimpor']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage()], 500);
+        }
     }
 }

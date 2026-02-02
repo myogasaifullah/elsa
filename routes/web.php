@@ -102,6 +102,7 @@ Route::get('/dosen-mooc', [DosenMoocController::class, 'index'])->name('dosen-mo
 Route::post('/dosen', [DosenMoocController::class, 'storeDosen'])->name('dosen.store');
 Route::put('/dosen/{dosen}', [DosenMoocController::class, 'updateDosen'])->name('dosen.update');
 Route::delete('/dosen/{dosen}', [DosenMoocController::class, 'destroyDosen'])->name('dosen.destroy');
+Route::post('/dosen/import', [DosenMoocController::class, 'importDosen'])->name('dosen.import');
 
 // MOOC Routes
 Route::post('/mooc', [DosenMoocController::class, 'storeMooc'])->name('mooc.store');

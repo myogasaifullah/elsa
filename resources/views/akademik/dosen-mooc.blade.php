@@ -22,9 +22,14 @@
       <div class="card-body">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h5 class="card-title mb-0">Daftar Dosen <span>| Universitas</span></h5>
-          <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahDosen">
-            <i class="bi bi-plus-circle"></i> Tambah Dosen
-          </button>
+          <div>
+            <button class="btn btn-sm btn-success me-2" data-bs-toggle="modal" data-bs-target="#modalTambahDosen">
+              <i class="bi bi-plus-circle"></i> Tambah Dosen
+            </button>
+            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalImportDosen">
+              <i class="bi bi-upload"></i> Import Dosen
+            </button>
+          </div>
         </div>
 
         <table class="table table-borderless datatable">
@@ -138,6 +143,32 @@
     </div>
   </div>
 
+
+  <!-- Modal Import Dosen -->
+  <div class="modal fade" id="modalImportDosen" tabindex="-1" aria-labelledby="modalImportDosenLabel">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="formImportDosen" enctype="multipart/form-data">
+          @csrf
+          <div class="modal-header">
+            <h5 class="modal-title">Import Dosen</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="file_import" class="form-label">Pilih File Excel (.xlsx atau .xls)</label>
+              <input type="file" class="form-control" id="file_import" name="file" accept=".xlsx,.xls" required>
+              <small class="form-text text-muted">File harus berisi kolom: nama_dosen, nuptk_dosen, target_video_dosen (opsional), status_dosen (opsional), fakultas_id, prodi_id</small>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+            <button class="btn btn-primary" type="submit">Import</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <!-- Modal Edit Dosen -->
   <div class="modal fade" id="modalEditDosen" tabindex="-1" aria-labelledby="modalEditDosenLabel">
@@ -371,6 +402,32 @@
         .catch(error => {
           console.error('Error:', error);
           alert('Terjadi kesalahan saat menyimpan data.');
+        });
+    });
+
+    // Submit form import dosen
+    document.getElementById('formImportDosen').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var formData = new FormData(this);
+
+      fetch("{{ route('dosen.import') }}", {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            location.reload();
+          } else {
+            alert('Terjadi kesalahan: ' + JSON.stringify(data.error || 'Terjadi kesalahan saat mengimpor data.'));
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Terjadi kesalahan saat mengimpor data.');
         });
     });
 
