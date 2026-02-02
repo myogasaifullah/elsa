@@ -31,7 +31,7 @@ class StudioMatkulController extends Controller
             'nama_studio' => 'required|string|max:255',
             'lokasi' => 'required|string|max:255',
             'gambar' => 'nullable|array',
-            'gambar.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'gambar.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:5120',
         ]);
 
         $studio = Studio::create([
@@ -59,7 +59,7 @@ class StudioMatkulController extends Controller
             'nama_studio' => 'required|string|max:255',
             'lokasi' => 'required|string|max:255',
             'gambar' => 'nullable|array',
-            'gambar.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'gambar.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:5120',
         ]);
 
         $studio = Studio::findOrFail($id);

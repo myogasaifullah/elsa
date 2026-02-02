@@ -314,7 +314,7 @@
                       @foreach($studio->gambarStudio as $index => $gambar)
                       <div class="carousel-item {{ $index == 0 ? 'active' : '' }}" data-gambar-id="{{ $gambar->id }}">
                         <div class="position-relative">
-                          <img src="{{ asset('storage/' . $gambar->path) }}" class="d-block w-100" alt="Gambar Studio" style="height: 250px; object-fit: cover; object-position: center;">
+                          <img src="{{ asset('storage/' . $gambar->path) }}" class="d-block w-100" alt="Gambar Studio" style="height: 400px; object-fit: cover; object-position: center;">
                         </div>
                       </div>
                       @endforeach

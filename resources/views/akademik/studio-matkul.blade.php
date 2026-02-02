@@ -55,7 +55,7 @@
 
     /* Responsive: tinggi tetap untuk gambar */
     .carousel .carousel-item img {
-      height: 250px;
+      height: 400px;
       object-fit: cover;
       object-position: center;
     }
@@ -115,6 +115,18 @@
             <h5 class="card-title">{{ $studio->nama_studio }}</h5>
             <p><code>{{ $studio->lokasi }}</code></p>
 
+            {{-- Tombol Hapus Gambar (DI ATAS GAMBAR STUDIO) --}}
+            @if($studio->gambarStudio->count() > 0)
+            <div class="btn-hapus-gambar-container">
+              <button class="btn btn-danger btn-sm btn-hapus-gambar"
+                data-id=""
+                data-studio-id="{{ $studio->id }}"
+                id="btnHapusGambar{{ $studio->id }}">
+                <i class="bi bi-trash"></i> Hapus Gambar Ini
+              </button>
+            </div>
+            @endif
+
             {{-- ====== Carousel Gambar Studio ====== --}}
             @if($studio->gambarStudio->count() > 0)
             <div id="carouselFade{{ $studio->id }}" class="carousel slide carousel-fade" data-bs-ride="carousel">
@@ -146,16 +158,6 @@
                 data-bs-target="#carouselFade{{ $studio->id }}"
                 data-bs-slide-to="{{ $index }}"></div>
               @endforeach
-            </div>
-
-            {{-- Tombol Hapus Gambar (DI LUAR CAROUSEL) --}}
-            <div class="btn-hapus-gambar-container">
-              <button class="btn btn-danger btn-sm btn-hapus-gambar"
-                data-id=""
-                data-studio-id="{{ $studio->id }}"
-                id="btnHapusGambar{{ $studio->id }}">
-                <i class="bi bi-trash"></i> Hapus Gambar Ini
-              </button>
             </div>
             @else
             <div class="text-center">
