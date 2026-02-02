@@ -8,6 +8,7 @@ use App\Services\ActivityLogService;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\FakultasImport;
+use App\Imports\ProdiImport;
 
 class FakultasProdiController extends Controller
 {
@@ -100,6 +101,40 @@ class FakultasProdiController extends Controller
             return redirect()->back()->with('error', 'Kesalahan validasi data: ' . implode('; ', $errorMessages));
         } catch (\Exception $e) {
             \Log::error('Import Fakultas: General error', ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage());
+        }
+    }
+
+    public function importProdi(Request $request)
+    {
+        \Log::info('Import Prodi: Starting import process');
+
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+        ]);
+
+        \Log::info('Import Prodi: File validated', ['file' => $request->file('file')->getClientOriginalName()]);
+
+        try {
+            $import = new ProdiImport();
+            Excel::import($import, $request->file('file'));
+
+            \Log::info('Import Prodi: Import completed successfully');
+
+            // Catat aktivitas: import prodi
+            ActivityLogService::create('prodi', 'Import data prodi dari file Excel');
+
+            return redirect()->back()->with('success', 'Data prodi berhasil diimpor.');
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $errorMessages = [];
+            foreach ($failures as $failure) {
+                $errorMessages[] = 'Row ' . $failure->row() . ': ' . implode(', ', $failure->errors());
+            }
+            \Log::error('Import Prodi: Validation error', ['errors' => $errorMessages]);
+            return redirect()->back()->with('error', 'Kesalahan validasi data: ' . implode('; ', $errorMessages));
+        } catch (\Exception $e) {
+            \Log::error('Import Prodi: General error', ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             return redirect()->back()->with('error', 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage());
         }
     }

@@ -92,9 +92,14 @@
       <div class="card-body">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h5 class="card-title mb-0">Daftar Prodi <span>| Universitas</span></h5>
-          <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahProdi">
-            <i class="bi bi-plus-circle"></i> Tambah Prodi
-          </button>
+          <div>
+            <button class="btn btn-sm btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalImportProdi">
+              <i class="bi bi-upload"></i> Import Prodi
+            </button>
+            <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahProdi">
+              <i class="bi bi-plus-circle"></i> Tambah Prodi
+            </button>
+          </div>
         </div>
 
         <table class="table table-borderless datatable">
@@ -177,6 +182,32 @@
               <label for="file" class="form-label">Pilih File Excel</label>
               <input type="file" class="form-control" id="file" name="file" accept=".xlsx,.xls,.csv" required>
               <div class="form-text">Format file: .xlsx, .xls, atau .csv. Kolom yang diperlukan: nama_fakultas (wajib), kode_fakultas (opsional), singkatan (opsional).</div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-primary">Import Data</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Import Prodi -->
+  <div class="modal fade" id="modalImportProdi" tabindex="-1" aria-labelledby="modalImportProdiLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalImportProdiLabel">Import Data Program Studi dari Excel</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="{{ route('prodi.import') }}" method="POST" enctype="multipart/form-data">
+          @csrf
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="file_prodi" class="form-label">Pilih File Excel</label>
+              <input type="file" class="form-control" id="file_prodi" name="file" accept=".xlsx,.xls,.csv" required>
+              <div class="form-text">Format file: .xlsx, .xls, atau .csv. Kolom yang diperlukan: nama_fakultas (wajib), nama_prodi (wajib), kode_prodi (opsional), singkatan (opsional).</div>
             </div>
           </div>
           <div class="modal-footer">

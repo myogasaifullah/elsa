@@ -36,6 +36,7 @@ Route::post('/fakultas/import', [FakultasProdiController::class, 'importFakultas
 Route::post('/prodi', [FakultasProdiController::class, 'storeProdi'])->name('prodi.store');
 Route::put('/prodi/{id}', [FakultasProdiController::class, 'updateProdi'])->name('prodi.update');
 Route::delete('/prodi/{id}', [FakultasProdiController::class, 'destroyProdi'])->name('prodi.destroy');
+Route::post('/prodi/import', [FakultasProdiController::class, 'importProdi'])->name('prodi.import');
 
 // Studio & Mata Kuliah
 Route::get('/studio-matkul', [StudioMatkulController::class, 'index'])->name('studio-matkul.index');
