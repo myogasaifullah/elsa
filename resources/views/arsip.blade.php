@@ -627,8 +627,7 @@
                         orderable: false,
                         targets: [20] // Actions column not sortable
                     }],
-                    stateSave: true, // Save table state in localStorage
-                    stateDuration: 60 * 60 * 24 * 7, // Save for 7 days
+                    stateSave: false, // Disable saving table state to show all data by default
                     fixedHeader: {
                         header: true,
                         footer: false
@@ -641,9 +640,13 @@
                     const status = $(this).data('status');
 
                     if (status === 'all') {
-                        table.column(7).search('').draw(); // Clear filter for Progres column (now column 7)
-                    } else {
-                        table.column(7).search(status).draw(); // Filter by status in Progres column
+                        table.column(6).search('').draw(); // Clear filter for Progres column
+                    } else if (status === 'belum') {
+                        table.column(6).search('Belum').draw(); // Filter by status in Progres column
+                    } else if (status === 'progres') {
+                        table.column(6).search('Sedang Progres').draw(); // Filter by status in Progres column
+                    } else if (status === 'selesai') {
+                        table.column(6).search('Selesai').draw(); // Filter by status in Progres column
                     }
 
                     // Update active state
@@ -657,9 +660,11 @@
                     const keterangan = $(this).data('keterangan');
 
                     if (keterangan === 'all') {
-                        table.column(8).search('').draw(); // Clear filter for Keterangan column (now column 8)
-                    } else {
-                        table.column(8).search(keterangan).draw(); // Filter by keterangan in Keterangan column
+                        table.column(7).search('').draw(); // Clear filter for Keterangan column
+                    } else if (keterangan === 'belum_terbit') {
+                        table.column(7).search('Belum Terbit').draw(); // Filter by keterangan in Keterangan column
+                    } else if (keterangan === 'sudah_terbit') {
+                        table.column(7).search('Sudah Terbit').draw(); // Filter by keterangan in Keterangan column
                     }
 
                     // Update active state
