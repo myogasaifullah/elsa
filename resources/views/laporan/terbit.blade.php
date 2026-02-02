@@ -2,7 +2,7 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
             <h4 class="text-center fw-bold">UNIVERSITAS TEKNOKRAT INDONESIA</h4>
-            <h5 class="text-center mb-4">SEMESTER GANJIL 2024/2025<br>DOSEN MOOC</h5>
+            <h5 class="text-center mb-4"><br>DOSEN MOOC</h5>
         </div>
         <div>
             <a href="{{ route('laporan.export.dosen.pdf') }}" class="btn btn-danger btn-sm">PDF</a>
@@ -51,17 +51,13 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse($progress as $index => $item)
-                @if($item->jadwalBooking &&
-                $item->jadwalBooking->judul_course &&
-                $item->progres === 'selesai' &&
-                $item->jadwalBooking->jenis_kategori === 'Mooc')
+                @forelse($terbitData as $index => $item)
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $item->jadwalBooking->dosen->nama_dosen ?? '-' }}</td>
                     <td>{{ $item->jadwalBooking->judul_course ?? '-' }}</td>
                     <td>
-                        @if($item->keterangan)
+                        @if($item->publish_link_youtube)
                         <a href="{{ $item->publish_link_youtube }}" target="_blank" class="text-primary">
                             {{ Str::limit($item->publish_link_youtube, 30) }}
                         </a>
@@ -72,7 +68,6 @@
                     <td>{{ $item->durasi ?? '-' }}</td>
                     <td>{{ $item->tanggal_upload_youtube ? \Carbon\Carbon::parse($item->tanggal_upload_youtube)->format('d M Y') : '-' }}</td>
                 </tr>
-                @endif
                 @empty
                 <tr>
                     <td colspan="6" class="text-center">Tidak ada data laporan</td>
@@ -81,14 +76,14 @@
             </tbody>
         </table>
     </div>
-    <!-- Pagination untuk Tabel Progres Editor -->
+    <!-- Pagination untuk Tabel Terbit -->
     <div class="d-flex justify-content-between align-items-center mt-3">
         <div class="text-muted">
-            Menampilkan {{ $progress->firstItem() ?? 0 }} - {{ $progress->lastItem() ?? 0 }} dari {{ $progress->total() }} entri
+            Menampilkan {{ $terbitData->firstItem() ?? 0 }} - {{ $terbitData->lastItem() ?? 0 }} dari {{ $terbitData->total() }} entri
         </div>
         <nav aria-label="Page navigation">
             <ul class="pagination justify-content-end mb-0">
-                {{ $progress->links('pagination::bootstrap-4') }}
+                {{ $terbitData->links('pagination::bootstrap-4') }}
             </ul>
         </nav>
     </div>
