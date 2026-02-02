@@ -58,6 +58,8 @@ Route::get('/', function () {
 
 Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
 Route::get('/arsip', [App\Http\Controllers\ArsipController::class, 'index'])->name('arsip.index');
+Route::get('/arsip/create', [App\Http\Controllers\ArsipController::class, 'create'])->name('arsip.create');
+Route::post('/arsip', [App\Http\Controllers\ArsipController::class, 'store'])->name('arsip.store');
 
 // Laporan Export Routes
 Route::get('/laporan/export/progress/pdf', [LaporanController::class, 'exportProgressPdf'])->name('laporan.export.progress.pdf');

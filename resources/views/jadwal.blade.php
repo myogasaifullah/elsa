@@ -181,8 +181,6 @@
 
   @include('action_jadwal')
 
-
-
   @include('layout.footer')
 
   <!-- ======================== Init Script ======================== -->

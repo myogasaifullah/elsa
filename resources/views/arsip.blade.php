@@ -45,10 +45,10 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h5 class="card-title mb-0">Tabel Arsip </h5>
+                        @include('action_arsip')
 
-                            <!-- Filter Dropdown -->
+                        <!-- Filter Dropdown -->
+                        <div class="d-flex justify-content-end mb-3">
                             <div class="dropdown">
                                 <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bi bi-three-dots"></i>
