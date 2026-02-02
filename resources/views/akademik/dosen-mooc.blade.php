@@ -431,6 +431,32 @@
         });
     });
 
+    // Submit form import mooc
+    document.getElementById('formImportMooc').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var formData = new FormData(this);
+
+      fetch("{{ route('mooc.import') }}", {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            location.reload();
+          } else {
+            alert('Terjadi kesalahan: ' + JSON.stringify(data.error || 'Terjadi kesalahan saat mengimpor data.'));
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Terjadi kesalahan saat mengimpor data.');
+        });
+    });
+
     // Hapus Dosen
     document.querySelectorAll('.btn-hapus-dosen').forEach(button => {
       button.addEventListener('click', function() {

@@ -108,6 +108,7 @@ Route::post('/dosen/import', [DosenMoocController::class, 'importDosen'])->name(
 Route::post('/mooc', [DosenMoocController::class, 'storeMooc'])->name('mooc.store');
 Route::put('/mooc/{mooc}', [DosenMoocController::class, 'updateMooc'])->name('mooc.update');
 Route::delete('/mooc/{mooc}', [DosenMoocController::class, 'destroyMooc'])->name('mooc.destroy');
+Route::post('/mooc/import', [DosenMoocController::class, 'importMooc'])->name('mooc.import');
 
 Route::middleware('auth')->group(function () {
     Route::get('/jadwal', [JadwalBookingController::class, 'index'])->name('jadwal.index');

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Services\ActivityLogService;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\DosenImport;
+use App\Imports\MoocImport;
 
 class DosenMoocController extends Controller
 {
@@ -134,6 +135,24 @@ class DosenMoocController extends Controller
             ActivityLogService::create('Dosen', 'Mengimpor data dosen dari file Excel');
 
             return response()->json(['success' => 'Data dosen berhasil diimpor']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function importMooc(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        try {
+            Excel::import(new MoocImport, $request->file('file'));
+
+            // Log aktivitas import MOOC
+            ActivityLogService::create('MOOC', 'Mengimpor data MOOC dari file Excel');
+
+            return response()->json(['success' => 'Data MOOC berhasil diimpor']);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage()], 500);
         }
