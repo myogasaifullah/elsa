@@ -53,6 +53,7 @@ Route::delete('/gambar-studio/{id}', [StudioMatkulController::class, 'destroyGam
 Route::post('/mata-kuliah', [StudioMatkulController::class, 'storeMataKuliah'])->name('mata-kuliah.store');
 Route::put('/mata-kuliah/{id}', [StudioMatkulController::class, 'updateMataKuliah'])->name('mata-kuliah.update');
 Route::delete('/mata-kuliah/{id}', [StudioMatkulController::class, 'destroyMataKuliah'])->name('mata-kuliah.destroy');
+Route::post('/mata-kuliah/import', [StudioMatkulController::class, 'importMataKuliah'])->name('mata-kuliah.import');
 
 Route::get('/', function () {
     return view('index');

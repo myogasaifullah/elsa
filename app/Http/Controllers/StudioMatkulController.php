@@ -10,6 +10,8 @@ use App\Models\Prodi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Services\ActivityLogService;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\MataKuliahImport;
 
 class StudioMatkulController extends Controller
 {
@@ -136,6 +138,21 @@ class StudioMatkulController extends Controller
         $mataKuliah->delete();
 
         return response()->json(['success' => 'Mata kuliah berhasil dihapus.']);
+    }
+
+    public function importMataKuliah(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv|max:2048',
+        ]);
+
+        try {
+            Excel::import(new MataKuliahImport, $request->file('file'));
+
+            return response()->json(['success' => 'Data mata kuliah berhasil diimpor.']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Gagal mengimpor data: ' . $e->getMessage()], 500);
+        }
     }
 
     public function destroyGambarStudio($id)

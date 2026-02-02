@@ -3,9 +3,14 @@
      <div class="card-body">
        <div class="d-flex justify-content-between align-items-center mb-3">
          <h5 class="card-title mb-0">Daftar Mata Kuliah <span>| Universitas</span></h5>
-         <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahMatkul">
-           <i class="bi bi-plus-circle"></i> Tambah Mata Kuliah
-         </button>
+         <div>
+           <button class="btn btn-sm btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalImportMatkul">
+             <i class="bi bi-upload"></i> Import Mata Kuliah
+           </button>
+           <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahMatkul">
+             <i class="bi bi-plus-circle"></i> Tambah Mata Kuliah
+           </button>
+         </div>
        </div>
 
        <table class="table table-borderless datatable">
@@ -176,8 +181,63 @@
    </div>
  </div>
 
+ <!-- Modal Import Mata Kuliah -->
+ <div class="modal fade" id="modalImportMatkul" tabindex="-1" aria-labelledby="modalImportMatkulLabel" aria-hidden="true">
+   <div class="modal-dialog">
+     <div class="modal-content">
+       <form id="formImportMatkul" enctype="multipart/form-data">
+         @csrf
+         <div class="modal-header">
+           <h5 class="modal-title">Import Data Mata Kuliah dari Excel</h5>
+           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+         </div>
+         <div class="modal-body">
+           <div class="mb-3">
+             <label class="form-label">Pilih File Excel</label>
+             <input type="file" class="form-control" name="file" accept=".xlsx,.xls,.csv" required>
+             <div class="form-text">
+               Format file: .xlsx, .xls, atau .csv<br>
+               Header yang diperlukan: nama_fakultas, nama_prodi, nama_mata_kuliah, kode_matakuliah<br>
+               Header opsional: sks, keterangan
+             </div>
+           </div>
+         </div>
+         <div class="modal-footer">
+           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+           <button type="submit" class="btn btn-primary">Import Data</button>
+         </div>
+       </form>
+     </div>
+   </div>
+ </div>
+
  <script>
    document.addEventListener('DOMContentLoaded', function() {
+
+     // Form Import Mata Kuliah
+     document.getElementById('formImportMatkul').addEventListener('submit', function(e) {
+       e.preventDefault();
+       var formData = new FormData(this);
+
+       fetch("{{ route('mata-kuliah.import') }}", {
+           method: 'POST',
+           body: formData,
+           headers: {
+             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+           }
+         })
+         .then(response => response.json())
+         .then(data => {
+           if (data.success) {
+             Swal.fire('Berhasil!', data.success, 'success').then(() => {
+               location.reload();
+             });
+           } else {
+             Swal.fire('Gagal!', data.error || 'Terjadi kesalahan saat mengimpor data.', 'error');
+           }
+         })
+         .catch(() => Swal.fire('Error!', 'Terjadi kesalahan jaringan.', 'error'));
+     });
 
      // Form Tambah Mata Kuliah
      document.getElementById('formTambahMatkul').addEventListener('submit', function(e) {
