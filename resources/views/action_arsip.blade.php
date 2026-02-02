@@ -1,16 +1,18 @@
-<div class="d-flex justify-content-between align-items-center mb-3">
+<div class="d-flex align-items-center mb-3">
     <h5 class="card-title mb-0">Tabel Arsip</h5>
 
-    <!-- Tombol Tambah -->
-    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addArsipModal">
-        <i class="bi bi-plus-circle"></i> Tambah
-    </button>
+    <!-- Grup Tombol di Kanan -->
+    <div class="ms-auto">
+        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addArsipModal">
+            <i class="bi bi-plus-circle"></i> Tambah
+        </button>
 
-    <!-- Tombol Import -->
-    <button type="button" class="btn btn-success btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#importArsipModal">
-        <i class="bi bi-upload"></i> Import Excel
-    </button>
+        <button type="button" class="btn btn-success btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#importArsipModal">
+            <i class="bi bi-upload"></i> Import Excel
+        </button>
+    </div>
 </div>
+
 
 <!-- Modal Tambah Arsip -->
 <div class="modal fade" id="addArsipModal" tabindex="-1" aria-labelledby="addArsipModalLabel" aria-hidden="true">
