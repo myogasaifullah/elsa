@@ -16,7 +16,9 @@ Successfully added pagination, sorting, filtering, and entries per page to the "
 
 1. **ProgresController.php**:
     - Added pagination (10 items per page) to the main progress query
-    - Changed filter to show progress data based on logged-in user (jadwal_booking.user_id = auth()->id())
+    - Updated logic to show ALL progress data for the logged-in editor (whether editor record exists or not)
+    - If editor record exists: filter by editor_id
+    - If no editor record: show all progress data with editors assigned
     - Added logic to count published content and show alert when < 10
 
 2. **editor.blade.php**:
@@ -25,4 +27,4 @@ Successfully added pagination, sorting, filtering, and entries per page to the "
     - Added second table for current month progress data
     - Added alert for low productivity (published content < 10)
 
-The implementation provides full table functionality (pagination, sorting, filtering, entries per page) for the main progress table showing all progress data for the logged-in user, plus additional monitoring features for editors.
+The implementation now ensures the "Tabel Progres Produksi" displays ALL data for the currently logged-in editor, with full table functionality (pagination, sorting, filtering, entries per page) plus additional monitoring features.

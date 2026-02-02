@@ -5,6 +5,11 @@
     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addArsipModal">
         <i class="bi bi-plus-circle"></i> Tambah
     </button>
+
+    <!-- Tombol Import -->
+    <button type="button" class="btn btn-success btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#importArsipModal">
+        <i class="bi bi-upload"></i> Import Excel
+    </button>
 </div>
 
 <!-- Modal Tambah Arsip -->
@@ -367,6 +372,59 @@
     </div>
 </div>
 
+<!-- Modal Import Arsip -->
+<div class="modal fade" id="importArsipModal" tabindex="-1" aria-labelledby="importArsipModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="importArsipModalLabel">Import Data Arsip dari Excel</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('arsip.import') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="import_file" class="form-label">Pilih File Excel (.xlsx atau .xls)</label>
+                        <input type="file" class="form-control" id="import_file" name="file" accept=".xlsx,.xls" required>
+                        <div class="form-text">
+                            File Excel harus memiliki header sesuai format yang ditentukan.
+                            <a href="#" onclick="showFormatInfo()">Lihat format yang diharapkan</a>
+                        </div>
+                    </div>
+                    <div id="formatInfo" class="alert alert-info" style="display: none;">
+                        <h6>Format Kolom Excel:</h6>
+                        <ol>
+                            <li><strong>nama_dosen</strong> - Nama dosen</li>
+                            <li><strong>nama_fakultas</strong> - Nama fakultas</li>
+                            <li><strong>nama_prodi</strong> - Nama program studi</li>
+                            <li><strong>nama_mata_kuliah</strong> - Nama mata kuliah</li>
+                            <li><strong>judul_course</strong> - Judul course</li>
+                            <li><strong>kategori_mooc</strong> - Kategori MOOC (jika ada)</li>
+                            <li><strong>nama_studio</strong> - Nama studio</li>
+                            <li><strong>tanggal_shooting</strong> - Tanggal shooting (YYYY-MM-DD)</li>
+                            <li><strong>jam_mulai</strong> - Jam mulai (HH:MM)</li>
+                            <li><strong>jam_selesai</strong> - Jam selesai (HH:MM)</li>
+                            <li><strong>jenis_kategori</strong> - Jenis kategori (Lomba, E-Learning, MOOC, Marketing)</li>
+                            <li><strong>target_upload</strong> - Target upload (YYYY-MM-DD)</li>
+                            <li><strong>persentase</strong> - Persentase (0-100)</li>
+                            <li><strong>progres</strong> - Status progres (belum, progres, selesai)</li>
+                            <li><strong>keterangan</strong> - Keterangan (belum terbit, sudah terbit)</li>
+                            <li><strong>durasi</strong> - Durasi dalam menit</li>
+                            <li><strong>tanggal_upload_youtube</strong> - Tanggal upload YouTube (YYYY-MM-DD)</li>
+                            <li><strong>publish_link_youtube</strong> - Link YouTube</li>
+                            <li><strong>nama_editor</strong> - Nama editor</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success">Import Data</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const editJenisKategoriSelect = document.getElementById('edit_jenis_kategori');
@@ -380,4 +438,9 @@
             }
         });
     });
+
+    function showFormatInfo() {
+        const formatInfo = document.getElementById('formatInfo');
+        formatInfo.style.display = formatInfo.style.display === 'none' ? 'block' : 'none';
+    }
 </script>

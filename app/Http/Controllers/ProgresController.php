@@ -48,6 +48,7 @@ class ProgresController extends Controller
             // If no editor record exists, return empty collection
             $progress = collect();
             $progressThisMonth = collect();
+            $showAlert = false;
         } else {
             $progress = Progress::with([
                 'jadwalBooking.dosen.fakultas',

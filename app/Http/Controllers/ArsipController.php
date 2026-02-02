@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Models\ActivityLog;
 use App\Models\Editor;
 use Illuminate\Support\Facades\DB;
+use App\Imports\ArsipImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ArsipController extends Controller
 {
@@ -227,5 +229,33 @@ class ArsipController extends Controller
         });
 
         return redirect()->route('arsip.index')->with('success', 'Data arsip berhasil dihapus.');
+    }
+
+    public function import(Request $request)
+    {
+        \Log::info('ArsipController: Import method called');
+
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        \Log::info('ArsipController: File validation passed', [
+            'file_name' => $request->file('file')->getClientOriginalName(),
+            'file_size' => $request->file('file')->getSize(),
+            'file_mime' => $request->file('file')->getMimeType()
+        ]);
+
+        try {
+            \Log::info('ArsipController: Starting Excel import');
+            Excel::import(new ArsipImport, $request->file('file'));
+            \Log::info('ArsipController: Excel import completed successfully');
+
+            return redirect()->route('arsip.index')->with('success', 'Data arsip berhasil diimpor.');
+        } catch (\Exception $e) {
+            \Log::error('ArsipController: Import failed with error: ' . $e->getMessage());
+            \Log::error('ArsipController: Stack trace: ' . $e->getTraceAsString());
+
+            return redirect()->route('arsip.index')->with('error', 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage());
+        }
     }
 }

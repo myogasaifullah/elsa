@@ -308,7 +308,7 @@
                                                 <td>{{ $user->name }}</td>
                                                 <td>{{ $user->email }}</td>
                                                 <td><span class="badge bg-primary">{{ $user->role }}</span></td>
-                                                <td>{{ $user->created_at->format('d/m/Y') }}</td>
+                                                <td>{{ $user->created_at ? $user->created_at->format('d/m/Y') : 'N/A' }}</td>
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -457,11 +457,13 @@
             // Bookings by Month Chart
             const bookingsCtx = document.getElementById('bookingsChart').getContext('2d');
             const bookingsData = @json($data['bookings_by_month']);
-            
+
             // Format data untuk chart (mengisi bulan yang kosong dengan 0)
-            const allMonths = Array.from({length: 12}, (_, i) => i + 1);
+            const allMonths = Array.from({
+                length: 12
+            }, (_, i) => i + 1);
             const formattedBookingsData = allMonths.map(month => bookingsData[month] || 0);
-            
+
             new Chart(bookingsCtx, {
                 type: 'line',
                 data: {
@@ -489,7 +491,7 @@
             // Users by Role Chart
             const usersCtx = document.getElementById('usersChart').getContext('2d');
             const usersData = @json($data['users_by_role']);
-            
+
             new Chart(usersCtx, {
                 type: 'doughnut',
                 data: {
@@ -520,13 +522,13 @@
             // Progress by Status Chart
             const progressCtx = document.getElementById('progressChart').getContext('2d');
             const progressData = @json($data['progress_by_status']);
-            
+
             // Format labels untuk progress
             const progressLabels = Object.keys(progressData).map(key => {
                 // Mengubah format key menjadi lebih readable
                 return key.toString().charAt(0).toUpperCase() + key.toString().slice(1).replace('_', ' ');
             });
-            
+
             new Chart(progressCtx, {
                 type: 'bar',
                 data: {
@@ -580,13 +582,12 @@
             // System Load Chart - Data dari database
             const systemCtx = document.getElementById('systemChart').getContext('2d');
             const systemData = @json($data['system_load']);
-            
+
             new Chart(systemCtx, {
                 type: 'line',
                 data: {
                     labels: systemData.labels,
-                    datasets: [
-                        {
+                    datasets: [{
                             label: 'User Activity',
                             data: systemData.user_activity,
                             borderColor: 'rgb(255, 99, 132)',
