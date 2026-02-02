@@ -16,14 +16,34 @@
     </nav>
   </div>
 
+  <!-- Flash Messages -->
+  @if(session('success'))
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ session('success') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  @endif
+
+  @if(session('error'))
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ session('error') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  @endif
+
   <div class="col-12">
     <div class="card recent-sales overflow-auto">
       <div class="card-body">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h5 class="card-title mb-0">Daftar Fakultas <span>| Universitas</span></h5>
-          <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahFakultas">
-            <i class="bi bi-plus-circle"></i> Tambah Fakultas
-          </button>
+          <div>
+            <button class="btn btn-sm btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalImportFakultas">
+              <i class="bi bi-upload"></i> Import Fakultas
+            </button>
+            <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahFakultas">
+              <i class="bi bi-plus-circle"></i> Tambah Fakultas
+            </button>
+          </div>
         </div>
 
         <table class="table table-borderless datatable">
@@ -141,6 +161,32 @@
 
   @include('akademik.modal-fakultas')
   @include('akademik.modal-prodi')
+
+  <!-- Modal Import Fakultas -->
+  <div class="modal fade" id="modalImportFakultas" tabindex="-1" aria-labelledby="modalImportFakultasLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalImportFakultasLabel">Import Data Fakultas dari Excel</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="{{ route('fakultas.import') }}" method="POST" enctype="multipart/form-data">
+          @csrf
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="file" class="form-label">Pilih File Excel</label>
+              <input type="file" class="form-control" id="file" name="file" accept=".xlsx,.xls,.csv" required>
+              <div class="form-text">Format file: .xlsx, .xls, atau .csv. Kolom yang diperlukan: nama_fakultas (wajib), kode_fakultas (opsional), singkatan (opsional).</div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-primary">Import Data</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </main>
 
 @include('layout.footer')

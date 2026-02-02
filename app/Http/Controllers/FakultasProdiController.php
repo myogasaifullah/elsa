@@ -6,6 +6,8 @@ use App\Models\Fakultas;
 use App\Models\Prodi;
 use App\Services\ActivityLogService;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\FakultasImport;
 
 class FakultasProdiController extends Controller
 {
@@ -66,6 +68,40 @@ class FakultasProdiController extends Controller
         ActivityLogService::delete('fakultas', "Menghapus fakultas: {$fakultasInfo}");
 
         return redirect()->back()->with('success', 'Fakultas berhasil dihapus.');
+    }
+
+    public function importFakultas(Request $request)
+    {
+        \Log::info('Import Fakultas: Starting import process');
+
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+        ]);
+
+        \Log::info('Import Fakultas: File validated', ['file' => $request->file('file')->getClientOriginalName()]);
+
+        try {
+            $import = new FakultasImport();
+            Excel::import($import, $request->file('file'));
+
+            \Log::info('Import Fakultas: Import completed successfully');
+
+            // Catat aktivitas: import fakultas
+            ActivityLogService::create('fakultas', 'Import data fakultas dari file Excel');
+
+            return redirect()->back()->with('success', 'Data fakultas berhasil diimpor.');
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $errorMessages = [];
+            foreach ($failures as $failure) {
+                $errorMessages[] = 'Row ' . $failure->row() . ': ' . implode(', ', $failure->errors());
+            }
+            \Log::error('Import Fakultas: Validation error', ['errors' => $errorMessages]);
+            return redirect()->back()->with('error', 'Kesalahan validasi data: ' . implode('; ', $errorMessages));
+        } catch (\Exception $e) {
+            \Log::error('Import Fakultas: General error', ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengimpor data: ' . $e->getMessage());
+        }
     }
 
     // Prodi CRUD

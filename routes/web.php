@@ -30,6 +30,7 @@ Route::get('/fakultas-prodi', [FakultasProdiController::class, 'index'])->name('
 Route::post('/fakultas', [FakultasProdiController::class, 'storeFakultas'])->name('fakultas.store');
 Route::put('/fakultas/{id}', [FakultasProdiController::class, 'updateFakultas'])->name('fakultas.update');
 Route::delete('/fakultas/{id}', [FakultasProdiController::class, 'destroyFakultas'])->name('fakultas.destroy');
+Route::post('/fakultas/import', [FakultasProdiController::class, 'importFakultas'])->name('fakultas.import');
 
 // Prodi
 Route::post('/prodi', [FakultasProdiController::class, 'storeProdi'])->name('prodi.store');
