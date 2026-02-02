@@ -6,26 +6,26 @@
 
 <style>
     /* DataTables Buttons - Transparent Style */
-.dt-buttons .btn {
-    background-color: transparent !important;
-    border: 1px solid transparent;
-    color: #0d6efd; /* biru default bootstrap */
-    box-shadow: none;
-}
+    .dt-buttons .btn {
+        background-color: transparent !important;
+        border: 1px solid transparent;
+        color: #0d6efd;
+        /* biru default bootstrap */
+        box-shadow: none;
+    }
 
-/* Hover effect */
-.dt-buttons .btn:hover {
-    background-color: rgba(13, 110, 253, 0.1) !important;
-    border-color: #0d6efd;
-}
+    /* Hover effect */
+    .dt-buttons .btn:hover {
+        background-color: rgba(13, 110, 253, 0.1) !important;
+        border-color: #0d6efd;
+    }
 
-/* Focus & active */
-.dt-buttons .btn:focus,
-.dt-buttons .btn:active {
-    background-color: rgba(13, 110, 253, 0.15) !important;
-    box-shadow: none !important;
-}
-
+    /* Focus & active */
+    .dt-buttons .btn:focus,
+    .dt-buttons .btn:active {
+        background-color: rgba(13, 110, 253, 0.15) !important;
+        box-shadow: none !important;
+    }
 </style>
 <main id="main" class="main">
 
@@ -74,6 +74,44 @@
                             </div>
                         </div>
 
+                        <!-- Date Filter Row -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="filterDate" class="form-label">Filter Tanggal Upload</label>
+                                <input type="date" class="form-control form-control-sm" id="filterDate">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="filterMonth" class="form-label">Filter Bulan</label>
+                                <select class="form-select form-select-sm" id="filterMonth">
+                                    <option value="">Semua Bulan</option>
+                                    <option value="01">Januari</option>
+                                    <option value="02">Februari</option>
+                                    <option value="03">Maret</option>
+                                    <option value="04">April</option>
+                                    <option value="05">Mei</option>
+                                    <option value="06">Juni</option>
+                                    <option value="07">Juli</option>
+                                    <option value="08">Agustus</option>
+                                    <option value="09">September</option>
+                                    <option value="10">Oktober</option>
+                                    <option value="11">November</option>
+                                    <option value="12">Desember</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="filterYear" class="form-label">Filter Tahun</label>
+                                <select class="form-select form-select-sm" id="filterYear">
+                                    <option value="">Semua Tahun</option>
+                                    @php
+                                    $currentYear = date('Y');
+                                    for ($year = $currentYear; $year >= $currentYear - 10; $year--) {
+                                    echo "<option value='$year'>$year</option>";
+                                    }
+                                    @endphp
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="table-responsive">
                             <table id="arsipTable" class="table table-sm  align-middle">
                                 <thead class="table-light text-center">
@@ -90,7 +128,14 @@
                                         <th>Tautan Video</th>
                                         <th>Tgl Upload YouTube</th>
                                         <th>Editor</th>
-                                        <th>Action</th>
+                                        <th>Fakultas</th>
+                                        <th>Prodi</th>
+                                        <th>Mata Kuliah</th>
+                                        <th>Kategori MOOC</th>
+                                        <th>Studio</th>
+                                        <th>Waktu</th>
+                                        <th>Jenis Kategori</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
 
@@ -154,39 +199,44 @@
                                             {{ $item->editor->nama ?? '-' }}
                                         </td>
 
-                                        {{-- Action --}}
+                                        {{-- Fakultas --}}
                                         <td class="text-center">
-                                            {{-- Detail --}}
-                                            <button
-                                                type="button"
-                                                class="btn btn-sm btn-info"
-                                                title="Detail"
-                                                aria-label="Detail"
-                                                data-toggle="modal"
-                                                data-target="#detailModal"
-                                                onclick="showDetail(this)"
+                                            {{ $item->jadwalBooking->user->fakultas->nama_fakultas ?? '-' }}
+                                        </td>
 
-                                                data-dosen="{{ $item->jadwalBooking->dosen->nama_dosen ?? '-' }}"
-                                                data-fakultas="{{ $item->jadwalBooking->user->fakultas->nama_fakultas ?? '-' }}"
-                                                data-prodi="{{ $item->jadwalBooking->user->prodi->nama_prodi ?? '-' }}"
-                                                data-mata-kuliah="{{ $item->jadwalBooking->nama_mata_kuliah ?? '-' }}"
-                                                data-kategori-mooc="{{ $item->jadwalBooking->kategori_mooc ?? '-' }}"
-                                                data-judul-course="{{ $item->jadwalBooking->judul_course ?? '-' }}"
-                                                data-studio="{{ $item->jadwalBooking->studio->nama_studio ?? '-' }}"
-                                                data-tanggal-shooting="{{ $item->jadwalBooking->tanggal ?? '-' }}"
-                                                data-waktu="{{ $item->jadwalBooking->jam ?? '-' }}"
-                                                data-jenis-kategori="{{ $item->jadwalBooking->jenis_kategori ?? '-' }}"
-                                                data-target-upload="{{ $item->target_upload ? \Carbon\Carbon::parse($item->target_upload)->format('d/m/Y') : '-' }}"
-                                                data-persentase="{{ $item->persentase }}"
-                                                data-progres="{{ ucfirst($item->progres) }}"
-                                                data-keterangan="{{ ucfirst(str_replace('_', ' ', $item->keterangan)) }}"
-                                                data-durasi="{{ $item->durasi ?? '-' }}"
-                                                data-publish-link="{{ $item->publish_link_youtube ?? '' }}"
-                                                data-tanggal-upload-youtube="{{ $item->tanggal_upload_youtube ? \Carbon\Carbon::parse($item->tanggal_upload_youtube)->format('d/m/Y') : '-' }}"
-                                                data-editor="{{ $item->editor->nama ?? '-' }}"
-                                                data-status="Sudah Shooting">
-                                                <i class="bi bi-info-circle"></i>
-                                            </button>
+                                        {{-- Prodi --}}
+                                        <td class="text-center">
+                                            {{ $item->jadwalBooking->user->prodi->nama_prodi ?? '-' }}
+                                        </td>
+
+                                        {{-- Mata Kuliah --}}
+                                        <td class="text-center">
+                                            {{ $item->jadwalBooking->nama_mata_kuliah ?? '-' }}
+                                        </td>
+
+                                        {{-- Kategori MOOC --}}
+                                        <td class="text-center">
+                                            {{ $item->jadwalBooking->kategori_mooc ?? '-' }}
+                                        </td>
+
+                                        {{-- Studio --}}
+                                        <td class="text-center">
+                                            {{ $item->jadwalBooking->studio->nama_studio ?? '-' }}
+                                        </td>
+
+                                        {{-- Waktu --}}
+                                        <td class="text-center">
+                                            {{ $item->jadwalBooking->jam ?? '-' }}
+                                        </td>
+
+                                        {{-- Jenis Kategori --}}
+                                        <td class="text-center">
+                                            {{ $item->jadwalBooking->jenis_kategori ?? '-' }}
+                                        </td>
+
+                                        {{-- Status --}}
+                                        <td class="text-center">
+                                            Sudah Shooting
                                         </td>
 
                                     </tr>
@@ -372,7 +422,7 @@
                     ],
                     columnDefs: [{
                         orderable: false,
-                        targets: [12] // Action column not sortable
+                        targets: [19] // Status column not sortable
                     }],
                     stateSave: true, // Save table state in localStorage
                     stateDuration: 60 * 60 * 24 * 7, // Save for 7 days
@@ -412,6 +462,64 @@
                     // Update active state
                     $('.filter-keterangan').removeClass('active');
                     $(this).addClass('active');
+                });
+
+                // Filter functionality for date, month, and year
+                function applyDateFilters() {
+                    const selectedDate = $('#filterDate').val();
+                    const selectedMonth = $('#filterMonth').val();
+                    const selectedYear = $('#filterYear').val();
+
+                    // If no filters are selected, clear all filters
+                    if (!selectedDate && !selectedMonth && !selectedYear) {
+                        table.search('').columns().search('').draw();
+                        return;
+                    }
+
+                    // Apply custom search function
+                    table.search(function(searchData, data, dataIndex) {
+                        const dateValue = data[10]; // Tgl Upload YouTube column
+
+                        if (!dateValue || dateValue === '-') {
+                            return false;
+                        }
+
+                        // Parse the date from d/m/Y format
+                        const parts = dateValue.split('/');
+                        if (parts.length !== 3) {
+                            return false;
+                        }
+
+                        const day = parseInt(parts[0], 10);
+                        const month = parseInt(parts[1], 10);
+                        const year = parseInt(parts[2], 10);
+
+                        // Check date filter
+                        if (selectedDate) {
+                            const filterDate = new Date(selectedDate);
+                            const rowDate = new Date(year, month - 1, day);
+                            if (rowDate.toDateString() !== filterDate.toDateString()) {
+                                return false;
+                            }
+                        }
+
+                        // Check month filter
+                        if (selectedMonth && month !== parseInt(selectedMonth, 10)) {
+                            return false;
+                        }
+
+                        // Check year filter
+                        if (selectedYear && year !== parseInt(selectedYear, 10)) {
+                            return false;
+                        }
+
+                        return true;
+                    }).draw();
+                }
+
+                // Event listeners for date filters
+                $('#filterDate, #filterMonth, #filterYear').on('change', function() {
+                    applyDateFilters();
                 });
             });
         } else {

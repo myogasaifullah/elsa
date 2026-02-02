@@ -54,7 +54,7 @@
 
                   {{-- Session status --}}
                   @if (session('status'))
-                    <div class="alert alert-success">{{ session('status') }}</div>
+                  <div class="alert alert-success">{{ session('status') }}</div>
                   @endif
 
                   <form method="POST" action="{{ route('login') }}" class="row g-3 needs-validation" novalidate>
@@ -67,7 +67,7 @@
                         <span class="input-group-text">@</span>
                         <input type="email" name="email" class="form-control" id="email" value="{{ old('email') }}" required autofocus>
                         @error('email')
-                          <div class="invalid-feedback d-block">{{ $message }}</div>
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
                         @enderror
                       </div>
                     </div>
@@ -75,9 +75,14 @@
                     <!-- Password -->
                     <div class="col-12">
                       <label for="password" class="form-label">Password</label>
-                      <input type="password" name="password" class="form-control" id="password" required>
+                      <div class="input-group">
+                        <input type="password" name="password" class="form-control" id="password" required>
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                          <i class="bi bi-eye"></i>
+                        </button>
+                      </div>
                       @error('password')
-                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                      <div class="invalid-feedback d-block">{{ $message }}</div>
                       @enderror
                     </div>
 
@@ -130,6 +135,23 @@
 
   <!-- Template Main JS File -->
   <script src="{{ asset('assets/js/main.js') }}"></script>
+
+  <!-- Password Toggle Script -->
+  <script>
+    document.getElementById('togglePassword').addEventListener('click', function() {
+      const passwordInput = document.getElementById('password');
+      const icon = this.querySelector('i');
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.remove('bi-eye');
+        icon.classList.add('bi-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        icon.classList.remove('bi-eye-slash');
+        icon.classList.add('bi-eye');
+      }
+    });
+  </script>
 
 </body>
 
