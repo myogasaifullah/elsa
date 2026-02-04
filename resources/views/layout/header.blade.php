@@ -1,4 +1,4 @@
-z<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -15,7 +15,7 @@ z<!DOCTYPE html>
   <!-- FullCalendar JS -->
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
 
-   <!-- Favicons -->
+  <!-- Favicons -->
   <link href="{{ asset('assets/favicon.ico') }}" rel="icon" type="image/x-icon">
   <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
 
@@ -34,9 +34,9 @@ z<!DOCTYPE html>
 
   <!-- Template Main CSS File -->
   <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
-        
-<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
-<link href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/css/datepicker.min.css" rel="stylesheet" />
+
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/css/datepicker.min.css" rel="stylesheet" />
 
   <!-- =======================================================
   * Template Name: NiceAdmin - v2.5.0
@@ -83,19 +83,19 @@ z<!DOCTYPE html>
 
         <li class="nav-item dropdown pe-3">
 
-         <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-    <img src="{{ asset('assets/img/profile.png') }}" alt="Profile" class="rounded-circle">
-    <span class="d-none d-md-block dropdown-toggle ps-2">
-      {{ Auth::check() ? Auth::user()->name : 'Guest' }}
-    </span>
-  </a><!-- End Profile Iamge Icon -->
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+            <img src="{{ asset('assets/img/profile.png') }}" alt="Profile" class="rounded-circle">
+            <span class="d-none d-md-block dropdown-toggle ps-2">
+              {{ Auth::check() ? Auth::user()->name : 'Guest' }}
+            </span>
+          </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-      <h6>{{ Auth::check() ? Auth::user()->name : 'Guest' }}</h6>
-      <span>{{ Auth::check() ? Auth::user()->email : 'Not logged in' }}</span>
-    </li>
-    
+              <h6>{{ Auth::check() ? Auth::user()->name : 'Guest' }}</h6>
+              <span>{{ Auth::check() ? Auth::user()->email : 'Not logged in' }}</span>
+            </li>
+
             <li>
               <hr class="dropdown-divider">
             </li>
@@ -124,21 +124,21 @@ z<!DOCTYPE html>
               <hr class="dropdown-divider">
             </li>
 
-             @auth
-    <li>
-      <form method="POST" action="{{ route('logout') }}">
+            @auth
+            <li>
+              <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="btn btn-danger btn-sm w-100"><i class="bi bi-box-arrow-right me-1"></i> Logout</button>
               </form>
-    </li>
-    @else
-    <li>
-      <a class="dropdown-item d-flex align-items-center" href="{{ route('login') }}">
-        <i class="bi bi-box-arrow-in-right"></i>
-        <span>Login</span>
-      </a>
-    </li>
-    @endauth
+            </li>
+            @else
+            <li>
+              <a class="btn btn-success btn-sm w-100 " href="{{ route('login') }}">
+                <i class="bi bi-box-arrow-in-right"></i>
+                <span>Login</span>
+              </a>
+            </li>
+            @endauth
 
           </ul><!-- End Profile Dropdown Items -->
         </li><!-- End Profile Nav -->
