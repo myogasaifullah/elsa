@@ -1,4 +1,12 @@
- <div class="card p-4">
+ @extends('layout.header')
+
+@section('title', 'Laporan Jadwal')
+
+@include('layout.sidebar')
+
+<main id="main" class="main">
+    
+<div class="card p-4">
      <div class="d-flex justify-content-between align-items-center mb-3">
          <div>
              <h5 class="text-center fw-bold">REKAP VIDEO PEMBELAJARAN DOSEN TETAP</h5>
@@ -11,7 +19,7 @@
      </div>
 
      <!-- Filter Form for Fakultas Table -->
-     <form method="GET" action="{{ route('laporan.index') }}" class="mb-4">
+     <form method="GET" action="{{ route('laporan.progres') }}" class="mb-4">
          <div class="row">
              <div class="col-md-4">
                  <label for="fakultas_date_from" class="form-label">Dari Tanggal</label>
@@ -59,43 +67,6 @@
                  </tr>
              </thead>
              <tbody>
-                 @php
-                 // Group progress by dosen and count by jenis_kategori
-                 $groupedByDosen = [];
-                 foreach($progress as $item) {
-                 $dosen = $item->jadwalBooking->dosen ?? null;
-                 $jenisKategori = $item->jadwalBooking->jenis_kategori ?? null;
-
-                 if ($dosen) {
-                 $dosenId = $dosen->id;
-                 if (!isset($groupedByDosen[$dosenId])) {
-                 $groupedByDosen[$dosenId] = [
-                 'dosen' => $dosen,
-                 'elearning_count' => 0,
-                 'mooc_count' => 0,
-                 'total_video' => 0,
-                 'progres_count' => 0
-                 ];
-                 }
-
-                 // Count by category
-                 if ($jenisKategori === 'E-learning') {
-                 $groupedByDosen[$dosenId]['elearning_count']++;
-                 } elseif ($jenisKategori === 'Mooc') {
-                 $groupedByDosen[$dosenId]['mooc_count']++;
-                 }
-
-                 // Count total videos
-                 $groupedByDosen[$dosenId]['total_video']++;
-
-                 // Count progress
-                 if ($item->progres === 'progres') {
-                 $groupedByDosen[$dosenId]['progres_count']++;
-                 }
-                 }
-                 }
-                 @endphp
-
                  @forelse($groupedByDosen as $index => $data)
                  <tr>
                      <td>{{ $index + 1 }}</td>
@@ -116,3 +87,7 @@
          </table>
      </div>
  </div>
+
+ </main>
+
+@include('layout.footer')

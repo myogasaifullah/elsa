@@ -1,3 +1,11 @@
+@extends('layout.header')
+
+@section('title', 'Laporan Terbit')
+
+@include('layout.sidebar')
+
+<main id="main" class="main">
+    
 <div class="card p-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="fw-bold mb-3">REKAPITULASI SHOOTING MOOC DOSEN</h4>
@@ -8,7 +16,7 @@
     </div>
 
     <!-- Filter Form for Rekap Table -->
-    <form method="GET" action="{{ route('laporan.index') }}" class="mb-4">
+    <form method="GET" action="{{ route('laporan.dosen') }}" class="mb-4">
         <div class="row">
             <div class="col-md-4">
                 <label for="rekap_date_from" class="form-label">Dari Tanggal</label>
@@ -47,51 +55,6 @@
                 </tr>
             </thead>
             <tbody>
-                @php
-                $groupedProgress = [];
-                foreach ($progress as $item) {
-                $dosenName = $item->jadwalBooking->dosen->nama_dosen ?? 'N/A';
-                if (!isset($groupedProgress[$dosenName])) {
-                $groupedProgress[$dosenName] = [
-                'target' => $item->jadwalBooking->dosen->target_video_dosen ?? 0,
-                'sudah' => 0,
-                'proses' => 0,
-                'belum' => 0,
-                'terbit' => 0,
-                'keterangan_shooting' => '-',
-                'keterangan_video' => '-',
-                ];
-                }
-
-                // Hitung jumlah target, sudah shooting, dan sudah terbit
-                if ($item->jadwalBooking->status == 'sudah shooting') {
-                $groupedProgress[$dosenName]['sudah']++;
-                }
-                if ($item->progres == 'progres') {
-                $groupedProgress[$dosenName]['proses']++;
-                }
-                if ($item->jadwalBooking->status == 'belum shooting') {
-                $groupedProgress[$dosenName]['belum']++;
-                }
-                if ($item->progres == 'selesai') {
-                $groupedProgress[$dosenName]['terbit']++;
-                }
-
-                // Tentukan keterangan shooting
-                if ($groupedProgress[$dosenName]['target'] == $groupedProgress[$dosenName]['sudah']) {
-                $groupedProgress[$dosenName]['keterangan_shooting'] = 'sudah shooting';
-                } else {
-                $groupedProgress[$dosenName]['keterangan_shooting'] = 'belum selesai';
-                }
-
-                // Tentukan keterangan video
-                if ($groupedProgress[$dosenName]['target'] == $groupedProgress[$dosenName]['terbit']) {
-                $groupedProgress[$dosenName]['keterangan_video'] = 'selesai terbit';
-                } else {
-                $groupedProgress[$dosenName]['keterangan_video'] = 'belum terbit';
-                }
-                }
-                @endphp
                 @foreach($groupedProgress as $dosen => $data)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
@@ -118,3 +81,7 @@
         </table>
     </div>
 </div>
+
+</main>
+
+@include('layout.footer')

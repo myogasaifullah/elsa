@@ -290,4 +290,268 @@ class LaporanController extends Controller
         $filters = $request->only(['fakultas_date_from', 'fakultas_date_to', 'fakultas_id']);
         return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\CombinedFakultasExport($filters), 'laporan-combined-fakultas.xlsx');
     }
+
+    // Separate report methods
+    public function editor(Request $request)
+    {
+        ActivityLogService::log('lihat_laporan_editor', 'Melihat halaman laporan editor');
+
+        $perPage = $request->get('per_page', 5);
+        $filterProgress = $request->only(['progress_date_from', 'progress_date_to', 'progress_dosen', 'progress_prodi']);
+
+        $progress = $this->getFilteredProgress($filterProgress, $perPage);
+        $prodis = Prodi::all();
+
+        return view('laporan.editor', compact('progress', 'filterProgress', 'prodis'));
+    }
+
+    public function jadwal(Request $request)
+    {
+        ActivityLogService::log('lihat_laporan_jadwal', 'Melihat halaman laporan jadwal');
+
+        $filterJadwal = $request->only(['jadwal_date_from', 'jadwal_date_to', 'jadwal_dosen', 'jadwal_studio']);
+        $progress = $this->getFilteredProgress($filterJadwal); // Get progress to extract jadwal bookings
+
+        $jadwalBookings = collect();
+        if ($progress->isNotEmpty()) {
+            $jadwalBookings = $progress->pluck('jadwalBooking')->filter()->values();
+        }
+        $groupedJadwal = $jadwalBookings->groupBy('tanggal')->sortKeys();
+        $studios = Studio::all();
+
+        return view('laporan.jadwal', compact('groupedJadwal', 'filterJadwal', 'studios'));
+    }
+
+    public function mooc(Request $request)
+    {
+        ActivityLogService::log('lihat_laporan_mooc', 'Melihat halaman laporan mooc');
+
+        // For MOOC, we'll use the same as rekap/dosen since it's similar
+        $filterRekap = $request->only(['rekap_date_from', 'rekap_date_to', 'rekap_dosen']);
+        $progress = $this->getFilteredProgress($filterRekap);
+
+        $groupedProgress = [];
+        foreach ($progress as $item) {
+            $dosenName = $item->jadwalBooking->dosen->nama_dosen ?? 'N/A';
+            if (!isset($groupedProgress[$dosenName])) {
+                $groupedProgress[$dosenName] = [
+                    'target' => $item->jadwalBooking->dosen->target_video_dosen ?? 0,
+                    'sudah' => 0,
+                    'proses' => 0,
+                    'belum' => 0,
+                    'terbit' => 0,
+                    'keterangan_shooting' => '-',
+                    'keterangan_video' => '-',
+                ];
+            }
+
+            if ($item->jadwalBooking->status == 'sudah shooting') {
+                $groupedProgress[$dosenName]['sudah']++;
+            }
+            if ($item->progres == 'progres') {
+                $groupedProgress[$dosenName]['proses']++;
+            }
+            if ($item->jadwalBooking->status == 'belum shooting') {
+                $groupedProgress[$dosenName]['belum']++;
+            }
+            if ($item->progres == 'selesai') {
+                $groupedProgress[$dosenName]['terbit']++;
+            }
+
+            if ($groupedProgress[$dosenName]['target'] == $groupedProgress[$dosenName]['sudah']) {
+                $groupedProgress[$dosenName]['keterangan_shooting'] = 'sudah shooting';
+            } else {
+                $groupedProgress[$dosenName]['keterangan_shooting'] = 'belum selesai';
+            }
+
+            if ($groupedProgress[$dosenName]['target'] == $groupedProgress[$dosenName]['terbit']) {
+                $groupedProgress[$dosenName]['keterangan_video'] = 'selesai terbit';
+            } else {
+                $groupedProgress[$dosenName]['keterangan_video'] = 'belum terbit';
+            }
+        }
+
+        return view('laporan.mooc', compact('groupedProgress', 'filterRekap'));
+    }
+
+    public function dosen(Request $request)
+    {
+        ActivityLogService::log('lihat_laporan_dosen', 'Melihat halaman laporan dosen');
+
+        $filterRekap = $request->only(['rekap_date_from', 'rekap_date_to', 'rekap_dosen']);
+        $progress = $this->getFilteredProgress($filterRekap);
+
+        $groupedProgress = [];
+        foreach ($progress as $item) {
+            $dosenName = $item->jadwalBooking->dosen->nama_dosen ?? 'N/A';
+            if (!isset($groupedProgress[$dosenName])) {
+                $groupedProgress[$dosenName] = [
+                    'target' => $item->jadwalBooking->dosen->target_video_dosen ?? 0,
+                    'sudah' => 0,
+                    'proses' => 0,
+                    'belum' => 0,
+                    'terbit' => 0,
+                    'keterangan_shooting' => '-',
+                    'keterangan_video' => '-',
+                ];
+            }
+
+            if ($item->jadwalBooking->status == 'sudah shooting') {
+                $groupedProgress[$dosenName]['sudah']++;
+            }
+            if ($item->progres == 'progres') {
+                $groupedProgress[$dosenName]['proses']++;
+            }
+            if ($item->jadwalBooking->status == 'belum shooting') {
+                $groupedProgress[$dosenName]['belum']++;
+            }
+            if ($item->progres == 'selesai') {
+                $groupedProgress[$dosenName]['terbit']++;
+            }
+
+            if ($groupedProgress[$dosenName]['target'] == $groupedProgress[$dosenName]['sudah']) {
+                $groupedProgress[$dosenName]['keterangan_shooting'] = 'sudah shooting';
+            } else {
+                $groupedProgress[$dosenName]['keterangan_shooting'] = 'belum selesai';
+            }
+
+            if ($groupedProgress[$dosenName]['target'] == $groupedProgress[$dosenName]['terbit']) {
+                $groupedProgress[$dosenName]['keterangan_video'] = 'selesai terbit';
+            } else {
+                $groupedProgress[$dosenName]['keterangan_video'] = 'belum terbit';
+            }
+        }
+
+        return view('laporan.dosen', compact('groupedProgress', 'filterRekap'));
+    }
+
+    public function terbit(Request $request)
+    {
+        ActivityLogService::log('lihat_laporan_terbit', 'Melihat halaman laporan terbit');
+
+        $perPage = $request->get('per_page', 5);
+        $filterDosen = $request->only(['dosen_date_from', 'dosen_date_to', 'dosen_status']);
+
+        $terbitData = $this->getFilteredTerbit($filterDosen, $perPage);
+
+        return view('laporan.terbit', compact('terbitData', 'filterDosen'));
+    }
+
+    public function progres(Request $request)
+    {
+        ActivityLogService::log('lihat_laporan_progres', 'Melihat halaman laporan progres');
+
+        $filterFakultas = $request->only(['fakultas_date_from', 'fakultas_date_to', 'fakultas_id']);
+        $progress = $this->getFilteredProgress($filterFakultas);
+
+        $groupedByDosen = [];
+        foreach ($progress as $item) {
+            $dosen = $item->jadwalBooking->dosen ?? null;
+            $jenisKategori = $item->jadwalBooking->jenis_kategori ?? null;
+
+            if ($dosen) {
+                $dosenId = $dosen->id;
+                if (!isset($groupedByDosen[$dosenId])) {
+                    $groupedByDosen[$dosenId] = [
+                        'dosen' => $dosen,
+                        'elearning_count' => 0,
+                        'mooc_count' => 0,
+                        'total_video' => 0,
+                        'progres_count' => 0
+                    ];
+                }
+
+                if ($jenisKategori === 'E-learning') {
+                    $groupedByDosen[$dosenId]['elearning_count']++;
+                } elseif ($jenisKategori === 'Mooc') {
+                    $groupedByDosen[$dosenId]['mooc_count']++;
+                }
+
+                $groupedByDosen[$dosenId]['total_video']++;
+
+                if ($item->progres === 'progres') {
+                    $groupedByDosen[$dosenId]['progres_count']++;
+                }
+            }
+        }
+
+        $fakultases = Fakultas::all();
+
+        return view('laporan.progres', compact('groupedByDosen', 'filterFakultas', 'fakultases'));
+    }
+
+    public function fakultas(Request $request)
+    {
+        ActivityLogService::log('lihat_laporan_fakultas', 'Melihat halaman laporan fakultas');
+
+        $filterFakultas = $request->only(['fakultas_date_from', 'fakultas_date_to', 'fakultas_id']);
+        $progress = $this->getFilteredProgress($filterFakultas);
+
+        $progressTetap = $progress->filter(function ($item) {
+            $status = strtolower(trim($item->jadwalBooking->dosen->status_dosen ?? ''));
+            return $status === 'tetap';
+        });
+
+        $progressTidakTetap = $progress->filter(function ($item) {
+            $status = strtolower(trim($item->jadwalBooking->dosen->status_dosen ?? ''));
+            return in_array($status, ['tidak tetap', 'tidaktetap', 'tidak_tetap', 'non tetap', 'nontetap']);
+        });
+
+        $fakultasDataTetap = [];
+        foreach ($progressTetap as $item) {
+            $dosen = $item->jadwalBooking->dosen;
+            $fakultas = $dosen->fakultas->nama_fakultas ?? 'Tidak Diketahui';
+            $dosenId = $dosen->id;
+
+            if (!isset($fakultasDataTetap[$fakultas])) {
+                $fakultasDataTetap[$fakultas] = [
+                    'jumlah_dosen' => \App\Models\Dosen::where('fakultas_id', $dosen->fakultas_id)->count(),
+                    'pembelajaran' => 0,
+                    'mooc' => 0,
+                    'editing' => 0,
+                    'total' => 0
+                ];
+            }
+
+            if ($item->progres == 'selesai') {
+                if (str_contains(strtolower($item->judul_video ?? ''), 'mooc')) {
+                    $fakultasDataTetap[$fakultas]['mooc']++;
+                } else {
+                    $fakultasDataTetap[$fakultas]['pembelajaran']++;
+                }
+            } elseif ($item->progres == 'progres') {
+                $fakultasDataTetap[$fakultas]['editing']++;
+            }
+
+            $fakultasDataTetap[$fakultas]['total']++;
+        }
+
+        $fakultasDataTidakTetap = [];
+        foreach ($progressTidakTetap as $item) {
+            $dosen = $item->jadwalBooking->dosen;
+            $fakultas = $dosen->fakultas->nama_fakultas ?? 'Tidak Diketahui';
+            $dosenId = $dosen->id;
+
+            if (!isset($fakultasDataTidakTetap[$fakultas])) {
+                $fakultasDataTidakTetap[$fakultas] = [
+                    'jumlah_dosen' => \App\Models\Dosen::where('fakultas_id', $dosen->fakultas_id)->count(),
+                    'pembelajaran' => 0,
+                    'editing' => 0,
+                    'total' => 0
+                ];
+            }
+
+            if ($item->progres == 'selesai') {
+                $fakultasDataTidakTetap[$fakultas]['pembelajaran']++;
+            } elseif ($item->progres == 'progres') {
+                $fakultasDataTidakTetap[$fakultas]['editing']++;
+            }
+
+            $fakultasDataTidakTetap[$fakultas]['total']++;
+        }
+
+        $fakultases = Fakultas::all();
+
+        return view('laporan.fakultas', compact('fakultasDataTetap', 'fakultasDataTidakTetap', 'filterFakultas', 'fakultases'));
+    }
 }

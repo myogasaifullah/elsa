@@ -60,6 +60,13 @@ Route::get('/', function () {
 });
 
 Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+Route::get('/laporan/editor', [LaporanController::class, 'editor'])->name('laporan.editor');
+Route::get('/laporan/jadwal', [LaporanController::class, 'jadwal'])->name('laporan.jadwal');
+Route::get('/laporan/mooc', [LaporanController::class, 'mooc'])->name('laporan.mooc');
+Route::get('/laporan/dosen', [LaporanController::class, 'dosen'])->name('laporan.dosen');
+Route::get('/laporan/terbit', [LaporanController::class, 'terbit'])->name('laporan.terbit');
+Route::get('/laporan/progres', [LaporanController::class, 'progres'])->name('laporan.progres');
+Route::get('/laporan/fakultas', [LaporanController::class, 'fakultas'])->name('laporan.fakultas');
 Route::get('/arsip', [App\Http\Controllers\ArsipController::class, 'index'])->name('arsip.index');
 Route::get('/arsip/create', [App\Http\Controllers\ArsipController::class, 'create'])->name('arsip.create');
 Route::post('/arsip', [App\Http\Controllers\ArsipController::class, 'store'])->name('arsip.store');

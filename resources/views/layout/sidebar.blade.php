@@ -100,7 +100,17 @@
     </li>
 
     <!-- Laporan -->
-    <li class="nav-item"> <a class="nav-link {{ Request::is('laporan') ? '' : 'collapsed' }}" href="{{ url('laporan') }}"> <i class="bi bi-file-earmark"></i> <span>Laporan</span> </a> </li>
+    <li class="nav-item"> <a class="nav-link {{ Request::is('laporan*') ? '' : 'collapsed' }}" data-bs-target="#laporan-nav" data-bs-toggle="collapse" href="#"> <i class="bi bi-file-earmark"></i><span>Laporan</span><i class="bi bi-chevron-down ms-auto"></i> </a>
+      <ul id="laporan-nav" class="nav-content collapse {{ Request::is('laporan*') ? 'show' : '' }}" data-bs-parent="#sidebar-nav">
+        <li> <a href="{{ url('laporan/editor') }}" class="{{ Request::is('laporan/editor') ? 'active' : '' }}"> <i class="bi bi-circle"></i><span>Editor</span> </a> </li>
+        <li> <a href="{{ url('laporan/jadwal') }}" class="{{ Request::is('laporan/jadwal') ? 'active' : '' }}"> <i class="bi bi-circle"></i><span>Jadwal</span> </a> </li>
+        <li> <a href="{{ url('laporan/mooc') }}" class="{{ Request::is('laporan/mooc') ? 'active' : '' }}"> <i class="bi bi-circle"></i><span>Mooc</span> </a> </li>
+        <li> <a href="{{ url('laporan/dosen') }}" class="{{ Request::is('laporan/dosen') ? 'active' : '' }}"> <i class="bi bi-circle"></i><span>Dosen</span> </a> </li>
+        <li> <a href="{{ url('laporan/terbit') }}" class="{{ Request::is('laporan/terbit') ? 'active' : '' }}"> <i class="bi bi-circle"></i><span>Terbit</span> </a> </li>
+        <li> <a href="{{ url('laporan/progres') }}" class="{{ Request::is('laporan/progres') ? 'active' : '' }}"> <i class="bi bi-circle"></i><span>Progres</span> </a> </li>
+        <li> <a href="{{ url('laporan/fakultas') }}" class="{{ Request::is('laporan/fakultas') ? 'active' : '' }}"> <i class="bi bi-circle"></i><span>Fakultas</span> </a> </li>
+      </ul>
+    </li>
 
     <!-- Arsip -->
     <li class="nav-item"> <a class="nav-link {{ Request::is('arsip*') ? '' : 'collapsed' }}" href="{{ url('arsip') }}"> <i class="bi bi-archive"></i> <span>Arsip</span> </a> </li>

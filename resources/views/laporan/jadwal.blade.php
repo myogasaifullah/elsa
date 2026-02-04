@@ -1,4 +1,23 @@
-<div class="card">
+@extends('layout.header')
+
+@section('title', 'Laporan Jadwal')
+
+@include('layout.sidebar')
+
+<main id="main" class="main">
+
+  <div class="pagetitle">
+    <h1>Laporan Jadwal</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('laporan.index') }}">Laporan</a></li>
+        <li class="breadcrumb-item active">Jadwal</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+
+  <div class="card">
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
@@ -12,7 +31,7 @@
       </div>
 
       <!-- Filter Form for Jadwal Table -->
-      <form method="GET" action="{{ route('laporan.index') }}" class="mb-4">
+      <form method="GET" action="{{ route('laporan.jadwal') }}" class="mb-4">
         <div class="row">
           <div class="col-md-3">
             <label for="jadwal_date_from" class="form-label">Dari Tanggal</label>
@@ -39,19 +58,12 @@
         <div class="row mt-3">
           <div class="col-md-12">
             <button type="submit" class="btn btn-primary">Filter</button>
-            <a href="{{ route('laporan.index') }}" class="btn btn-secondary">Reset</a>
+            <a href="{{ route('laporan.jadwal') }}" class="btn btn-secondary">Reset</a>
           </div>
         </div>
       </form>
 
       @php
-      $jadwalBookings = collect();
-      if(isset($progress) && $progress->isNotEmpty()) {
-      $jadwalBookings = $progress->pluck('jadwalBooking')->filter()->values();
-      }
-
-      // Group by date
-      $groupedJadwal = $jadwalBookings->groupBy('tanggal')->sortKeys();
       $currentMonth = now()->format('F Y');
       $weeks = [
       1 => 'MINGGU KE-1',
@@ -114,3 +126,7 @@
 
     </div>
   </div>
+
+</main>
+
+@include('layout.footer')
