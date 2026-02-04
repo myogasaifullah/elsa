@@ -1,12 +1,21 @@
-# TODO: Add Import Feature for MOOC Data
+# TODO: Implementasi Fitur Dosen pada Sidebar Admin
 
-## Completed Tasks
-- [x] Add importMooc method to DosenMoocController.php
-- [x] Add route for mooc.import in routes/web.php
-- [x] Add import button and modal to resources/views/akademik/mooc.blade.php
-- [x] Add JavaScript for import form submission in resources/views/akademik/dosen-mooc.blade.php
-- [x] Fix missing route error by adding the route to routes/web.php
-- [x] Fix import button not clickable by placing modal outside the card
+## Tugas Utama
 
-## Summary
-The import feature for MOOC data has been successfully added to the view `resources/views/akademik/dosen-mooc.blade.php`. Users can now import MOOC data from an Excel file containing columns `judul_mooc` and `dosen_id`. The route was initially missing and has been added. The button was not clickable due to modal placement inside the card, which has been fixed.
+- [x] Tambahkan fitur dosen pada sidebar admin
+- [x] Buatkan agar halaman dosen tersebut menampilkan seluruh data seperti halaman arsip
+
+## Langkah-langkah Implementasi
+
+- [x] Tambahkan link "Dosen" di sidebar admin setelah "Arsip"
+- [x] Modifikasi UserController::dosenIndex untuk menampilkan semua data progress jika user adalah admin, atau data terfilter jika dosen
+- [x] Update resources/views/dosen.blade.php agar menampilkan data seperti halaman arsip dengan:
+    - Filter dropdown untuk status dan keterangan
+    - Filter tanggal, bulan, dan tahun
+    - Tabel DataTables dengan semua kolom progress
+    - Fitur export (Copy, CSV, Excel, PDF, Print)
+    - Responsive design
+
+## Status
+
+Semua langkah telah selesai diimplementasikan. Fitur dosen sekarang tersedia di sidebar admin dan menampilkan semua data progress dengan layout dan fungsionalitas yang sama seperti halaman arsip.

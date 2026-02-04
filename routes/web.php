@@ -96,6 +96,8 @@ Route::delete('/user/{user}', [App\Http\Controllers\UserController::class, 'dest
 Route::get('/verifikasi', [App\Http\Controllers\UserController::class, 'verifikasi'])->name('user.verifikasi');
 Route::put('/verifikasi/status/{id}', [App\Http\Controllers\UserController::class, 'updateStatus'])->name('user.updateStatus');
 
+Route::get('/dosen', [App\Http\Controllers\UserController::class, 'dosenIndex'])->name('dosen.index');
+
 // Dosen & MOOC Routes
 Route::get('/dosen-mooc', [DosenMoocController::class, 'index'])->name('dosen-mooc.index');
 

@@ -15,11 +15,11 @@ class UserController extends Controller
      *
      * @return \Illuminate\View\View
      */
-//     public function editor()
-// {
-//     $editors = Editor::all();
-//     return view('user.verifikasi', compact('editors'));
-// }
+    //     public function editor()
+    // {
+    //     $editors = Editor::all();
+    //     return view('user.verifikasi', compact('editors'));
+    // }
 
     public function index()
     {
@@ -28,7 +28,7 @@ class UserController extends Controller
         $prodis = \App\Models\Prodi::all();
         $editors = Editor::all();
 
-        return view('user', compact('users', 'fakultas', 'prodis','editors'));
+        return view('user', compact('users', 'fakultas', 'prodis', 'editors'));
     }
 
     /**
@@ -215,7 +215,6 @@ class UserController extends Controller
             }
 
             return redirect()->route('user.index')->with('success', 'User updated successfully.');
-
         } catch (\Exception $e) {
             Log::error('User update failed', [
                 'user_id' => $userId,
@@ -246,22 +245,51 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('user.index')->with('success', 'User deleted successfully.');
     }
-public function updateStatus(Request $request, $id)
-{
-    $request->validate([
-        'status' => 'required|in:active,rejected',
-    ]);
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:active,rejected',
+        ]);
 
-    $user = User::findOrFail($id);
-    $user->status = $request->status;
-    $user->save();
+        $user = User::findOrFail($id);
+        $user->status = $request->status;
+        $user->save();
 
-    Log::info('Status pengguna diperbarui', [
-        'user_id' => $id,
-        'status_baru' => $request->status,
-    ]);
+        Log::info('Status pengguna diperbarui', [
+            'user_id' => $id,
+            'status_baru' => $request->status,
+        ]);
 
-    return redirect()->route('user.verifikasi')->with('success', 'Status pengguna berhasil diperbarui.');
-}
+        return redirect()->route('user.verifikasi')->with('success', 'Status pengguna berhasil diperbarui.');
+    }
 
+    /**
+     * Display a listing of progress data.
+     * For admin: show all progress data.
+     * For dosen: show progress data filtered by logged-in dosen's name.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function dosenIndex()
+    {
+        $user = auth()->user();
+        $query = \App\Models\Progress::with([
+            'jadwalBooking.dosen',
+            'jadwalBooking.user.fakultas',
+            'jadwalBooking.user.prodi',
+            'jadwalBooking.studio',
+            'editor'
+        ]);
+
+        // If not admin, filter by dosen's name
+        if (strtolower($user->role) !== 'admin') {
+            $query->whereHas('jadwalBooking.dosen', function ($query) use ($user) {
+                $query->where('nama_dosen', $user->name);
+            });
+        }
+
+        $progress = $query->get();
+
+        return view('dosen', compact('progress'));
+    }
 }

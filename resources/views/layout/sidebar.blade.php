@@ -102,6 +102,9 @@
     <!-- Arsip -->
     <li class="nav-item"> <a class="nav-link {{ Request::is('arsip*') ? '' : 'collapsed' }}" href="{{ url('arsip') }}"> <i class="bi bi-archive"></i> <span>Arsip</span> </a> </li>
 
+    <!-- Dosen -->
+    <li class="nav-item"> <a class="nav-link {{ Request::is('dosen*') ? '' : 'collapsed' }}" href="{{ url('dosen') }}"> <i class="bi bi-person-badge"></i> <span>Dosen</span> </a> </li>
+
     {{-- ================= MAHASISWA ================= --}}
     @elseif(Auth::check() && in_array(strtolower(Auth::user()->role), ['mahasiswa','']))
 
@@ -147,6 +150,13 @@
     <li class="nav-item">
       <a class="nav-link {{ Request::is('jadwal*') ? '' : 'collapsed' }}" href="{{ url('jadwal') }}">
         <i class="bi bi-journal-text"></i><span>Booking Studio</span>
+      </a>
+    </li>
+
+    <!-- Dosen -->
+    <li class="nav-item">
+      <a class="nav-link {{ Request::is('dosen*') ? '' : 'collapsed' }}" href="{{ url('dosen') }}">
+        <i class="bi bi-person-badge"></i><span>Dosen</span>
       </a>
     </li>
 
