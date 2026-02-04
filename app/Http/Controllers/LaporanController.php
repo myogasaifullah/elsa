@@ -208,7 +208,7 @@ class LaporanController extends Controller
 
     public function exportJadwalPdf(Request $request)
     {
-        $filters = $request->only(['jadwal_date_from', 'jadwal_date_to', 'jadwal_dosen', 'jadwal_studio']);
+        $filters = $request->all(); // Get all query parameters
         $export = new JadwalExport($filters);
 
         return Pdf::loadView('exports.jadwal', $export->view()->getData())->download('laporan-jadwal.pdf');
@@ -216,7 +216,7 @@ class LaporanController extends Controller
 
     public function exportJadwalExcel(Request $request)
     {
-        $filters = $request->only(['jadwal_date_from', 'jadwal_date_to', 'jadwal_dosen', 'jadwal_studio']);
+        $filters = $request->all(); // Get all query parameters
         return Excel::download(new JadwalExport($filters), 'laporan-jadwal.xlsx');
     }
 
@@ -335,7 +335,17 @@ class LaporanController extends Controller
         $groupedJadwal = $jadwalBookings->groupBy('tanggal')->sortKeys();
         $studios = Studio::all();
 
-        return view('laporan.jadwal', compact('groupedJadwal', 'filterJadwal', 'studios'));
+        // Get unique values for filter dropdowns
+        $uniqueDosen = $jadwalBookings->pluck('dosen.nama_dosen')->unique()->filter()->sort()->values();
+        $uniqueFakultas = $jadwalBookings->pluck('dosen.fakultas.nama_fakultas')->unique()->filter()->sort()->values();
+        $uniqueJudulCourse = $jadwalBookings->pluck('judul_course')->unique()->filter()->sort()->values();
+
+        // Get unique years from jadwal booking dates
+        $uniqueYears = $jadwalBookings->pluck('tanggal')->filter()->map(function ($date) {
+            return $date ? \Carbon\Carbon::parse($date)->format('Y') : null;
+        })->unique()->filter()->sort()->values();
+
+        return view('laporan.jadwal', compact('groupedJadwal', 'filterJadwal', 'studios', 'uniqueDosen', 'uniqueFakultas', 'uniqueJudulCourse', 'uniqueYears'));
     }
 
     public function mooc(Request $request)
