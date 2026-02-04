@@ -194,7 +194,7 @@ class LaporanController extends Controller
     // Export methods for each table
     public function exportProgressPdf(Request $request)
     {
-        $filters = $request->only(['progress_date_from', 'progress_date_to', 'progress_dosen', 'progress_prodi']);
+        $filters = $request->all(); // Get all query parameters
         $export = new ProgressExport($filters);
 
         return Pdf::loadView('exports.progress', $export->view()->getData())->download('laporan-progress.pdf');
@@ -202,7 +202,7 @@ class LaporanController extends Controller
 
     public function exportProgressExcel(Request $request)
     {
-        $filters = $request->only(['progress_date_from', 'progress_date_to', 'progress_dosen', 'progress_prodi']);
+        $filters = $request->all(); // Get all query parameters
         return Excel::download(new ProgressExport($filters), 'laporan-progress.xlsx');
     }
 
@@ -296,13 +296,29 @@ class LaporanController extends Controller
     {
         ActivityLogService::log('lihat_laporan_editor', 'Melihat halaman laporan editor');
 
-        $perPage = $request->get('per_page', 5);
         $filterProgress = $request->only(['progress_date_from', 'progress_date_to', 'progress_dosen', 'progress_prodi']);
 
-        $progress = $this->getFilteredProgress($filterProgress, $perPage);
+        // Get all filtered progress data without pagination for DataTables
+        $progress = $this->getFilteredProgress($filterProgress);
         $prodis = Prodi::all();
 
-        return view('laporan.editor', compact('progress', 'filterProgress', 'prodis'));
+        // Get unique values for filter dropdowns
+        $uniqueDosen = $progress->pluck('jadwalBooking.dosen.nama_dosen')->unique()->filter()->sort()->values();
+        $uniqueFakultas = $progress->pluck('jadwalBooking.user.fakultas.nama_fakultas')->unique()->filter()->sort()->values();
+        $uniqueMataKuliah = $progress->pluck('jadwalBooking.nama_mata_kuliah')->unique()->filter()->sort()->values();
+        $uniqueLokasi = $progress->pluck('jadwalBooking.studio.nama_studio')->unique()->filter()->sort()->values();
+        $uniqueEditor = $progress->pluck('editor.nama')->unique()->filter()->sort()->values();
+
+        // Get unique years and months from target_upload
+        $uniqueYears = $progress->pluck('target_upload')->filter()->map(function ($date) {
+            return $date ? \Carbon\Carbon::parse($date)->format('Y') : null;
+        })->unique()->filter()->sort()->values();
+
+        $uniqueMonths = $progress->pluck('target_upload')->filter()->map(function ($date) {
+            return $date ? \Carbon\Carbon::parse($date)->format('m') : null;
+        })->unique()->filter()->sort()->values();
+
+        return view('laporan.editor', compact('progress', 'filterProgress', 'prodis', 'uniqueDosen', 'uniqueFakultas', 'uniqueMataKuliah', 'uniqueLokasi', 'uniqueEditor', 'uniqueYears', 'uniqueMonths'));
     }
 
     public function jadwal(Request $request)
