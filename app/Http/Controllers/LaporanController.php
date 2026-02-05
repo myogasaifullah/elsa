@@ -371,7 +371,7 @@ class LaporanController extends Controller
     // New combined export methods
     public function exportCombinedFakultasPdf(Request $request)
     {
-        $filters = $request->only(['fakultas_date_from', 'fakultas_date_to', 'fakultas_id']);
+        $filters = $request->only(['fakultas_year', 'fakultas_month']);
         $export = new \App\Exports\CombinedFakultasExport($filters);
 
         return Pdf::loadView('exports.combined_fakultas', $export->view()->getData())->download('laporan-combined-fakultas.pdf');
@@ -379,7 +379,7 @@ class LaporanController extends Controller
 
     public function exportCombinedFakultasExcel(Request $request)
     {
-        $filters = $request->only(['fakultas_date_from', 'fakultas_date_to', 'fakultas_id']);
+        $filters = $request->only(['fakultas_year', 'fakultas_month']);
         return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\CombinedFakultasExport($filters), 'laporan-combined-fakultas.xlsx');
     }
 
@@ -668,7 +668,7 @@ class LaporanController extends Controller
     {
         ActivityLogService::log('lihat_laporan_fakultas', 'Melihat halaman laporan fakultas');
 
-        $filterFakultas = $request->only(['fakultas_date_from', 'fakultas_date_to', 'fakultas_id']);
+        $filterFakultas = $request->only(['fakultas_year', 'fakultas_month']);
         $progress = $this->getFilteredProgress($filterFakultas);
 
         $progressTetap = $progress->filter(function ($item) {
@@ -698,7 +698,7 @@ class LaporanController extends Controller
             }
 
             if ($item->progres == 'selesai') {
-                if (str_contains(strtolower($item->judul_video ?? ''), 'mooc')) {
+                if (strtolower($item->jadwalBooking->jenis_kategori ?? '') === 'mooc') {
                     $fakultasDataTetap[$fakultas]['mooc']++;
                 } else {
                     $fakultasDataTetap[$fakultas]['pembelajaran']++;
@@ -720,13 +720,18 @@ class LaporanController extends Controller
                 $fakultasDataTidakTetap[$fakultas] = [
                     'jumlah_dosen' => \App\Models\Dosen::where('fakultas_id', $dosen->fakultas_id)->count(),
                     'pembelajaran' => 0,
+                    'mooc' => 0,
                     'editing' => 0,
                     'total' => 0
                 ];
             }
 
             if ($item->progres == 'selesai') {
-                $fakultasDataTidakTetap[$fakultas]['pembelajaran']++;
+                if (strtolower($item->jadwalBooking->jenis_kategori ?? '') === 'mooc') {
+                    $fakultasDataTidakTetap[$fakultas]['mooc']++;
+                } else {
+                    $fakultasDataTidakTetap[$fakultas]['pembelajaran']++;
+                }
             } elseif ($item->progres == 'progres') {
                 $fakultasDataTidakTetap[$fakultas]['editing']++;
             }
@@ -736,6 +741,16 @@ class LaporanController extends Controller
 
         $fakultases = Fakultas::all();
 
-        return view('laporan.fakultas', compact('fakultasDataTetap', 'fakultasDataTidakTetap', 'filterFakultas', 'fakultases'));
+        // Get unique years and months from jadwal booking dates
+        $allProgress = $this->getFilteredProgress([]);
+        $uniqueYears = $allProgress->pluck('jadwalBooking.tanggal')->filter()->map(function ($date) {
+            return $date ? \Carbon\Carbon::parse($date)->format('Y') : null;
+        })->unique()->filter()->sort()->values();
+
+        $uniqueMonths = $allProgress->pluck('jadwalBooking.tanggal')->filter()->map(function ($date) {
+            return $date ? \Carbon\Carbon::parse($date)->format('m') : null;
+        })->unique()->filter()->sort()->values();
+
+        return view('laporan.fakultas', compact('fakultasDataTetap', 'fakultasDataTidakTetap', 'filterFakultas', 'fakultases', 'uniqueYears', 'uniqueMonths'));
     }
 }

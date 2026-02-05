@@ -52,21 +52,15 @@ class CombinedFakultasExport implements FromView, ShouldAutoSize, WithStyles
         $query = Progress::with(['jadwalBooking.dosen.fakultas'])->orderBy('created_at', 'desc');
 
         // Apply filters
-        if (!empty($filters['fakultas_date_from'])) {
+        if (!empty($filters['fakultas_year'])) {
             $query->whereHas('jadwalBooking', function ($q) use ($filters) {
-                $q->where('tanggal', '>=', $filters['fakultas_date_from']);
+                $q->whereYear('tanggal', $filters['fakultas_year']);
             });
         }
 
-        if (!empty($filters['fakultas_date_to'])) {
+        if (!empty($filters['fakultas_month'])) {
             $query->whereHas('jadwalBooking', function ($q) use ($filters) {
-                $q->where('tanggal', '<=', $filters['fakultas_date_to']);
-            });
-        }
-
-        if (!empty($filters['fakultas_id'])) {
-            $query->whereHas('jadwalBooking.dosen.fakultas', function ($q) use ($filters) {
-                $q->where('id', $filters['fakultas_id']);
+                $q->whereMonth('tanggal', $filters['fakultas_month']);
             });
         }
 
