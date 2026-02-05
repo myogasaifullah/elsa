@@ -158,7 +158,7 @@
             <div class="mb-3">
               <label for="file_import" class="form-label">Pilih File Excel (.xlsx atau .xls)</label>
               <input type="file" class="form-control" id="file_import" name="file" accept=".xlsx,.xls" required>
-              <small class="form-text text-muted">File harus berisi kolom: nama_dosen, nuptk_dosen, target_video_dosen (opsional), status_dosen (opsional), fakultas_id, prodi_id</small>
+              <small class="form-text text-muted">File harus berisi kolom: nama_dosen, nuptk_dosen, target_video_dosen (opsional), status_dosen (opsional), nama_fakultas, nama_prodi</small>
             </div>
           </div>
           <div class="modal-footer">
