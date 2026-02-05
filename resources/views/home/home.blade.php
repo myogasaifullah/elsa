@@ -469,7 +469,7 @@
                     {{ $progress->keterangan ?? '-' }}
                   </span>
                 </td>
-                <td>{{ $progress->publish_link_youtube ? '<a href="' . $progress->publish_link_youtube . '" target="_blank">Link</a>' : '-' }}</td>
+                <td>{!! $progress->publish_link_youtube ? '<a href="' . $progress->publish_link_youtube . '" target="_blank">Link Video</a>' : '-' !!}</td>
                 <!-- <td>{{ $progress->created_at ? $progress->created_at->format('d/m/Y H:i') : '-' }}</td>
                 <td>{{ $progress->updated_at ? $progress->updated_at->format('d/m/Y H:i') : '-' }}</td> -->
               </tr>
@@ -482,7 +482,7 @@
   </div>
 
 
-  <!-- Table Video Berdasarkan Kategori -->
+  <!-- Table Video Berdasarkan Kategori
   <div class="col-12">
     <div class="card">
       <div class="card-body">
@@ -516,7 +516,7 @@
         </table>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <!-- log aktifitas -->
   <div class="col-12">
