@@ -292,16 +292,80 @@ class LaporanController extends Controller
 
     public function exportFakultasPdf(Request $request)
     {
-        $filters = $request->only(['fakultas_date_from', 'fakultas_date_to', 'fakultas_id']);
-        $export = new FakultasExport($filters);
+        $filterFakultas = $request->only(['fakultas_date_from', 'fakultas_date_to', 'fakultas_id', 'fakultas_year', 'fakultas_month']);
+        $progress = $this->getFilteredProgress($filterFakultas);
 
-        return Pdf::loadView('exports.fakultas', $export->view()->getData())->download('laporan-fakultas.pdf');
+        $groupedByDosen = [];
+        foreach ($progress as $item) {
+            $dosen = $item->jadwalBooking->dosen ?? null;
+            $jenisKategori = $item->jadwalBooking->jenis_kategori ?? null;
+
+            if ($dosen) {
+                $dosenId = $dosen->id;
+                if (!isset($groupedByDosen[$dosenId])) {
+                    $groupedByDosen[$dosenId] = [
+                        'dosen' => $dosen,
+                        'elearning_count' => 0,
+                        'mooc_count' => 0,
+                        'total_video' => 0,
+                        'progres_count' => 0
+                    ];
+                }
+
+                if (strtolower($jenisKategori) === 'e-learning') {
+                    $groupedByDosen[$dosenId]['elearning_count']++;
+                } elseif (strtolower($jenisKategori) === 'mooc') {
+                    $groupedByDosen[$dosenId]['mooc_count']++;
+                }
+
+                $groupedByDosen[$dosenId]['total_video']++;
+
+                if ($item->progres === 'progres') {
+                    $groupedByDosen[$dosenId]['progres_count']++;
+                }
+            }
+        }
+
+        return Pdf::loadView('exports.fakultas', compact('groupedByDosen'))->download('laporan-fakultas.pdf');
     }
 
     public function exportFakultasExcel(Request $request)
     {
-        $filters = $request->only(['fakultas_date_from', 'fakultas_date_to', 'fakultas_id']);
-        return Excel::download(new FakultasExport($filters), 'laporan-fakultas.xlsx');
+        $filterFakultas = $request->only(['fakultas_date_from', 'fakultas_date_to', 'fakultas_id', 'fakultas_year', 'fakultas_month']);
+        $progress = $this->getFilteredProgress($filterFakultas);
+
+        $groupedByDosen = [];
+        foreach ($progress as $item) {
+            $dosen = $item->jadwalBooking->dosen ?? null;
+            $jenisKategori = $item->jadwalBooking->jenis_kategori ?? null;
+
+            if ($dosen) {
+                $dosenId = $dosen->id;
+                if (!isset($groupedByDosen[$dosenId])) {
+                    $groupedByDosen[$dosenId] = [
+                        'dosen' => $dosen,
+                        'elearning_count' => 0,
+                        'mooc_count' => 0,
+                        'total_video' => 0,
+                        'progres_count' => 0
+                    ];
+                }
+
+                if (strtolower($jenisKategori) === 'e-learning') {
+                    $groupedByDosen[$dosenId]['elearning_count']++;
+                } elseif (strtolower($jenisKategori) === 'mooc') {
+                    $groupedByDosen[$dosenId]['mooc_count']++;
+                }
+
+                $groupedByDosen[$dosenId]['total_video']++;
+
+                if ($item->progres === 'progres') {
+                    $groupedByDosen[$dosenId]['progres_count']++;
+                }
+            }
+        }
+
+        return Excel::download(new \App\Exports\FakultasExport($groupedByDosen), 'laporan-fakultas.xlsx');
     }
 
     // New combined export methods

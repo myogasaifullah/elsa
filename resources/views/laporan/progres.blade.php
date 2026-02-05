@@ -13,8 +13,8 @@
                  <h6 class="text-center mb-3">FAKULTAS TEKNIK DAN ILMU KOMPUTER<br>UNIVERSITAS TEKNOKRAT INDONESIA</h6>
              </div>
              <div>
-                 <a href="{{ route('laporan.export.fakultas.pdf') }}" class="btn btn-danger btn-sm">PDF</a>
-                 <a href="{{ route('laporan.export.fakultas.excel') }}" class="btn btn-success btn-sm">Excel</a>
+                 <a href="{{ route('laporan.export.fakultas.pdf', request()->query()) }}" class="btn btn-danger btn-sm">PDF</a>
+                 <a href="{{ route('laporan.export.fakultas.excel', request()->query()) }}" class="btn btn-success btn-sm">Excel</a>
              </div>
          </div>
 
