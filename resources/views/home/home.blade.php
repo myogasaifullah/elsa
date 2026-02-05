@@ -199,21 +199,37 @@
           <table class="table datatable">
             <thead>
               <tr>
-                <th>ID</th>
+                <!-- <th>ID</th> -->
                 <th>User</th>
+                <th>Tanggal</th>
+                <th>Jam</th>
+                <th>Jenis Kategori</th>
+                <th>Kategori MOOC</th>
                 <th>Studio</th>
+                <th>Nama Mata Kuliah</th>
+                <th>Judul Course</th>
                 <th>Status</th>
-                <th>Created At</th>
+                <th>Dosen</th>
+                <!-- <th>Created At</th>
+                <th>Updated At</th> -->
               </tr>
             </thead>
             <tbody>
               @foreach($data['bookings'] as $booking)
               <tr>
-                <td>{{ $booking->id }}</td>
-                <td>{{ $booking->user->name ?? 'N/A' }}</td>
-                <td>{{ $booking->studio->nama_studio ?? 'N/A' }}</td>
-                <td><span class="badge bg-{{ $booking->status == 'approved' ? 'success' : 'warning' }}">{{ $booking->status }}</span></td>
-                <td>{{ $booking->created_at ? $booking->created_at->format('d/m/Y H:i') : 'N/A' }}</td>
+                <!-- <td>{{ $booking->id }}</td> -->
+                <td>{{ $booking->user->name ?? '-' }}</td>
+                <td>{{ $booking->tanggal ? \Carbon\Carbon::parse($booking->tanggal)->format('d/m/Y') : '-' }}</td>
+                <td>{{ $booking->jam ?? '-' }}</td>
+                <td>{{ $booking->jenis_kategori ?? '-' }}</td>
+                <td>{{ $booking->kategori_mooc ?? '-' }}</td>
+                <td>{{ $booking->studio->nama_studio ?? '-' }}</td>
+                <td>{{ $booking->nama_mata_kuliah ?? '-' }}</td>
+                <td>{{ $booking->judul_course ?? '-' }}</td>
+                <td><span class="badge bg-{{ $booking->status == 'approved' ? 'success' : ($booking->status == 'pending' ? 'warning' : 'danger') }}">{{ $booking->status ?? '-' }}</span></td>
+                <td>{{ $booking->dosen->nama_dosen ?? '-' }}</td>
+                <!-- <td>{{ $booking->created_at ? $booking->created_at->format('d/m/Y H:i') : '-' }}</td>
+                <td>{{ $booking->updated_at ? $booking->updated_at->format('d/m/Y H:i') : '-' }}</td> -->
               </tr>
               @endforeach
             </tbody>
@@ -235,8 +251,10 @@
               <tr>
                 <!-- <th>ID</th> -->
                 <th>Nama Fakultas</th>
-                <!-- <th>Kode</th> -->
-                <th>Created At</th>
+                <th>Kode Fakultas</th>
+                <th>Singkatan</th>
+                <!-- <th>Created At</th>
+                <th>Updated At</th> -->
               </tr>
             </thead>
             <tbody>
@@ -244,8 +262,10 @@
               <tr>
                 <!-- <td>{{ $fakultas->id }}</td> -->
                 <td>{{ $fakultas->nama_fakultas }}</td>
-                <!-- <td>{{ $fakultas->kode_fakultas }}</td> -->
-                <td>{{ $fakultas->created_at ? $fakultas->created_at->format('d/m/Y H:i') : 'N/A' }}</td>
+                <td>{{ $fakultas->kode_fakultas ?? '-' }}</td>
+                <td>{{ $fakultas->singkatan ?? '-' }}</td>
+                <!-- <td>{{ $fakultas->created_at ? $fakultas->created_at->format('d/m/Y H:i') : '-' }}</td>
+                <td>{{ $fakultas->updated_at ? $fakultas->updated_at->format('d/m/Y H:i') : '-' }}</td> -->
               </tr>
               @endforeach
             </tbody>
@@ -267,9 +287,10 @@
               <tr>
                 <!-- <th>ID</th> -->
                 <th>Nama Prodi</th>
-                <!-- <th>Kode</th> -->
+                <th>Kode Prodi</th>
                 <th>Fakultas</th>
-                <th>Created At</th>
+                <!-- <th>Created At</th>
+                <th>Updated At</th> -->
               </tr>
             </thead>
             <tbody>
@@ -277,9 +298,10 @@
               <tr>
                 <!-- <td>{{ $prodi->id }}</td> -->
                 <td>{{ $prodi->nama_prodi }}</td>
-                <!-- <td>{{ $prodi->kode_prodi }}</td> -->
-                <td>{{ $prodi->fakultas->nama_fakultas ?? 'N/A' }}</td>
-                <td>{{ $prodi->created_at ? $prodi->created_at->format('d/m/Y H:i') : 'N/A' }}</td>
+                <td>{{ $prodi->kode_prodi ?? '-' }}</td>
+                <td>{{ $prodi->fakultas->nama_fakultas ?? '-' }}</td>
+                <!-- <td>{{ $prodi->created_at ? $prodi->created_at->format('d/m/Y H:i') : '-' }}</td>
+                <td>{{ $prodi->updated_at ? $prodi->updated_at->format('d/m/Y H:i') : '-' }}</td> -->
               </tr>
               @endforeach
             </tbody>
@@ -362,20 +384,28 @@
             <thead>
               <tr>
                 <!-- <th>ID</th> -->
-                <th>Nama Mata Kuliah</th>
                 <th>Fakultas</th>
                 <th>Prodi</th>
-                <!-- <th>Semester</th> -->
+                <th>Nama Mata Kuliah</th>
+                <th>Kode Matakuliah</th>
+                <th>SKS</th>
+                <th>Keterangan</th>
+                <!-- <th>Created At</th>
+                <th>Updated At</th> -->
               </tr>
             </thead>
             <tbody>
               @foreach($data['mata_kuliahs'] as $matkul)
               <tr>
                 <!-- <td>{{ $matkul->id }}</td> -->
+                <td>{{ $matkul->fakultas->nama_fakultas ?? '-' }}</td>
+                <td>{{ $matkul->prodi->nama_prodi ?? '-' }}</td>
                 <td>{{ $matkul->nama_mata_kuliah }}</td>
-                <td>{{ $matkul->fakultas->nama_fakultas }}</td>
-                <td>{{ $matkul->prodi->nama_prodi }}</td>
-                <!-- <td>{{ $matkul->semester }}</td> -->
+                <td>{{ $matkul->kode_matakuliah ?? '-' }}</td>
+                <td>{{ $matkul->sks ?? '-' }}</td>
+                <td>{{ $matkul->keterangan ?? '-' }}</td>
+                <!-- <td>{{ $matkul->created_at ? $matkul->created_at->format('d/m/Y H:i') : '-' }}</td>
+                <td>{{ $matkul->updated_at ? $matkul->updated_at->format('d/m/Y H:i') : '-' }}</td> -->
               </tr>
               @endforeach
             </tbody>
@@ -396,30 +426,52 @@
             <thead>
               <tr>
                 <!-- <th>ID</th> -->
+                <!-- <th>Jadwal Booking ID</th> -->
+                <!-- <th>Editor ID</th> -->
                 <th>Jadwal Booking</th>
-                <th>Progress</th>
                 <th>Editor</th>
-                <th>Status</th>
+                <th>Persentase</th>
+                <th>Keterangan</th>
+                <th>Publish Link YouTube</th>
+                <!-- <th>Created At</th>
+                <th>Updated At</th> -->
               </tr>
             </thead>
             <tbody>
               @foreach($data['progresses'] as $progress)
               <tr>
                 <!-- <td>{{ $progress->id }}</td> -->
-                <td>{{ $progress->jadwalBooking->judul_course ?? 'N/A' }}</td>
-                <td>{{ $progress->persentase }}%</td>
-                <td>{{ $progress->editor->nama ?? 'N/A' }}</td>
+                <!-- <td>{{ $progress->jadwal_booking_id ?? '-' }}</td>
+                <td>{{ $progress->editor_id ?? '-' }}</td> -->
+                <td>{{ $progress->jadwalBooking->judul_course ?? '-' }}</td>
+                <td>{{ $progress->editor->nama ?? '-' }}</td>
                 <td>
                   <span class="badge
-    @if(!empty($progress->publish_link_youtube))
-        bg-success
-    @else
-        bg-warning
-    @endif
-">
-                    {{ ucfirst($progress->keterangan) }}
+                    @if($progress->persentase >= 0 && $progress->persentase <= 25) bg-danger
+                    @elseif($progress->persentase > 25 && $progress->persentase <= 50) bg-warning text-dark
+                    @elseif($progress->persentase > 50 && $progress->persentase <= 75) bg-info text-dark
+                    @elseif($progress->persentase > 75 && $progress->persentase <= 100) bg-success
+                    @else bg-secondary
+                    @endif">
+                    {{ $progress->persentase }}%
                   </span>
                 </td>
+                <td>
+                  <span class="badge
+                    @if(strtolower($progress->keterangan) == 'draft') bg-secondary
+                    @elseif(strtolower($progress->keterangan) == 'review') bg-warning text-dark
+                    @elseif(strtolower($progress->keterangan) == 'editing') bg-info text-dark
+                    @elseif(strtolower($progress->keterangan) == 'completed' || strtolower($progress->keterangan) == 'finished') bg-success
+                    @elseif(strtolower($progress->keterangan) == 'published' || strtolower($progress->keterangan) == 'sudah terbit') bg-primary
+                    @elseif(strtolower($progress->keterangan) == 'belum terbit') bg-danger
+                    @else bg-light text-dark
+                    @endif">
+                    {{ $progress->keterangan ?? '-' }}
+                  </span>
+                </td>
+                <td>{{ $progress->publish_link_youtube ? '<a href="' . $progress->publish_link_youtube . '" target="_blank">Link</a>' : '-' }}</td>
+                <!-- <td>{{ $progress->created_at ? $progress->created_at->format('d/m/Y H:i') : '-' }}</td>
+                <td>{{ $progress->updated_at ? $progress->updated_at->format('d/m/Y H:i') : '-' }}</td> -->
               </tr>
               @endforeach
             </tbody>
@@ -453,10 +505,10 @@
             <tr>
               <td>{{ $video->judul_mooc }}</td>
               <td>MOOC</td>
-              <td>{{ $video->dosen->nama_dosen ?? 'N/A' }}</td>
-              <td>{{ $video->dosen->fakultas->nama_fakultas ?? 'N/A' }}</td>
-              <td>{{ $video->dosen->prodi->nama_prodi ?? 'N/A' }}</td>
-              <td>N/A</td>
+              <td>{{ $video->dosen->nama_dosen ?? '-' }}</td>
+              <td>{{ $video->dosen->fakultas->nama_fakultas ?? '-' }}</td>
+              <td>{{ $video->dosen->prodi->nama_prodi ?? '-' }}</td>
+              <td>{{ $video->dosen->mata_kuliah->nama_mata_kuliah ?? '-' }}</td>
               <td><span class="badge bg-success">Published</span></td>
             </tr>
             @endforeach
@@ -488,9 +540,9 @@
             <tr>
               <td>{{ $index + 1 }}</td>
               <td>{{ $log->created_at }}</td>
-              <td>{{ $log->user->name ?? 'N/A' }}</td>
-              <td>{{ $log->user->role ?? 'N/A' }}</td>
-              <!-- <td>N/A</td> -->
+              <td>{{ $log->user->name ?? '-' }}</td>
+              <td>{{ $log->user->role ?? '-' }}</td>
+              <!-- <td>-</td> -->
               <td>{{ $log->action }} - {{ $log->description }}</td>
             </tr>
             @endforeach

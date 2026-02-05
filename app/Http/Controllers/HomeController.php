@@ -29,7 +29,7 @@ class HomeController extends Controller
         // Mengambil semua data dari semua model
         $data = [
             'users' => User::all(),
-            'bookings' => $this->getBookings($request),
+            'bookings' => Booking::with(['user', 'studio'])->get(),
             'dosens' => Dosen::all(),
             'editors' => Editor::all(),
             'fakultas' => Fakultas::all(),
