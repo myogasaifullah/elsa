@@ -76,6 +76,32 @@
   </div>
 </div>
 
+<!-- Modal Import MOOC -->
+<div class="modal fade" id="modalImportMooc" tabindex="-1" aria-labelledby="modalImportMoocLabel">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="formImportMooc" enctype="multipart/form-data">
+        @csrf
+        <div class="modal-header">
+          <h5 class="modal-title">Import MOOC</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="file_import_mooc" class="form-label">Pilih File Excel (.xlsx atau .xls)</label>
+            <input type="file" class="form-control" id="file_import_mooc" name="file" accept=".xlsx,.xls" required>
+            <small class="form-text text-muted">File harus berisi kolom: judul_mooc, nama_dosen</small>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+          <button class="btn btn-primary" type="submit">Import</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 
 <!-- Modal Edit MOOC -->
 <div class="modal fade" id="modalEditMooc" tabindex="-1" aria-labelledby="modalEditMoocLabel">

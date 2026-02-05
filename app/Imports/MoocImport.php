@@ -32,21 +32,21 @@ class MoocImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmptyR
             \Log::warning('MoocImport: Skipping row ' . $this->rowNumber . ' - judul_mooc is missing or empty');
             return null;
         }
-        if (empty($row['dosen_id'] ?? '')) {
-            \Log::warning('MoocImport: Skipping row ' . $this->rowNumber . ' - dosen_id is missing or empty');
+        if (empty(trim($row['nama_dosen'] ?? ''))) {
+            \Log::warning('MoocImport: Skipping row ' . $this->rowNumber . ' - nama_dosen is missing or empty');
             return null;
         }
 
-        // Check if dosen exists
-        $dosen = Dosen::find($row['dosen_id']);
+        // Check if dosen exists by name
+        $dosen = Dosen::where('nama_dosen', trim($row['nama_dosen']))->first();
         if (!$dosen) {
-            \Log::warning('MoocImport: Skipping row ' . $this->rowNumber . ' - dosen_id ' . $row['dosen_id'] . ' does not exist');
+            \Log::warning('MoocImport: Skipping row ' . $this->rowNumber . ' - nama_dosen ' . $row['nama_dosen'] . ' does not exist');
             return null;
         }
 
         return new Mooc([
             'judul_mooc' => trim($row['judul_mooc']),
-            'dosen_id' => $row['dosen_id'],
+            'dosen_id' => $dosen->id,
         ]);
     }
 
@@ -69,7 +69,7 @@ class MoocImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmptyR
     {
         return [
             'judul_mooc' => 'required|string|max:255',
-            'dosen_id' => 'required|exists:dosens,id',
+            'nama_dosen' => 'required|string',
         ];
     }
 
@@ -77,8 +77,7 @@ class MoocImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmptyR
     {
         return [
             'judul_mooc.required' => 'Kolom judul_mooc wajib diisi.',
-            'dosen_id.required' => 'Kolom dosen_id wajib diisi.',
-            'dosen_id.exists' => 'Dosen dengan ID tersebut tidak ditemukan.',
+            'nama_dosen.required' => 'Kolom nama_dosen wajib diisi.',
         ];
     }
 }
