@@ -142,6 +142,20 @@ class LaporanController extends Controller
             });
         }
 
+        // Apply fakultas year filter
+        if (!empty($filters['fakultas_year'])) {
+            $query->whereHas('jadwalBooking', function ($q) use ($filters) {
+                $q->whereYear('tanggal', $filters['fakultas_year']);
+            });
+        }
+
+        // Apply fakultas month filter
+        if (!empty($filters['fakultas_month'])) {
+            $query->whereHas('jadwalBooking', function ($q) use ($filters) {
+                $q->whereMonth('tanggal', $filters['fakultas_month']);
+            });
+        }
+
         if ($perPage) {
             return $query->paginate($perPage);
         }
@@ -537,7 +551,7 @@ class LaporanController extends Controller
     {
         ActivityLogService::log('lihat_laporan_progres', 'Melihat halaman laporan progres');
 
-        $filterFakultas = $request->only(['fakultas_date_from', 'fakultas_date_to', 'fakultas_id']);
+        $filterFakultas = $request->only(['fakultas_date_from', 'fakultas_date_to', 'fakultas_id', 'fakultas_year', 'fakultas_month']);
         $progress = $this->getFilteredProgress($filterFakultas);
 
         $groupedByDosen = [];
@@ -573,7 +587,17 @@ class LaporanController extends Controller
 
         $fakultases = Fakultas::all();
 
-        return view('laporan.progres', compact('groupedByDosen', 'filterFakultas', 'fakultases'));
+        // Get unique years and months from jadwal booking dates
+        $allProgress = $this->getFilteredProgress([]);
+        $uniqueYears = $allProgress->pluck('jadwalBooking.tanggal')->filter()->map(function ($date) {
+            return $date ? \Carbon\Carbon::parse($date)->format('Y') : null;
+        })->unique()->filter()->sort()->values();
+
+        $uniqueMonths = $allProgress->pluck('jadwalBooking.tanggal')->filter()->map(function ($date) {
+            return $date ? \Carbon\Carbon::parse($date)->format('m') : null;
+        })->unique()->filter()->sort()->values();
+
+        return view('laporan.progres', compact('groupedByDosen', 'filterFakultas', 'fakultases', 'uniqueYears', 'uniqueMonths'));
     }
 
     public function fakultas(Request $request)

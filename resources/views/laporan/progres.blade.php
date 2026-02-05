@@ -21,15 +21,15 @@
          <!-- Filter Form for Fakultas Table -->
          <form method="GET" action="{{ route('laporan.progres') }}" class="mb-4">
              <div class="row">
-                 <div class="col-md-4">
+                 <div class="col-md-2">
                      <label for="fakultas_date_from" class="form-label">Dari Tanggal</label>
                      <input type="date" class="form-control" id="fakultas_date_from" name="fakultas_date_from" value="{{ $filterFakultas['fakultas_date_from'] ?? '' }}">
                  </div>
-                 <div class="col-md-4">
+                 <div class="col-md-2">
                      <label for="fakultas_date_to" class="form-label">Sampai Tanggal</label>
                      <input type="date" class="form-control" id="fakultas_date_to" name="fakultas_date_to" value="{{ $filterFakultas['fakultas_date_to'] ?? '' }}">
                  </div>
-                 <div class="col-md-4">
+                 <div class="col-md-2">
                      <label for="fakultas_id" class="form-label">Fakultas</label>
                      <select class="form-control" id="fakultas_id" name="fakultas_id">
                          <option value="">Pilih Fakultas</option>
@@ -38,11 +38,27 @@
                          @endforeach
                      </select>
                  </div>
-             </div>
-             <div class="row mt-3">
-                 <div class="col-md-12">
-                     <button type="submit" class="btn btn-primary">Filter</button>
-                     <a href="{{ route('laporan.index') }}" class="btn btn-secondary">Reset</a>
+                 <div class="col-md-2">
+                     <label for="fakultas_year" class="form-label">Tahun</label>
+                     <select class="form-control" id="fakultas_year" name="fakultas_year">
+                         <option value="">Pilih Tahun</option>
+                         @foreach($uniqueYears as $year)
+                         <option value="{{ $year }}" {{ (isset($filterFakultas['fakultas_year']) && $filterFakultas['fakultas_year'] == $year) ? 'selected' : '' }}>{{ $year }}</option>
+                         @endforeach
+                     </select>
+                 </div>
+                 <div class="col-md-2">
+                     <label for="fakultas_month" class="form-label">Bulan</label>
+                     <select class="form-control" id="fakultas_month" name="fakultas_month">
+                         <option value="">Pilih Bulan</option>
+                         @foreach($uniqueMonths as $month)
+                         <option value="{{ $month }}" {{ (isset($filterFakultas['fakultas_month']) && $filterFakultas['fakultas_month'] == $month) ? 'selected' : '' }}>{{ \Carbon\Carbon::create()->month((int)$month)->format('F') }}</option>
+                         @endforeach
+                     </select>
+                 </div>
+                 <div class="col-md-2 d-flex align-items-end">
+                     <button type="submit" class="btn btn-primary me-2">Filter</button>
+                     <a href="{{ route('laporan.progres') }}" class="btn btn-secondary">Reset</a>
                  </div>
              </div>
          </form>

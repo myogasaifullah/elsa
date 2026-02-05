@@ -1,21 +1,13 @@
-# TODO: Implementasi Fitur Dosen pada Sidebar Admin
+# TODO: Add Filter Features to laporan/progres.blade.php
 
-## Tugas Utama
+## Completed Tasks
 
-- [x] Tambahkan fitur dosen pada sidebar admin
-- [x] Buatkan agar halaman dosen tersebut menampilkan seluruh data seperti halaman arsip
+- [x] Update LaporanController.php progres method to include fakultas_year and fakultas_month in filter parameters
+- [x] Add fakultas_year and fakultas_month filtering logic to getFilteredProgress method
+- [x] Add unique years and months calculation in progres method
+- [x] Update laporan/progres.blade.php to include year and month dropdown filters in the form
+- [x] Fix Carbon month formatting error by casting to int
 
-## Langkah-langkah Implementasi
+## Summary
 
-- [x] Tambahkan link "Dosen" di sidebar admin setelah "Arsip"
-- [x] Modifikasi UserController::dosenIndex untuk menampilkan semua data progress jika user adalah admin, atau data terfilter jika dosen
-- [x] Update resources/views/dosen.blade.php agar menampilkan data seperti halaman arsip dengan:
-    - Filter dropdown untuk status dan keterangan
-    - Filter tanggal, bulan, dan tahun
-    - Tabel DataTables dengan semua kolom progress
-    - Fitur export (Copy, CSV, Excel, PDF, Print)
-    - Responsive design
-
-## Status
-
-Semua langkah telah selesai diimplementasikan. Fitur dosen sekarang tersedia di sidebar admin dan menampilkan semua data progress dengan layout dan fungsionalitas yang sama seperti halaman arsip.
+Added filter functionality for faculty, year, and month to the laporan/progres.blade.php page. The existing faculty filter was already present, so new year and month filters were added. The form layout was adjusted to accommodate 5 filter fields in a single row. Fixed a Carbon error in month display formatting.
