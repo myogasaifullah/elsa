@@ -128,6 +128,20 @@ class LaporanController extends Controller
             });
         }
 
+        // Apply year filter
+        if (!empty($filters['rekap_year'])) {
+            $query->whereHas('jadwalBooking', function ($q) use ($filters) {
+                $q->whereYear('tanggal', $filters['rekap_year']);
+            });
+        }
+
+        // Apply month filter
+        if (!empty($filters['rekap_month'])) {
+            $query->whereHas('jadwalBooking', function ($q) use ($filters) {
+                $q->whereMonth('tanggal', $filters['rekap_month']);
+            });
+        }
+
         if ($perPage) {
             return $query->paginate($perPage);
         }
@@ -236,7 +250,7 @@ class LaporanController extends Controller
 
     public function exportRekapPdf(Request $request)
     {
-        $filters = $request->only(['rekap_date_from', 'rekap_date_to', 'rekap_dosen']);
+        $filters = $request->only(['rekap_date_from', 'rekap_date_to', 'rekap_dosen', 'rekap_year', 'rekap_month']);
         $export = new RekapExport($filters);
 
         return Pdf::loadView('exports.rekap', $export->view()->getData())->download('laporan-rekap.pdf');
@@ -244,7 +258,7 @@ class LaporanController extends Controller
 
     public function exportRekapExcel(Request $request)
     {
-        $filters = $request->only(['rekap_date_from', 'rekap_date_to', 'rekap_dosen']);
+        $filters = $request->only(['rekap_date_from', 'rekap_date_to', 'rekap_dosen', 'rekap_year', 'rekap_month']);
         return Excel::download(new RekapExport($filters), 'laporan-rekap.xlsx');
     }
 
@@ -448,8 +462,18 @@ class LaporanController extends Controller
     {
         ActivityLogService::log('lihat_laporan_dosen', 'Melihat halaman laporan dosen');
 
-        $filterRekap = $request->only(['rekap_date_from', 'rekap_date_to', 'rekap_dosen']);
+        $filterRekap = $request->only(['rekap_year', 'rekap_month']);
         $progress = $this->getFilteredProgress($filterRekap);
+
+        // Get unique years and months from jadwal booking dates
+        $allProgress = $this->getFilteredProgress([]);
+        $uniqueYears = $allProgress->pluck('jadwalBooking.tanggal')->filter()->map(function ($date) {
+            return $date ? \Carbon\Carbon::parse($date)->format('Y') : null;
+        })->unique()->filter()->sort()->values();
+
+        $uniqueMonths = $allProgress->pluck('jadwalBooking.tanggal')->filter()->map(function ($date) {
+            return $date ? \Carbon\Carbon::parse($date)->format('m') : null;
+        })->unique()->filter()->sort()->values();
 
         $groupedProgress = [];
         foreach ($progress as $item) {
@@ -492,7 +516,7 @@ class LaporanController extends Controller
             }
         }
 
-        return view('laporan.dosen', compact('groupedProgress', 'filterRekap'));
+        return view('laporan.dosen', compact('groupedProgress', 'filterRekap', 'uniqueYears', 'uniqueMonths'));
     }
 
     public function terbit(Request $request)

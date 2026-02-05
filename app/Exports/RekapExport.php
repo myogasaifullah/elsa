@@ -21,7 +21,7 @@ class RekapExport implements FromView, ShouldAutoSize, WithStyles
     public function view(): View
     {
         $progress = $this->getFilteredProgress($this->filters);
-        
+
         return view('exports.rekap', [
             'progress' => $progress
         ]);
@@ -37,26 +37,40 @@ class RekapExport implements FromView, ShouldAutoSize, WithStyles
     private function getFilteredProgress($filters)
     {
         $query = Progress::with(['jadwalBooking.dosen'])->orderBy('created_at', 'desc');
-        
+
         // Apply filters
         if (!empty($filters['rekap_date_from'])) {
             $query->whereHas('jadwalBooking', function ($q) use ($filters) {
                 $q->where('tanggal', '>=', $filters['rekap_date_from']);
             });
         }
-        
+
         if (!empty($filters['rekap_date_to'])) {
             $query->whereHas('jadwalBooking', function ($q) use ($filters) {
                 $q->where('tanggal', '<=', $filters['rekap_date_to']);
             });
         }
-        
+
         if (!empty($filters['rekap_dosen'])) {
             $query->whereHas('jadwalBooking.dosen', function ($q) use ($filters) {
                 $q->where('nama_dosen', 'like', '%' . $filters['rekap_dosen'] . '%');
             });
         }
-        
+
+        // Apply year filter
+        if (!empty($filters['rekap_year'])) {
+            $query->whereHas('jadwalBooking', function ($q) use ($filters) {
+                $q->whereYear('tanggal', $filters['rekap_year']);
+            });
+        }
+
+        // Apply month filter
+        if (!empty($filters['rekap_month'])) {
+            $query->whereHas('jadwalBooking', function ($q) use ($filters) {
+                $q->whereMonth('tanggal', $filters['rekap_month']);
+            });
+        }
+
         return $query->get();
     }
 }
