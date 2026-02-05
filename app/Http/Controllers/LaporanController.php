@@ -557,9 +557,9 @@ class LaporanController extends Controller
                     ];
                 }
 
-                if ($jenisKategori === 'E-learning') {
+                if (strtolower($jenisKategori) === 'e-learning') {
                     $groupedByDosen[$dosenId]['elearning_count']++;
-                } elseif ($jenisKategori === 'Mooc') {
+                } elseif (strtolower($jenisKategori) === 'mooc') {
                     $groupedByDosen[$dosenId]['mooc_count']++;
                 }
 
