@@ -21,10 +21,12 @@ class MoocExport implements FromView, ShouldAutoSize, WithStyles
     public function view(): View
     {
         $progress = $this->getFilteredProgress($this->filters);
-        
+
         // Group by fakultas
-        $grouped = $progress->groupBy('jadwalBooking.user.fakultas.nama_fakultas');
-        
+        $grouped = $progress->groupBy(function ($item) {
+            return $item->jadwalBooking->dosen->fakultas->nama_fakultas ?? 'Tidak Diketahui';
+        })->sortKeys();
+
         return view('exports.mooc', [
             'grouped' => $grouped
         ]);
@@ -44,27 +46,58 @@ class MoocExport implements FromView, ShouldAutoSize, WithStyles
             'jadwalBooking.dosen.prodi',
             'jadwalBooking.studio',
             'editor'
-        ])->orderBy('created_at', 'desc');
-        
+        ])
+            ->whereNotNull('publish_link_youtube') // Only data with video link
+            ->whereHas('jadwalBooking', function ($q) {
+                $q->where('jenis_kategori', 'Mooc'); // Only MOOC category
+            })
+            ->orderBy('created_at', 'desc');
+
         // Apply filters
-        if (!empty($filters['mooc_date_from'])) {
+        if (!empty($filters['rekap_date_from'])) {
             $query->whereHas('jadwalBooking', function ($q) use ($filters) {
-                $q->where('tanggal', '>=', $filters['mooc_date_from']);
+                $q->where('tanggal', '>=', $filters['rekap_date_from']);
             });
         }
-        
-        if (!empty($filters['mooc_date_to'])) {
+
+        if (!empty($filters['rekap_date_to'])) {
             $query->whereHas('jadwalBooking', function ($q) use ($filters) {
-                $q->where('tanggal', '<=', $filters['mooc_date_to']);
+                $q->where('tanggal', '<=', $filters['rekap_date_to']);
             });
         }
-        
-        if (!empty($filters['mooc_dosen'])) {
+
+        if (!empty($filters['rekap_dosen'])) {
             $query->whereHas('jadwalBooking.dosen', function ($q) use ($filters) {
-                $q->where('nama_dosen', 'like', '%' . $filters['mooc_dosen'] . '%');
+                $q->where('nama_dosen', 'like', '%' . $filters['rekap_dosen'] . '%');
             });
         }
-        
+
+        if (!empty($filters['rekap_fakultas'])) {
+            $query->whereHas('jadwalBooking.dosen.fakultas', function ($q) use ($filters) {
+                $q->where('nama_fakultas', $filters['rekap_fakultas']);
+            });
+        }
+
+        if (!empty($filters['rekap_kategori_mooc'])) {
+            $query->whereHas('jadwalBooking', function ($q) use ($filters) {
+                $q->where('kategori_mooc', $filters['rekap_kategori_mooc']);
+            });
+        }
+
+        // Apply year filter
+        if (!empty($filters['rekap_year'])) {
+            $query->whereHas('jadwalBooking', function ($q) use ($filters) {
+                $q->whereYear('tanggal', $filters['rekap_year']);
+            });
+        }
+
+        // Apply month filter
+        if (!empty($filters['rekap_month'])) {
+            $query->whereHas('jadwalBooking', function ($q) use ($filters) {
+                $q->whereMonth('tanggal', $filters['rekap_month']);
+            });
+        }
+
         return $query->get();
     }
 }

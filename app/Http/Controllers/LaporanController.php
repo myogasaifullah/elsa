@@ -222,15 +222,15 @@ class LaporanController extends Controller
 
     public function exportMoocPdf(Request $request)
     {
-        $filters = $request->only(['mooc_date_from', 'mooc_date_to', 'mooc_dosen']);
+        $filters = $request->only(['rekap_date_from', 'rekap_date_to', 'rekap_dosen', 'rekap_kategori_mooc', 'rekap_fakultas', 'rekap_year', 'rekap_month']);
         $export = new MoocExport($filters);
 
-        return Pdf::loadView('exports.mooc', $export->view()->getData())->download('laporan-mooc.pdf');
+        return Pdf::loadView('exports.mooc', $export->view()->getData())->setPaper('a4', 'landscape')->download('laporan-mooc.pdf');
     }
 
     public function exportMoocExcel(Request $request)
     {
-        $filters = $request->only(['mooc_date_from', 'mooc_date_to', 'mooc_dosen']);
+        $filters = $request->only(['rekap_date_from', 'rekap_date_to', 'rekap_dosen', 'rekap_kategori_mooc', 'rekap_fakultas', 'rekap_year', 'rekap_month']);
         return Excel::download(new MoocExport($filters), 'laporan-mooc.xlsx');
     }
 
@@ -352,12 +352,34 @@ class LaporanController extends Controller
     {
         ActivityLogService::log('lihat_laporan_mooc', 'Melihat halaman laporan mooc');
 
-        $filterRekap = $request->only(['rekap_date_from', 'rekap_date_to', 'rekap_dosen']);
+        $filterRekap = $request->only(['rekap_date_from', 'rekap_date_to', 'rekap_dosen', 'rekap_kategori_mooc', 'rekap_fakultas', 'rekap_year', 'rekap_month']);
+
+        // Get all MOOC progress data for unique values
+        $allProgress = $this->getFilteredMoocProgress([]);
+
+        // Get unique values for filter dropdowns from all data
+        $uniqueDosen = $allProgress->pluck('jadwalBooking.dosen.nama_dosen')->unique()->filter()->sort()->values();
+        $uniqueKategoriMooc = $allProgress->pluck('jadwalBooking.kategori_mooc')->unique()->filter()->sort()->values();
+        $uniqueFakultas = $allProgress->pluck('jadwalBooking.dosen.fakultas.nama_fakultas')->unique()->filter()->sort()->values();
+
+        // Get unique years and months from jadwal booking dates
+        $uniqueYears = $allProgress->pluck('jadwalBooking.tanggal')->filter()->map(function ($date) {
+            return $date ? \Carbon\Carbon::parse($date)->format('Y') : null;
+        })->unique()->filter()->sort()->values();
+
+        $uniqueMonths = $allProgress->pluck('jadwalBooking.tanggal')->filter()->map(function ($date) {
+            return $date ? \Carbon\Carbon::parse($date)->format('m') : null;
+        })->unique()->filter()->sort()->values();
 
         // Get filtered progress data with additional filters for MOOC category and video link
         $progress = $this->getFilteredMoocProgress($filterRekap);
 
-        return view('laporan.mooc', compact('progress', 'filterRekap'));
+        // Group progress by faculty
+        $groupedByFakultas = $progress->groupBy(function ($item) {
+            return $item->jadwalBooking->dosen->fakultas->nama_fakultas ?? 'Tidak Diketahui';
+        })->sortKeys();
+
+        return view('laporan.mooc', compact('groupedByFakultas', 'filterRekap', 'uniqueDosen', 'uniqueKategoriMooc', 'uniqueFakultas', 'uniqueYears', 'uniqueMonths'));
     }
 
     private function getFilteredMoocProgress($filters)
@@ -390,6 +412,32 @@ class LaporanController extends Controller
         if (!empty($filters['rekap_dosen'])) {
             $query->whereHas('jadwalBooking.dosen', function ($q) use ($filters) {
                 $q->where('nama_dosen', 'like', '%' . $filters['rekap_dosen'] . '%');
+            });
+        }
+
+        if (!empty($filters['rekap_fakultas'])) {
+            $query->whereHas('jadwalBooking.dosen.fakultas', function ($q) use ($filters) {
+                $q->where('nama_fakultas', $filters['rekap_fakultas']);
+            });
+        }
+
+        if (!empty($filters['rekap_kategori_mooc'])) {
+            $query->whereHas('jadwalBooking', function ($q) use ($filters) {
+                $q->where('kategori_mooc', $filters['rekap_kategori_mooc']);
+            });
+        }
+
+        // Apply year filter
+        if (!empty($filters['rekap_year'])) {
+            $query->whereHas('jadwalBooking', function ($q) use ($filters) {
+                $q->whereYear('tanggal', $filters['rekap_year']);
+            });
+        }
+
+        // Apply month filter
+        if (!empty($filters['rekap_month'])) {
+            $query->whereHas('jadwalBooking', function ($q) use ($filters) {
+                $q->whereMonth('tanggal', $filters['rekap_month']);
             });
         }
 
