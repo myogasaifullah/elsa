@@ -1,13 +1,17 @@
-# TODO: Add Filter Features to laporan/progres.blade.php
+# TODO: Add Features to Bookings Data Section
 
 ## Completed Tasks
 
-- [x] Update LaporanController.php progres method to include fakultas_year and fakultas_month in filter parameters
-- [x] Add fakultas_year and fakultas_month filtering logic to getFilteredProgress method
-- [x] Add unique years and months calculation in progres method
-- [x] Update laporan/progres.blade.php to include year and month dropdown filters in the form
-- [x] Fix Carbon month formatting error by casting to int
+- [x] Update HomeController.php to handle query parameters for search, filter, sort, pagination, and entries per page
+- [x] Modify home.blade.php to add UI elements for search, filter, sorting, entries per page, and pagination
+- [x] Start Laravel development server for testing
 
-## Summary
+## Remaining Tasks
 
-Added filter functionality for faculty, year, and month to the laporan/progres.blade.php page. The existing faculty filter was already present, so new year and month filters were added. The form layout was adjusted to accommodate 5 filter fields in a single row. Fixed a Carbon error in month display formatting.
+- [ ] Test search functionality (by user name, studio name, status)
+- [ ] Test filter by status (pending, approved, rejected)
+- [ ] Test sorting by ID and Created At (ascending/descending)
+- [ ] Test pagination (navigate through pages)
+- [ ] Test entries per page (10, 25, 50, 100)
+- [ ] Test reset functionality
+- [ ] Verify UI responsiveness and Bootstrap styling

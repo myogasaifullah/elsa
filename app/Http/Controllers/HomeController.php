@@ -24,12 +24,12 @@ class HomeController extends Controller
     /**
      * Menampilkan semua data dari database
      */
-    public function index()
+    public function index(Request $request)
     {
         // Mengambil semua data dari semua model
         $data = [
             'users' => User::all(),
-            'bookings' => Booking::all(),
+            'bookings' => $this->getBookings($request),
             'dosens' => Dosen::all(),
             'editors' => Editor::all(),
             'fakultas' => Fakultas::all(),
@@ -68,6 +68,48 @@ class HomeController extends Controller
         ];
 
         return view('home', compact('data'));
+    }
+
+    /**
+     * Get bookings with search, filter, sort, pagination
+     */
+    private function getBookings(Request $request)
+    {
+        $query = Booking::with(['user', 'studio']);
+
+        // Search
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('user', function ($userQuery) use ($search) {
+                    $userQuery->where('name', 'like', '%' . $search . '%');
+                })
+                    ->orWhereHas('studio', function ($studioQuery) use ($search) {
+                        $studioQuery->where('nama_studio', 'like', '%' . $search . '%');
+                    })
+                    ->orWhere('status', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Filter by status
+        if ($request->has('status') && !empty($request->status)) {
+            $query->where('status', $request->status);
+        }
+
+        // Sort
+        $sortBy = $request->get('sort_by', 'id');
+        $sortDirection = $request->get('sort_direction', 'asc');
+        if (in_array($sortBy, ['id', 'created_at'])) {
+            $query->orderBy($sortBy, $sortDirection);
+        }
+
+        // Entries per page
+        $perPage = $request->get('per_page', 10);
+        if (!in_array($perPage, [10, 25, 50, 100])) {
+            $perPage = 10;
+        }
+
+        return $query->paginate($perPage);
     }
 
     /**

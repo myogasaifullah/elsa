@@ -195,30 +195,29 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Data Bookings ({{ $data['bookings']->count() }})</h5>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>User</th>
-                  <th>Studio</th>
-                  <th>Status</th>
-                  <th>Created At</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach($data['bookings'] as $booking)
-                <tr>
-                  <td>{{ $booking->id }}</td>
-                  <td>{{ $booking->user->name ?? 'N/A' }}</td>
-                  <td>{{ $booking->studio->nama_studio ?? 'N/A' }}</td>
-                  <td><span class="badge bg-{{ $booking->status == 'approved' ? 'success' : 'warning' }}">{{ $booking->status }}</span></td>
-                  <td>{{ $booking->created_at ? $booking->created_at->format('d/m/Y H:i') : 'N/A' }}</td>
-                </tr>
-                @endforeach
-              </tbody>
-            </table>
-          </div>
+
+          <table class="table datatable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>User</th>
+                <th>Studio</th>
+                <th>Status</th>
+                <th>Created At</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($data['bookings'] as $booking)
+              <tr>
+                <td>{{ $booking->id }}</td>
+                <td>{{ $booking->user->name ?? 'N/A' }}</td>
+                <td>{{ $booking->studio->nama_studio ?? 'N/A' }}</td>
+                <td><span class="badge bg-{{ $booking->status == 'approved' ? 'success' : 'warning' }}">{{ $booking->status }}</span></td>
+                <td>{{ $booking->created_at ? $booking->created_at->format('d/m/Y H:i') : 'N/A' }}</td>
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -230,28 +229,27 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Data Fakultas ({{ $data['fakultas']->count() }})</h5>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <!-- <th>ID</th> -->
-                  <th>Nama Fakultas</th>
-                  <!-- <th>Kode</th> -->
-                  <th>Created At</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach($data['fakultas'] as $fakultas)
-                <tr>
-                  <!-- <td>{{ $fakultas->id }}</td> -->
-                  <td>{{ $fakultas->nama_fakultas }}</td>
-                  <!-- <td>{{ $fakultas->kode_fakultas }}</td> -->
-                  <td>{{ $fakultas->created_at ? $fakultas->created_at->format('d/m/Y H:i') : 'N/A' }}</td>
-                </tr>
-                @endforeach
-              </tbody>
-            </table>
-          </div>
+
+          <table class="table datatable">
+            <thead>
+              <tr>
+                <!-- <th>ID</th> -->
+                <th>Nama Fakultas</th>
+                <!-- <th>Kode</th> -->
+                <th>Created At</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($data['fakultas'] as $fakultas)
+              <tr>
+                <!-- <td>{{ $fakultas->id }}</td> -->
+                <td>{{ $fakultas->nama_fakultas }}</td>
+                <!-- <td>{{ $fakultas->kode_fakultas }}</td> -->
+                <td>{{ $fakultas->created_at ? $fakultas->created_at->format('d/m/Y H:i') : 'N/A' }}</td>
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -263,30 +261,29 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Data Prodi ({{ $data['prodis']->count() }})</h5>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <!-- <th>ID</th> -->
-                  <th>Nama Prodi</th>
-                  <!-- <th>Kode</th> -->
-                  <th>Fakultas</th>
-                  <th>Created At</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach($data['prodis'] as $prodi)
-                <tr>
-                  <!-- <td>{{ $prodi->id }}</td> -->
-                  <td>{{ $prodi->nama_prodi }}</td>
-                  <!-- <td>{{ $prodi->kode_prodi }}</td> -->
-                  <td>{{ $prodi->fakultas->nama_fakultas ?? 'N/A' }}</td>
-                  <td>{{ $prodi->created_at ? $prodi->created_at->format('d/m/Y H:i') : 'N/A' }}</td>
-                </tr>
-                @endforeach
-              </tbody>
-            </table>
-          </div>
+
+          <table class="table datatable">
+            <thead>
+              <tr>
+                <!-- <th>ID</th> -->
+                <th>Nama Prodi</th>
+                <!-- <th>Kode</th> -->
+                <th>Fakultas</th>
+                <th>Created At</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($data['prodis'] as $prodi)
+              <tr>
+                <!-- <td>{{ $prodi->id }}</td> -->
+                <td>{{ $prodi->nama_prodi }}</td>
+                <!-- <td>{{ $prodi->kode_prodi }}</td> -->
+                <td>{{ $prodi->fakultas->nama_fakultas ?? 'N/A' }}</td>
+                <td>{{ $prodi->created_at ? $prodi->created_at->format('d/m/Y H:i') : 'N/A' }}</td>
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -360,30 +357,29 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Data Mata Kuliah ({{ $data['mata_kuliahs']->count() }})</h5>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <!-- <th>ID</th> -->
-                  <th>Nama Mata Kuliah</th>
-                  <th>Fakultas</th>
-                  <th>Prodi</th>
-                  <!-- <th>Semester</th> -->
-                </tr>
-              </thead>
-              <tbody>
-                @foreach($data['mata_kuliahs'] as $matkul)
-                <tr>
-                  <!-- <td>{{ $matkul->id }}</td> -->
-                  <td>{{ $matkul->nama_mata_kuliah }}</td>
-                  <td>{{ $matkul->fakultas->nama_fakultas }}</td>
-                  <td>{{ $matkul->prodi->nama_prodi }}</td>
-                  <!-- <td>{{ $matkul->semester }}</td> -->
-                </tr>
-                @endforeach
-              </tbody>
-            </table>
-          </div>
+
+          <table class="table datatable">
+            <thead>
+              <tr>
+                <!-- <th>ID</th> -->
+                <th>Nama Mata Kuliah</th>
+                <th>Fakultas</th>
+                <th>Prodi</th>
+                <!-- <th>Semester</th> -->
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($data['mata_kuliahs'] as $matkul)
+              <tr>
+                <!-- <td>{{ $matkul->id }}</td> -->
+                <td>{{ $matkul->nama_mata_kuliah }}</td>
+                <td>{{ $matkul->fakultas->nama_fakultas }}</td>
+                <td>{{ $matkul->prodi->nama_prodi }}</td>
+                <!-- <td>{{ $matkul->semester }}</td> -->
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -395,40 +391,39 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Data Progress ({{ $data['progresses']->count() }})</h5>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <!-- <th>ID</th> -->
-                  <th>Jadwal Booking</th>
-                  <th>Progress</th>
-                  <th>Editor</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach($data['progresses'] as $progress)
-                <tr>
-                  <!-- <td>{{ $progress->id }}</td> -->
-                  <td>{{ $progress->jadwalBooking->judul_course ?? 'N/A' }}</td>
-                  <td>{{ $progress->persentase }}%</td>
-                  <td>{{ $progress->editor->nama ?? 'N/A' }}</td>
-                  <td>
-                    <span class="badge
-        @if(!empty($progress->publish_link_youtube))
-            bg-success
-        @else
-            bg-warning
-        @endif
-    ">
-                      {{ ucfirst($progress->keterangan) }}
-                    </span>
-                  </td>
-                </tr>
-                @endforeach
-              </tbody>
-            </table>
-          </div>
+
+          <table class="table datatable">
+            <thead>
+              <tr>
+                <!-- <th>ID</th> -->
+                <th>Jadwal Booking</th>
+                <th>Progress</th>
+                <th>Editor</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($data['progresses'] as $progress)
+              <tr>
+                <!-- <td>{{ $progress->id }}</td> -->
+                <td>{{ $progress->jadwalBooking->judul_course ?? 'N/A' }}</td>
+                <td>{{ $progress->persentase }}%</td>
+                <td>{{ $progress->editor->nama ?? 'N/A' }}</td>
+                <td>
+                  <span class="badge
+    @if(!empty($progress->publish_link_youtube))
+        bg-success
+    @else
+        bg-warning
+    @endif
+">
+                    {{ ucfirst($progress->keterangan) }}
+                  </span>
+                </td>
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
