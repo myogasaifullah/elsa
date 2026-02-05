@@ -56,38 +56,31 @@
           <tr>
             <th>No</th>
             <th>Nama Dosen</th>
-            <th>Target Shooting</th>
-            <th>Sudah Shooting</th>
-            <th>Proses Edit</th>
-            <th>Belum Shooting</th>
-            <th>Sudah Terbit</th>
-            <th>Keterangan Shooting</th>
-            <th>Keterangan Video</th>
+            <th>Kategori Mooc</th>
+            <th>Judul Course</th>
+            <th>Tautan Video</th>
           </tr>
         </thead>
         <tbody>
-          @foreach($groupedProgress as $dosen => $data)
+          @forelse($progress as $item)
           <tr>
             <td>{{ $loop->iteration }}</td>
-            <td>{{ $dosen }}</td>
-            <td>{{ $data['target'] }}</td>
-            <td>{{ $data['sudah'] }}</td>
-            <td>{{ $data['proses'] }}</td>
-            <td>{{ $data['belum'] }}</td>
-            <td>{{ $data['terbit'] }}</td>
-            <td>{{ $data['keterangan_shooting'] }}</td>
-            <td>{{ $data['keterangan_video'] }}</td>
+            <td>{{ $item->jadwalBooking->dosen->nama_dosen ?? '-' }}</td>
+            <td>{{ $item->jadwalBooking->kategori_mooc ?? '-' }}</td>
+            <td>{{ $item->jadwalBooking->judul_course ?? '-' }}</td>
+            <td>
+              @if($item->publish_link_youtube)
+              <a href="{{ $item->publish_link_youtube }}" target="_blank" class="btn btn-sm btn-primary">Lihat Video</a>
+              @else
+              -
+              @endif
+            </td>
           </tr>
-          @endforeach
+          @empty
           <tr>
-            <td colspan="2">TOTAL</td>
-            <td>{{ array_sum(array_column($groupedProgress, 'target')) }}</td>
-            <td>{{ array_sum(array_column($groupedProgress, 'sudah')) }}</td>
-            <td>{{ array_sum(array_column($groupedProgress, 'proses')) }}</td>
-            <td>{{ array_sum(array_column($groupedProgress, 'belum')) }}</td>
-            <td>{{ array_sum(array_column($groupedProgress, 'terbit')) }}</td>
-            <td colspan="2"></td>
+            <td colspan="5" class="text-center">Tidak ada data MOOC dengan tautan video yang ditemukan.</td>
           </tr>
+          @endforelse
         </tbody>
       </table>
     </div>

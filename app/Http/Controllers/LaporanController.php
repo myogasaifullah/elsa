@@ -352,52 +352,48 @@ class LaporanController extends Controller
     {
         ActivityLogService::log('lihat_laporan_mooc', 'Melihat halaman laporan mooc');
 
-        // For MOOC, we'll use the same as rekap/dosen since it's similar
         $filterRekap = $request->only(['rekap_date_from', 'rekap_date_to', 'rekap_dosen']);
-        $progress = $this->getFilteredProgress($filterRekap);
 
-        $groupedProgress = [];
-        foreach ($progress as $item) {
-            $dosenName = $item->jadwalBooking->dosen->nama_dosen ?? 'N/A';
-            if (!isset($groupedProgress[$dosenName])) {
-                $groupedProgress[$dosenName] = [
-                    'target' => $item->jadwalBooking->dosen->target_video_dosen ?? 0,
-                    'sudah' => 0,
-                    'proses' => 0,
-                    'belum' => 0,
-                    'terbit' => 0,
-                    'keterangan_shooting' => '-',
-                    'keterangan_video' => '-',
-                ];
-            }
+        // Get filtered progress data with additional filters for MOOC category and video link
+        $progress = $this->getFilteredMoocProgress($filterRekap);
 
-            if ($item->jadwalBooking->status == 'sudah shooting') {
-                $groupedProgress[$dosenName]['sudah']++;
-            }
-            if ($item->progres == 'progres') {
-                $groupedProgress[$dosenName]['proses']++;
-            }
-            if ($item->jadwalBooking->status == 'belum shooting') {
-                $groupedProgress[$dosenName]['belum']++;
-            }
-            if ($item->progres == 'selesai') {
-                $groupedProgress[$dosenName]['terbit']++;
-            }
+        return view('laporan.mooc', compact('progress', 'filterRekap'));
+    }
 
-            if ($groupedProgress[$dosenName]['target'] == $groupedProgress[$dosenName]['sudah']) {
-                $groupedProgress[$dosenName]['keterangan_shooting'] = 'sudah shooting';
-            } else {
-                $groupedProgress[$dosenName]['keterangan_shooting'] = 'belum selesai';
-            }
+    private function getFilteredMoocProgress($filters)
+    {
+        $query = Progress::with([
+            'jadwalBooking.dosen.fakultas',
+            'jadwalBooking.dosen.prodi',
+            'jadwalBooking.studio',
+            'editor'
+        ])
+            ->whereNotNull('publish_link_youtube') // Only data with video link
+            ->whereHas('jadwalBooking', function ($q) {
+                $q->where('jenis_kategori', 'Mooc'); // Only MOOC category
+            })
+            ->orderBy('created_at', 'desc');
 
-            if ($groupedProgress[$dosenName]['target'] == $groupedProgress[$dosenName]['terbit']) {
-                $groupedProgress[$dosenName]['keterangan_video'] = 'selesai terbit';
-            } else {
-                $groupedProgress[$dosenName]['keterangan_video'] = 'belum terbit';
-            }
+        // Apply filters
+        if (!empty($filters['rekap_date_from'])) {
+            $query->whereHas('jadwalBooking', function ($q) use ($filters) {
+                $q->where('tanggal', '>=', $filters['rekap_date_from']);
+            });
         }
 
-        return view('laporan.mooc', compact('groupedProgress', 'filterRekap'));
+        if (!empty($filters['rekap_date_to'])) {
+            $query->whereHas('jadwalBooking', function ($q) use ($filters) {
+                $q->where('tanggal', '<=', $filters['rekap_date_to']);
+            });
+        }
+
+        if (!empty($filters['rekap_dosen'])) {
+            $query->whereHas('jadwalBooking.dosen', function ($q) use ($filters) {
+                $q->where('nama_dosen', 'like', '%' . $filters['rekap_dosen'] . '%');
+            });
+        }
+
+        return $query->get();
     }
 
     public function dosen(Request $request)
