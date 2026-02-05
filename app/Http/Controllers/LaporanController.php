@@ -184,18 +184,18 @@ class LaporanController extends Controller
             ->orderBy('created_at', 'desc');
 
         // Apply filters
-        if (!empty($filters['dosen_date_from'])) {
-            $query->where('tanggal_upload_youtube', '>=', $filters['dosen_date_from']);
-        }
-
-        if (!empty($filters['dosen_date_to'])) {
-            $query->where('tanggal_upload_youtube', '<=', $filters['dosen_date_to']);
-        }
-
-        if (!empty($filters['dosen_status'])) {
+        if (!empty($filters['dosen_name'])) {
             $query->whereHas('jadwalBooking.dosen', function ($q) use ($filters) {
-                $q->where('status_dosen', $filters['dosen_status']);
+                $q->where('nama_dosen', 'like', '%' . $filters['dosen_name'] . '%');
             });
+        }
+
+        if (!empty($filters['upload_year'])) {
+            $query->whereYear('tanggal_upload_youtube', $filters['upload_year']);
+        }
+
+        if (!empty($filters['upload_month'])) {
+            $query->whereMonth('tanggal_upload_youtube', $filters['upload_month']);
         }
 
         if ($perPage) {
@@ -523,12 +523,14 @@ class LaporanController extends Controller
     {
         ActivityLogService::log('lihat_laporan_terbit', 'Melihat halaman laporan terbit');
 
-        $perPage = $request->get('per_page', 5);
-        $filterDosen = $request->only(['dosen_date_from', 'dosen_date_to', 'dosen_status']);
+        $filterDosen = $request->only(['dosen_name', 'upload_year', 'upload_month']);
 
-        $terbitData = $this->getFilteredTerbit($filterDosen, $perPage);
+        // Load all data for client-side DataTable pagination like arsip.blade.php
+        $terbitData = $this->getFilteredTerbit($filterDosen);
 
-        return view('laporan.terbit', compact('terbitData', 'filterDosen'));
+        $dosens = Dosen::all();
+
+        return view('laporan.terbit', compact('terbitData', 'filterDosen', 'dosens'));
     }
 
     public function progres(Request $request)
