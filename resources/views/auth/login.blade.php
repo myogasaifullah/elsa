@@ -109,7 +109,7 @@
               </div>
 
               <div class="credits">
-                <a href="https://bootstrapmade.com/">Elsa</a>
+                &copy; {{ date('Y') }} <a href="https://bootstrapmade.com/">Elsa</a>. All Rights Reserved.
               </div>
 
             </div>

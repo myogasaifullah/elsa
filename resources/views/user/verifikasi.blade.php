@@ -82,7 +82,7 @@
         <h5 class="card-title">Data Editor <span>| Today</span></h5>
           <!-- <h2>Jumlah Editor: {{ isset($editors) ? $editors->count() : 0 }}</h2> -->
           <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahEditor">
-            <i class="bi bi-plus-circle "></i> Tambah MOOC
+            <i class="bi bi-plus-circle "></i> Tambah Editor
           </button>
         </div>
 
