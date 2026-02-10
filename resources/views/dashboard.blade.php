@@ -283,6 +283,132 @@
                 </div>
             </div>
 
+            <!-- Advanced Visualizations Section -->
+            <div class="col-lg-12 mt-4">
+                <h4 class="section-title">Advanced Analytics</h4>
+                <div class="row">
+                    <!-- Fakultas Distribution Pie Chart -->
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Fakultas Distribution</h5>
+                                <div class="chart-container" style="height: 300px;">
+                                    <canvas id="fakultasChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Prodi by Fakultas Bar Chart -->
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Prodi by Fakultas</h5>
+                                <div class="chart-container" style="height: 300px;">
+                                    <canvas id="prodiChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dosen by Status Doughnut Chart -->
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Dosen by Status</h5>
+                                <div class="chart-container" style="height: 300px;">
+                                    <canvas id="dosenChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MOOC by Fakultas Radar Chart -->
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">MOOC by Fakultas</h5>
+                                <div class="chart-container" style="height: 300px;">
+                                    <canvas id="moocChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Completion Trend Line Chart -->
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Progress Completion Trend</h5>
+                                <div class="chart-container" style="height: 300px;">
+                                    <canvas id="progressTrendChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Activity Logs by Type Bar Chart -->
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Activity Logs by Type</h5>
+                                <div class="chart-container" style="height: 300px;">
+                                    <canvas id="activityChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bookings Trend Weekly Area Chart -->
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Weekly Bookings Trend</h5>
+                                <div class="chart-container" style="height: 300px;">
+                                    <canvas id="weeklyBookingsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Studio Utilization Horizontal Bar Chart -->
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Studio Utilization</h5>
+                                <div class="chart-container" style="height: 300px;">
+                                    <canvas id="studioChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Editor Performance Radar Chart -->
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Editor Performance</h5>
+                                <div class="chart-container" style="height: 300px;">
+                                    <canvas id="editorChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Monthly Growth Multi-Line Chart -->
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Monthly Growth Trends</h5>
+                                <div class="chart-container" style="height: 400px;">
+                                    <canvas id="growthChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Recent Data Tables -->
             <div class="col-lg-12 mt-4">
                 <h4 class="section-title">Recent Activity</h4>
@@ -635,6 +761,571 @@
                                 text: 'Days'
                             }
                         }
+                    }
+                }
+            });
+
+            // Fakultas Distribution Pie Chart
+            const fakultasCtx = document.getElementById('fakultasChart').getContext('2d');
+            const fakultasData = @json($data['fakultas_distribution']);
+
+            new Chart(fakultasCtx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(fakultasData),
+                    datasets: [{
+                        data: Object.values(fakultasData),
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 205, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(153, 102, 255, 0.8)',
+                            'rgba(255, 159, 64, 0.8)',
+                            'rgba(201, 203, 207, 0.8)',
+                            'rgba(255, 99, 71, 0.8)'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                    return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
+                }
+            });
+
+            // Prodi by Fakultas Bar Chart
+            const prodiCtx = document.getElementById('prodiChart').getContext('2d');
+            const prodiData = @json($data['prodi_by_fakultas']);
+
+            new Chart(prodiCtx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(prodiData),
+                    datasets: [{
+                        label: 'Jumlah Prodi',
+                        data: Object.values(prodiData),
+                        backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Jumlah Prodi'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Fakultas'
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeInOutQuart'
+                    }
+                }
+            });
+
+            // Dosen by Status Doughnut Chart
+            const dosenCtx = document.getElementById('dosenChart').getContext('2d');
+            const dosenData = @json($data['dosen_by_status']);
+
+            new Chart(dosenCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(dosenData),
+                    datasets: [{
+                        data: Object.values(dosenData),
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 205, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(153, 102, 255, 0.8)'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff',
+                        hoverBorderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                    return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+                                }
+                            }
+                        }
+                    },
+                    cutout: '60%',
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
+                }
+            });
+
+            // MOOC by Fakultas Radar Chart
+            const moocCtx = document.getElementById('moocChart').getContext('2d');
+            const moocData = @json($data['mooc_by_fakultas']);
+
+            new Chart(moocCtx, {
+                type: 'radar',
+                data: {
+                    labels: Object.keys(moocData),
+                    datasets: [{
+                        label: 'Jumlah MOOC',
+                        data: Object.values(moocData),
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(255, 99, 132, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 2000
+                    }
+                }
+            });
+
+            // Progress Completion Trend Line Chart
+            const progressTrendCtx = document.getElementById('progressTrendChart').getContext('2d');
+            const progressTrendData = @json($data['progress_completion_trend']);
+
+            // Prepare data for last 30 days
+            const progressDates = Object.keys(progressTrendData);
+            const progressValues = Object.values(progressTrendData);
+
+            new Chart(progressTrendCtx, {
+                type: 'line',
+                data: {
+                    labels: progressDates.map(date => new Date(date).toLocaleDateString('id-ID')),
+                    datasets: [{
+                        label: 'Rata-rata Progress (%)',
+                        data: progressValues,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return 'Progress: ' + context.parsed.y.toFixed(1) + '%';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Progress (%)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Tanggal'
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeInOutQuart'
+                    }
+                }
+            });
+
+            // Activity Logs by Type Bar Chart
+            const activityCtx = document.getElementById('activityChart').getContext('2d');
+            const activityData = @json($data['activity_logs_by_type']);
+
+            new Chart(activityCtx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(activityData),
+                    datasets: [{
+                        label: 'Jumlah Aktivitas',
+                        data: Object.values(activityData),
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 205, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(153, 102, 255, 0.8)',
+                            'rgba(255, 159, 64, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 205, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Jumlah Aktivitas'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Tipe Aktivitas'
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1500,
+                        easing: 'easeInOutBounce'
+                    }
+                }
+            });
+
+            // Weekly Bookings Trend Area Chart
+            const weeklyBookingsCtx = document.getElementById('weeklyBookingsChart').getContext('2d');
+            const weeklyBookingsData = @json($data['bookings_trend_weekly']);
+
+            // Generate week labels for last 12 weeks
+            const weekLabels = [];
+            for (let i = 11; i >= 0; i--) {
+                const weekStart = new Date();
+                weekStart.setDate(weekStart.getDate() - (i * 7));
+                weekLabels.push('Week ' + (52 - i));
+            }
+
+            const weeklyValues = Array.from({
+                length: 12
+            }, (_, i) => weeklyBookingsData[52 - i] || 0);
+
+            new Chart(weeklyBookingsCtx, {
+                type: 'line',
+                data: {
+                    labels: weekLabels,
+                    datasets: [{
+                        label: 'Weekly Bookings',
+                        data: weeklyValues,
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        backgroundColor: 'rgba(153, 102, 255, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: 'rgba(153, 102, 255, 1)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Jumlah Booking'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Minggu'
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeInOutQuart'
+                    }
+                }
+            });
+
+            // Studio Utilization Horizontal Bar Chart
+            const studioCtx = document.getElementById('studioChart').getContext('2d');
+            const studioData = @json($data['studio_utilization']);
+
+            new Chart(studioCtx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(studioData),
+                    datasets: [{
+                        label: 'Total Bookings',
+                        data: Object.values(studioData),
+                        backgroundColor: 'rgba(255, 159, 64, 0.8)',
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Jumlah Booking'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Studio'
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1500,
+                        easing: 'easeInOutBounce'
+                    }
+                }
+            });
+
+            // Editor Performance Radar Chart
+            const editorCtx = document.getElementById('editorChart').getContext('2d');
+            const editorData = @json($data['editor_performance']);
+
+            new Chart(editorCtx, {
+                type: 'radar',
+                data: {
+                    labels: Object.keys(editorData),
+                    datasets: [{
+                        label: 'Jumlah Progress',
+                        data: Object.values(editorData),
+                        backgroundColor: 'rgba(255, 205, 86, 0.2)',
+                        borderColor: 'rgba(255, 205, 86, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(255, 205, 86, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(255, 205, 86, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 2000
+                    }
+                }
+            });
+
+            // Monthly Growth Multi-Line Chart
+            const growthCtx = document.getElementById('growthChart').getContext('2d');
+            const growthData = @json($data['monthly_growth']);
+
+            const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+            new Chart(growthCtx, {
+                type: 'line',
+                data: {
+                    labels: monthLabels,
+                    datasets: [{
+                            label: 'Users',
+                            data: monthLabels.map((_, i) => growthData.users[i + 1] || 0),
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                            borderWidth: 3,
+                            fill: false,
+                            tension: 0.4,
+                            pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        },
+                        {
+                            label: 'Bookings',
+                            data: monthLabels.map((_, i) => growthData.bookings[i + 1] || 0),
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                            borderWidth: 3,
+                            fill: false,
+                            tension: 0.4,
+                            pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        },
+                        {
+                            label: 'Progress',
+                            data: monthLabels.map((_, i) => growthData.progress[i + 1] || 0),
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                            borderWidth: 3,
+                            fill: false,
+                            tension: 0.4,
+                            pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Jumlah'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Bulan'
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 2500,
+                        easing: 'easeInOutQuart'
+                    },
+                    interaction: {
+                        mode: 'nearest',
+                        axis: 'x',
+                        intersect: false
                     }
                 }
             });
