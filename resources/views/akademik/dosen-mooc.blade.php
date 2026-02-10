@@ -309,17 +309,18 @@
         });
     });
 
-    // Edit Dosen
-    document.querySelectorAll('.btn-edit-dosen').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const id = this.getAttribute('data-id');
-        const nama = this.getAttribute('data-nama');
-        const nuptk = this.getAttribute('data-nuptk');
-        const target = this.getAttribute('data-target');
-        const status = this.getAttribute('data-status');
-        const fakultas = this.getAttribute('data-fakultas');
-        const fakultasName = this.getAttribute('data-fakultas-name');
-        const prodi = this.getAttribute('data-prodi');
+    // Edit Dosen - using event delegation
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('btn-edit-dosen')) {
+        const btn = e.target;
+        const id = btn.getAttribute('data-id');
+        const nama = btn.getAttribute('data-nama');
+        const nuptk = btn.getAttribute('data-nuptk');
+        const target = btn.getAttribute('data-target');
+        const status = btn.getAttribute('data-status');
+        const fakultas = btn.getAttribute('data-fakultas');
+        const fakultasName = btn.getAttribute('data-fakultas-name');
+        const prodi = btn.getAttribute('data-prodi');
 
         document.getElementById('editDosenId').value = id;
         document.getElementById('editNamaDosen').value = nama;
@@ -331,7 +332,7 @@
         document.getElementById('editProdiId').value = prodi;
 
         new bootstrap.Modal(document.getElementById('modalEditDosen')).show();
-      });
+      }
     });
 
     // Submit form edit dosen
@@ -362,19 +363,20 @@
         });
     });
 
-    // Edit MOOC
-    document.querySelectorAll('.btn-edit-mooc').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const id = this.getAttribute('data-id');
-        const judul = this.getAttribute('data-judul');
-        const dosen = this.getAttribute('data-dosen');
+    // Edit MOOC - using event delegation
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('btn-edit-mooc')) {
+        const btn = e.target;
+        const id = btn.getAttribute('data-id');
+        const judul = btn.getAttribute('data-judul');
+        const dosen = btn.getAttribute('data-dosen');
 
         document.getElementById('editMoocId').value = id;
         document.getElementById('editJudulMooc').value = judul;
         document.getElementById('editDosenMoocId').value = dosen;
 
         new bootstrap.Modal(document.getElementById('modalEditMooc')).show();
-      });
+      }
     });
 
     // Submit form edit mooc
@@ -493,10 +495,11 @@
       });
     });
 
-    // Hapus MOOC
-    document.querySelectorAll('.btn-hapus-mooc').forEach(button => {
-      button.addEventListener('click', function() {
-        const id = this.getAttribute('data-id');
+    // Hapus MOOC - using event delegation
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('btn-hapus-mooc')) {
+        const button = e.target;
+        const id = button.getAttribute('data-id');
         Swal.fire({
           title: 'Hapus MOOC?',
           text: 'Data MOOC akan dihapus dari sistem.',
@@ -526,7 +529,7 @@
               });
           }
         });
-      });
+      }
     });
   });
 </script>

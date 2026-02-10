@@ -291,25 +291,27 @@
          .catch(() => Swal.fire('Error!', 'Terjadi kesalahan jaringan.', 'error'));
      });
 
-     // Tombol Edit Mata Kuliah
-     document.querySelectorAll('.btn-editmatkul').forEach(btn => {
-       btn.addEventListener('click', function() {
-         document.getElementById('editMatkulId').value = this.getAttribute('data-id');
-         document.getElementById('editFakultasMatkul').value = this.getAttribute('data-fakultas');
-         document.getElementById('hiddenEditFakultasMatkul').value = this.getAttribute('data-fakultas');
-         document.getElementById('editProdiMatkul').value = this.getAttribute('data-prodi');
-         document.getElementById('editKodeMatkul').value = this.getAttribute('data-kode');
-         document.getElementById('editNamaMatkul').value = this.getAttribute('data-nama');
-         document.getElementById('editSksMatkul').value = this.getAttribute('data-sks');
-         document.getElementById('editKeteranganMatkul').value = this.getAttribute('data-keterangan');
+     // Tombol Edit Mata Kuliah - using event delegation
+     document.addEventListener('click', function(e) {
+       if (e.target.classList.contains('btn-editmatkul')) {
+         const btn = e.target;
+         document.getElementById('editMatkulId').value = btn.getAttribute('data-id');
+         document.getElementById('editFakultasMatkul').value = btn.getAttribute('data-fakultas');
+         document.getElementById('hiddenEditFakultasMatkul').value = btn.getAttribute('data-fakultas');
+         document.getElementById('editProdiMatkul').value = btn.getAttribute('data-prodi');
+         document.getElementById('editKodeMatkul').value = btn.getAttribute('data-kode');
+         document.getElementById('editNamaMatkul').value = btn.getAttribute('data-nama');
+         document.getElementById('editSksMatkul').value = btn.getAttribute('data-sks');
+         document.getElementById('editKeteranganMatkul').value = btn.getAttribute('data-keterangan');
          new bootstrap.Modal(document.getElementById('modalEditMatkul')).show();
-       });
+       }
      });
 
-     // Tombol Hapus Mata Kuliah
-     document.querySelectorAll('.btn-hapusmatkul').forEach(btn => {
-       btn.addEventListener('click', function() {
-         var id = this.getAttribute('data-id');
+     // Tombol Hapus Mata Kuliah - using event delegation
+     document.addEventListener('click', function(e) {
+       if (e.target.classList.contains('btn-hapusmatkul')) {
+         const btn = e.target;
+         var id = btn.getAttribute('data-id');
          Swal.fire({
            title: 'Hapus Mata Kuliah?',
            text: 'Data mata kuliah akan dihapus permanen.',
@@ -338,7 +340,7 @@
                .catch(() => Swal.fire('Error!', 'Terjadi kesalahan jaringan.', 'error'));
            }
          });
-       });
+       }
      });
 
      // Auto-select Fakultas when Prodi changes in Add Modal
