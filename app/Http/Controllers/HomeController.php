@@ -313,7 +313,7 @@ class HomeController extends Controller
                 // Progress by persentase range
                 'progress_by_persentase' => Progress::selectRaw(
                     '
-                    CASE 
+                    CASE
                         WHEN persentase = 0 THEN "0%"
                         WHEN persentase > 0 AND persentase <= 25 THEN "1-25%"
                         WHEN persentase > 25 AND persentase <= 50 THEN "26-50%"
@@ -321,7 +321,7 @@ class HomeController extends Controller
                         WHEN persentase > 75 AND persentase < 100 THEN "76-99%"
                         WHEN persentase = 100 THEN "100%"
                         ELSE "Unknown"
-                    END as progress_range, 
+                    END as progress_range,
                     COUNT(*) as total'
                 )
                     ->groupBy('progress_range')
@@ -347,6 +347,124 @@ class HomeController extends Controller
                     ->orderBy('date')
                     ->get()
                     ->pluck('count', 'date')
+                    ->toArray(),
+
+                // Prodi per fakultas
+                'prodi_per_fakultas' => Fakultas::withCount('prodis')
+                    ->get()
+                    ->pluck('prodis_count', 'nama_fakultas')
+                    ->toArray(),
+
+                // Total MOOC count
+                'mooc_per_kategori' => Mooc::count(),
+
+                // Progress per status (keterangan)
+                'progress_per_status' => Progress::selectRaw('keterangan, COUNT(*) as total')
+                    ->groupBy('keterangan')
+                    ->pluck('total', 'keterangan')
+                    ->toArray(),
+
+                // Bookings by status
+                'bookings_by_status' => Booking::selectRaw('status, COUNT(*) as total')
+                    ->groupBy('status')
+                    ->pluck('total', 'status')
+                    ->toArray(),
+
+                // Mata kuliah per fakultas
+                'mata_kuliah_per_fakultas' => Fakultas::withCount('mataKuliahs')
+                    ->get()
+                    ->pluck('mata_kuliahs_count', 'nama_fakultas')
+                    ->toArray(),
+
+                // Dosen per fakultas
+                'dosen_per_fakultas' => Fakultas::withCount('dosens')
+                    ->get()
+                    ->pluck('dosens_count', 'nama_fakultas')
+                    ->toArray(),
+
+                // Studios by location
+                'studios_by_location' => Studio::selectRaw('lokasi, COUNT(*) as total')
+                    ->groupBy('lokasi')
+                    ->pluck('total', 'lokasi')
+                    ->toArray(),
+
+                // Editor performance metrics - comprehensive KPIs
+                'editor_performance' => Progress::selectRaw('editors.nama as editor_name, COUNT(*) as total_progress, AVG(persentase) as avg_progress')
+                    ->join('editors', 'progress.editor_id', '=', 'editors.id')
+                    ->groupBy('editors.nama')
+                    ->get()
+                    ->pluck('avg_progress', 'editor_name')
+                    ->toArray(),
+
+                // Editor completion rate
+                'editor_completion_rate' => Progress::selectRaw('editors.nama as editor_name, COUNT(CASE WHEN persentase = 100 THEN 1 END) * 100.0 / COUNT(*) as completion_rate')
+                    ->join('editors', 'progress.editor_id', '=', 'editors.id')
+                    ->groupBy('editors.nama')
+                    ->havingRaw('COUNT(*) > 0')
+                    ->get()
+                    ->pluck('completion_rate', 'editor_name')
+                    ->toArray(),
+
+                // Editor workload (total tasks assigned)
+                'editor_workload' => Progress::selectRaw('editors.nama as editor_name, COUNT(*) as total_tasks')
+                    ->join('editors', 'progress.editor_id', '=', 'editors.id')
+                    ->groupBy('editors.nama')
+                    ->get()
+                    ->pluck('total_tasks', 'editor_name')
+                    ->toArray(),
+
+                // Editor efficiency (completed tasks per day - last 30 days)
+                'editor_efficiency' => Progress::selectRaw('editors.nama as editor_name, COUNT(CASE WHEN persentase = 100 AND progress.updated_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) THEN 1 END) / 30.0 as tasks_per_day')
+                    ->join('editors', 'progress.editor_id', '=', 'editors.id')
+                    ->groupBy('editors.nama')
+                    ->get()
+                    ->pluck('tasks_per_day', 'editor_name')
+                    ->toArray(),
+
+                // Editor progress distribution
+                'editor_progress_distribution' => Progress::selectRaw('editors.nama as editor_name,
+                        COUNT(CASE WHEN persentase = 0 THEN 1 END) as not_started,
+                        COUNT(CASE WHEN persentase > 0 AND persentase < 100 THEN 1 END) as in_progress,
+                        COUNT(CASE WHEN persentase = 100 THEN 1 END) as completed')
+                    ->join('editors', 'progress.editor_id', '=', 'editors.id')
+                    ->groupBy('editors.nama')
+                    ->get()
+                    ->keyBy('editor_name')
+                    ->toArray(),
+
+                // Editor activity timeline (last 7 days)
+                'editor_activity_timeline' => Progress::selectRaw('editors.nama as editor_name, DATE(progress.updated_at) as activity_date, COUNT(*) as activities')
+                    ->join('editors', 'progress.editor_id', '=', 'editors.id')
+                    ->where('progress.updated_at', '>=', now()->subDays(7))
+                    ->groupBy('editors.nama', 'activity_date')
+                    ->orderBy('activity_date')
+                    ->get()
+                    ->groupBy('editor_name')
+                    ->toArray(),
+
+                // Editor quality score (based on progress consistency)
+                'editor_quality_score' => Progress::selectRaw('editors.nama as editor_name,
+                        AVG(persentase) as avg_progress,
+                        STDDEV(persentase) as progress_variance,
+                        (AVG(persentase) - COALESCE(STDDEV(persentase), 0)) as quality_score')
+                    ->join('editors', 'progress.editor_id', '=', 'editors.id')
+                    ->groupBy('editors.nama')
+                    ->havingRaw('COUNT(*) > 1')
+                    ->get()
+                    ->pluck('quality_score', 'editor_name')
+                    ->toArray(),
+
+                // Editor task completion trend (last 90 days)
+                'editor_completion_trend' => Progress::selectRaw('editors.nama as editor_name,
+                        DATE(progress.updated_at) as activity_date,
+                        COUNT(*) as total_updates,
+                        COUNT(CASE WHEN persentase = 100 THEN 1 END) as completed_tasks')
+                    ->join('editors', 'progress.editor_id', '=', 'editors.id')
+                    ->where('progress.updated_at', '>=', now()->subDays(90))
+                    ->groupBy('editors.nama', 'activity_date')
+                    ->orderBy('activity_date')
+                    ->get()
+                    ->groupBy('editor_name')
                     ->toArray()
             ]
         ];
