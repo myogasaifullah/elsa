@@ -230,6 +230,16 @@ $monthNames = [
                 </div>
             </div>
 
+            <!-- Editor Activity Timeline Chart -->
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Editor Activity Timeline</h5>
+                        <canvas id="editorActivityTimelineChart" style="max-height: 300px;"></canvas>
+                    </div>
+                </div>
+            </div>
+
             <!-- Editor Progress Distribution Chart -->
             <div class="col-lg-12">
                 <div class="card">
@@ -301,6 +311,7 @@ $monthNames = [
         const editorWorkload = JSON.parse('{!! json_encode($editorWorkload) !!}');
         const editorEfficiency = JSON.parse('{!! json_encode($editorEfficiency) !!}');
         const editorProgressDistribution = JSON.parse('{!! json_encode($editorProgressDistribution) !!}');
+        const editorActivityTimeline = JSON.parse('{!! json_encode($editorActivityTimeline) !!}');
         const editorQualityScore = JSON.parse('{!! json_encode($editorQualityScore) !!}');
         const editorCompletionTrend = JSON.parse('{!! json_encode($editorCompletionTrend) !!}');
         const monthNames = JSON.parse('{!! json_encode($monthNames) !!}');
@@ -916,6 +927,53 @@ $monthNames = [
                 scales: {
                     r: {
                         beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Editor Activity Timeline Chart
+        const editorActivityTimelineCtx = document.getElementById('editorActivityTimelineChart').getContext('2d');
+        const editorActivityLabels = Object.keys(editorActivityTimeline).map(date => {
+            return new Date(date).toLocaleDateString('id-ID', {
+                weekday: 'short',
+                day: 'numeric',
+                month: 'short'
+            });
+        });
+        const editorActivityData = Object.values(editorActivityTimeline);
+
+        new Chart(editorActivityTimelineCtx, {
+            type: 'line',
+            data: {
+                labels: editorActivityLabels,
+                datasets: [{
+                    label: 'Editor Activities',
+                    data: editorActivityData,
+                    fill: false,
+                    borderColor: 'rgb(255, 159, 64)',
+                    tension: 0.1,
+                    pointBackgroundColor: 'rgb(255, 159, 64)',
+                    pointBorderColor: '#fff',
+                    pointRadius: 5,
+                    pointHoverRadius: 7
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of Activities'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
                     }
                 }
             }
