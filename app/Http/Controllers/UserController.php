@@ -264,6 +264,26 @@ class UserController extends Controller
     }
 
     /**
+     * Get user data for AJAX request.
+     *
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getUserData(User $user)
+    {
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'nomor_telepon' => $user->nomor_telepon,
+            'fakultas_id' => $user->fakultas_id,
+            'prodi_id' => $user->prodi_id,
+            'role' => $user->role,
+            'status' => $user->status,
+        ]);
+    }
+
+    /**
      * Display a listing of progress data.
      * For admin: show all progress data.
      * For dosen: show progress data filtered by logged-in dosen's name.

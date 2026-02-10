@@ -11,114 +11,129 @@ use App\Http\Controllers\JadwalBookingController;
 use App\Http\Controllers\StudioMatkulController;
 use App\Http\Controllers\EditorController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProgresController;
 
 Route::get('laporan/export/combined-fakultas/pdf', [LaporanController::class, 'exportCombinedFakultasPdf'])->name('laporan.export.combined-fakultas.pdf');
 Route::get('laporan/export/combined-fakultas/excel', [LaporanController::class, 'exportCombinedFakultasExcel'])->name('laporan.export.combined-fakultas.excel');
-
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\ProgresController;
 
 // Route::get('/verifikasi', [UserController::class, 'editor'])->name('user.verifikasi');
 Route::post('/editor', [EditorController::class, 'store'])->name('editor.store');
 Route::put('/editor/{editor}', [EditorController::class, 'update'])->name('editor.update');
 Route::delete('/editor/{editor}', [EditorController::class, 'destroy'])->name('editor.destroy');
 
-// Index
-Route::get('/fakultas-prodi', [FakultasProdiController::class, 'index'])->name('fakultas-prodi.index');
+// Admin routes
+Route::middleware('admin')->group(function () {
+    // Index
+    Route::get('/fakultas-prodi', [FakultasProdiController::class, 'index'])->name('fakultas-prodi.index');
 
-// Fakultas
-Route::post('/fakultas', [FakultasProdiController::class, 'storeFakultas'])->name('fakultas.store');
-Route::put('/fakultas/{id}', [FakultasProdiController::class, 'updateFakultas'])->name('fakultas.update');
-Route::delete('/fakultas/{id}', [FakultasProdiController::class, 'destroyFakultas'])->name('fakultas.destroy');
-Route::post('/fakultas/import', [FakultasProdiController::class, 'importFakultas'])->name('fakultas.import');
+    // Fakultas
+    Route::post('/fakultas', [FakultasProdiController::class, 'storeFakultas'])->name('fakultas.store');
+    Route::put('/fakultas/{id}', [FakultasProdiController::class, 'updateFakultas'])->name('fakultas.update');
+    Route::delete('/fakultas/{id}', [FakultasProdiController::class, 'destroyFakultas'])->name('fakultas.destroy');
+    Route::post('/fakultas/import', [FakultasProdiController::class, 'importFakultas'])->name('fakultas.import');
 
-// Prodi
-Route::post('/prodi', [FakultasProdiController::class, 'storeProdi'])->name('prodi.store');
-Route::put('/prodi/{id}', [FakultasProdiController::class, 'updateProdi'])->name('prodi.update');
-Route::delete('/prodi/{id}', [FakultasProdiController::class, 'destroyProdi'])->name('prodi.destroy');
-Route::post('/prodi/import', [FakultasProdiController::class, 'importProdi'])->name('prodi.import');
+    // Prodi
+    Route::post('/prodi', [FakultasProdiController::class, 'storeProdi'])->name('prodi.store');
+    Route::put('/prodi/{id}', [FakultasProdiController::class, 'updateProdi'])->name('prodi.update');
+    Route::delete('/prodi/{id}', [FakultasProdiController::class, 'destroyProdi'])->name('prodi.destroy');
+    Route::post('/prodi/import', [FakultasProdiController::class, 'importProdi'])->name('prodi.import');
+});
 
-// Studio & Mata Kuliah
-Route::get('/studio-matkul', [StudioMatkulController::class, 'index'])->name('studio-matkul.index');
+// Admin routes for Studio & Mata Kuliah
+Route::middleware('admin')->group(function () {
+    // Studio & Mata Kuliah
+    Route::get('/studio-matkul', [StudioMatkulController::class, 'index'])->name('studio-matkul.index');
 
-// Studio
-Route::post('/studio', [StudioMatkulController::class, 'storeStudio'])->name('studio.store');
-Route::put('/studio/{id}', [StudioMatkulController::class, 'updateStudio'])->name('studio.update');
-Route::delete('/studio/{id}', [StudioMatkulController::class, 'destroyStudio'])->name('studio.destroy');
+    // Studio
+    Route::post('/studio', [StudioMatkulController::class, 'storeStudio'])->name('studio.store');
+    Route::put('/studio/{id}', [StudioMatkulController::class, 'updateStudio'])->name('studio.update');
+    Route::delete('/studio/{id}', [StudioMatkulController::class, 'destroyStudio'])->name('studio.destroy');
 
-// Gambar Studio
-Route::delete('/gambar-studio/{id}', [StudioMatkulController::class, 'destroyGambarStudio'])->name('gambar-studio.destroy');
+    // Gambar Studio
+    Route::delete('/gambar-studio/{id}', [StudioMatkulController::class, 'destroyGambarStudio'])->name('gambar-studio.destroy');
 
-// Mata Kuliah
-Route::post('/mata-kuliah', [StudioMatkulController::class, 'storeMataKuliah'])->name('mata-kuliah.store');
-Route::put('/mata-kuliah/{id}', [StudioMatkulController::class, 'updateMataKuliah'])->name('mata-kuliah.update');
-Route::delete('/mata-kuliah/{id}', [StudioMatkulController::class, 'destroyMataKuliah'])->name('mata-kuliah.destroy');
-Route::post('/mata-kuliah/import', [StudioMatkulController::class, 'importMataKuliah'])->name('mata-kuliah.import');
+    // Mata Kuliah
+    Route::post('/mata-kuliah', [StudioMatkulController::class, 'storeMataKuliah'])->name('mata-kuliah.store');
+    Route::put('/mata-kuliah/{id}', [StudioMatkulController::class, 'updateMataKuliah'])->name('mata-kuliah.update');
+    Route::delete('/mata-kuliah/{id}', [StudioMatkulController::class, 'destroyMataKuliah'])->name('mata-kuliah.destroy');
+    Route::post('/mata-kuliah/import', [StudioMatkulController::class, 'importMataKuliah'])->name('mata-kuliah.import');
+});
 
 Route::get('/', function () {
     return view('index');
 });
 
-Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
-Route::get('/laporan/editor', [LaporanController::class, 'editor'])->name('laporan.editor');
-Route::get('/laporan/jadwal', [LaporanController::class, 'jadwal'])->name('laporan.jadwal');
-Route::get('/laporan/mooc', [LaporanController::class, 'mooc'])->name('laporan.mooc');
-Route::get('/laporan/dosen', [LaporanController::class, 'dosen'])->name('laporan.dosen');
-Route::get('/laporan/terbit', [LaporanController::class, 'terbit'])->name('laporan.terbit');
-Route::get('/laporan/progres', [LaporanController::class, 'progres'])->name('laporan.progres');
-Route::get('/laporan/fakultas', [LaporanController::class, 'fakultas'])->name('laporan.fakultas');
-Route::get('/arsip', [App\Http\Controllers\ArsipController::class, 'index'])->name('arsip.index');
-Route::get('/arsip/create', [App\Http\Controllers\ArsipController::class, 'create'])->name('arsip.create');
-Route::post('/arsip', [App\Http\Controllers\ArsipController::class, 'store'])->name('arsip.store');
-Route::post('/arsip/import', [App\Http\Controllers\ArsipController::class, 'import'])->name('arsip.import');
-Route::get('/arsip/{arsip}/edit', [App\Http\Controllers\ArsipController::class, 'edit'])->name('arsip.edit');
-Route::put('/arsip/{arsip}', [App\Http\Controllers\ArsipController::class, 'update'])->name('arsip.update');
-Route::delete('/arsip/{arsip}', [App\Http\Controllers\ArsipController::class, 'destroy'])->name('arsip.destroy');
+// Admin routes for Laporan and Arsip
+Route::middleware('admin')->group(function () {
+    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+    Route::get('/laporan/editor', [LaporanController::class, 'editor'])->name('laporan.editor');
+    Route::get('/laporan/jadwal', [LaporanController::class, 'jadwal'])->name('laporan.jadwal');
+    Route::get('/laporan/mooc', [LaporanController::class, 'mooc'])->name('laporan.mooc');
+    Route::get('/laporan/dosen', [LaporanController::class, 'dosen'])->name('laporan.dosen');
+    Route::get('/laporan/terbit', [LaporanController::class, 'terbit'])->name('laporan.terbit');
+    Route::get('/laporan/progres', [LaporanController::class, 'progres'])->name('laporan.progres');
+    Route::get('/laporan/fakultas', [LaporanController::class, 'fakultas'])->name('laporan.fakultas');
+    Route::get('/arsip', [App\Http\Controllers\ArsipController::class, 'index'])->name('arsip.index');
+    Route::get('/arsip/create', [App\Http\Controllers\ArsipController::class, 'create'])->name('arsip.create');
+    Route::post('/arsip', [App\Http\Controllers\ArsipController::class, 'store'])->name('arsip.store');
+    Route::post('/arsip/import', [App\Http\Controllers\ArsipController::class, 'import'])->name('arsip.import');
+    Route::get('/arsip/{arsip}/edit', [App\Http\Controllers\ArsipController::class, 'edit'])->name('arsip.edit');
+    Route::put('/arsip/{arsip}', [App\Http\Controllers\ArsipController::class, 'update'])->name('arsip.update');
+    Route::delete('/arsip/{arsip}', [App\Http\Controllers\ArsipController::class, 'destroy'])->name('arsip.destroy');
+});
 
-// Laporan Export Routes
-Route::get('/laporan/export/progress/pdf', [LaporanController::class, 'exportProgressPdf'])->name('laporan.export.progress.pdf');
-Route::get('/laporan/export/progress/excel', [LaporanController::class, 'exportProgressExcel'])->name('laporan.export.progress.excel');
-Route::get('/laporan/export/jadwal/pdf', [LaporanController::class, 'exportJadwalPdf'])->name('laporan.export.jadwal.pdf');
-Route::get('/laporan/export/jadwal/excel', [LaporanController::class, 'exportJadwalExcel'])->name('laporan.export.jadwal.excel');
-Route::get('/laporan/export/mooc/pdf', [LaporanController::class, 'exportMoocPdf'])->name('laporan.export.mooc.pdf');
-Route::get('/laporan/export/mooc/excel', [LaporanController::class, 'exportMoocExcel'])->name('laporan.export.mooc.excel');
-Route::get('/laporan/export/rekap/pdf', [LaporanController::class, 'exportRekapPdf'])->name('laporan.export.rekap.pdf');
-Route::get('/laporan/export/rekap/excel', [LaporanController::class, 'exportRekapExcel'])->name('laporan.export.rekap.excel');
-Route::get('/laporan/export/dosen/pdf', [LaporanController::class, 'exportDosenPdf'])->name('laporan.export.dosen.pdf');
-Route::get('/laporan/export/dosen/excel', [LaporanController::class, 'exportDosenExcel'])->name('laporan.export.dosen.excel');
-Route::get('/laporan/export/fakultas/pdf', [LaporanController::class, 'exportFakultasPdf'])->name('laporan.export.fakultas.pdf');
-Route::get('/laporan/export/fakultas/excel', [LaporanController::class, 'exportFakultasExcel'])->name('laporan.export.fakultas.excel');
+// Admin routes for Laporan and Arsip (continued)
+Route::middleware('admin')->group(function () {
+    // Laporan Export Routes
+    Route::get('/laporan/export/progress/pdf', [LaporanController::class, 'exportProgressPdf'])->name('laporan.export.progress.pdf');
+    Route::get('/laporan/export/progress/excel', [LaporanController::class, 'exportProgressExcel'])->name('laporan.export.progress.excel');
+    Route::get('/laporan/export/jadwal/pdf', [LaporanController::class, 'exportJadwalPdf'])->name('laporan.export.jadwal.pdf');
+    Route::get('/laporan/export/jadwal/excel', [LaporanController::class, 'exportJadwalExcel'])->name('laporan.export.jadwal.excel');
+    Route::get('/laporan/export/mooc/pdf', [LaporanController::class, 'exportMoocPdf'])->name('laporan.export.mooc.pdf');
+    Route::get('/laporan/export/mooc/excel', [LaporanController::class, 'exportMoocExcel'])->name('laporan.export.mooc.excel');
+    Route::get('/laporan/export/rekap/pdf', [LaporanController::class, 'exportRekapPdf'])->name('laporan.export.rekap.pdf');
+    Route::get('/laporan/export/rekap/excel', [LaporanController::class, 'exportRekapExcel'])->name('laporan.export.rekap.excel');
+    Route::get('/laporan/export/dosen/pdf', [LaporanController::class, 'exportDosenPdf'])->name('laporan.export.dosen.pdf');
+    Route::get('/laporan/export/dosen/excel', [LaporanController::class, 'exportDosenExcel'])->name('laporan.export.dosen.excel');
+    Route::get('/laporan/export/fakultas/pdf', [LaporanController::class, 'exportFakultasPdf'])->name('laporan.export.fakultas.pdf');
+    Route::get('/laporan/export/fakultas/excel', [LaporanController::class, 'exportFakultasExcel'])->name('laporan.export.fakultas.excel');
+});
 
 Route::get('/test-export', function () {
     $progress = \App\Models\Progress::with('jadwalBooking.dosen')->get(); // Retrieve actual progress data
     return view('exports.progress', compact('progress'));
 })->name('test.export');
 
-Route::get('/user', [App\Http\Controllers\UserController::class, 'index'])->name('user.index');
-Route::get('/listuser', [App\Http\Controllers\UserController::class, 'index'])->name('user.listuser');
-Route::post('/user', [App\Http\Controllers\UserController::class, 'store'])->name('user.store');
-Route::put('/user/{userId}', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
-Route::delete('/user/{user}', [App\Http\Controllers\UserController::class, 'destroy'])->name('user.destroy');
+// Admin routes
+Route::middleware('admin')->group(function () {
+    Route::get('/user', [App\Http\Controllers\UserController::class, 'index'])->name('user.index');
+    Route::get('/listuser', [App\Http\Controllers\UserController::class, 'index'])->name('user.listuser');
+    Route::get('/user/{user}/data', [App\Http\Controllers\UserController::class, 'getUserData'])->name('user.data');
+    Route::post('/user', [App\Http\Controllers\UserController::class, 'store'])->name('user.store');
+    Route::put('/user/{userId}', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
+    Route::delete('/user/{user}', [App\Http\Controllers\UserController::class, 'destroy'])->name('user.destroy');
 
-Route::get('/verifikasi', [App\Http\Controllers\UserController::class, 'verifikasi'])->name('user.verifikasi');
-Route::put('/verifikasi/status/{id}', [App\Http\Controllers\UserController::class, 'updateStatus'])->name('user.updateStatus');
+    Route::get('/verifikasi', [App\Http\Controllers\UserController::class, 'verifikasi'])->name('user.verifikasi');
+    Route::put('/verifikasi/status/{id}', [App\Http\Controllers\UserController::class, 'updateStatus'])->name('user.updateStatus');
 
-Route::get('/dosen', [App\Http\Controllers\UserController::class, 'dosenIndex'])->name('dosen.index');
+    Route::get('/dosen', [App\Http\Controllers\UserController::class, 'dosenIndex'])->name('dosen.index');
 
-// Dosen & MOOC Routes
-Route::get('/dosen-mooc', [DosenMoocController::class, 'index'])->name('dosen-mooc.index');
+    // Dosen & MOOC Routes
+    Route::get('/dosen-mooc', [DosenMoocController::class, 'index'])->name('dosen-mooc.index');
 
-// Dosen Routes
-Route::post('/dosen', [DosenMoocController::class, 'storeDosen'])->name('dosen.store');
-Route::put('/dosen/{dosen}', [DosenMoocController::class, 'updateDosen'])->name('dosen.update');
-Route::delete('/dosen/{dosen}', [DosenMoocController::class, 'destroyDosen'])->name('dosen.destroy');
-Route::post('/dosen/import', [DosenMoocController::class, 'importDosen'])->name('dosen.import');
+    // Dosen Routes
+    Route::post('/dosen', [DosenMoocController::class, 'storeDosen'])->name('dosen.store');
+    Route::put('/dosen/{dosen}', [DosenMoocController::class, 'updateDosen'])->name('dosen.update');
+    Route::delete('/dosen/{dosen}', [DosenMoocController::class, 'destroyDosen'])->name('dosen.destroy');
+    Route::post('/dosen/import', [DosenMoocController::class, 'importDosen'])->name('dosen.import');
 
-// MOOC Routes
-Route::post('/mooc', [DosenMoocController::class, 'storeMooc'])->name('mooc.store');
-Route::put('/mooc/{mooc}', [DosenMoocController::class, 'updateMooc'])->name('mooc.update');
-Route::delete('/mooc/{mooc}', [DosenMoocController::class, 'destroyMooc'])->name('mooc.destroy');
-Route::post('/mooc/import', [DosenMoocController::class, 'importMooc'])->name('mooc.import');
+    // MOOC Routes
+    Route::post('/mooc', [DosenMoocController::class, 'storeMooc'])->name('mooc.store');
+    Route::put('/mooc/{mooc}', [DosenMoocController::class, 'updateMooc'])->name('mooc.update');
+    Route::delete('/mooc/{mooc}', [DosenMoocController::class, 'destroyMooc'])->name('mooc.destroy');
+    Route::post('/mooc/import', [DosenMoocController::class, 'importMooc'])->name('mooc.import');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/jadwal', [JadwalBookingController::class, 'index'])->name('jadwal.index');

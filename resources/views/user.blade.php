@@ -58,13 +58,13 @@
           @foreach($users as $user)
           <tr>
             <th scope="row">{{ $loop->iteration }}</th>
-            <td>{{ $user->name }}</td>
-            <td>{{ $user->email }}</td>
-            <td>{{ $user->fakultas ? $user->fakultas->nama_fakultas : '-' }}</td>
-            <td>{{ $user->prodi ? $user->prodi->nama_prodi : '-' }}</td>
-            <td>{{ $user->nomor_telepon ?? '-' }}</td>
-            <td>{{ $user->role ?? '-' }}</td>
-            <td>
+            <td class="user-name">{{ $user->name }}</td>
+            <td class="user-email">{{ $user->email }}</td>
+            <td class="user-fakultas">{{ $user->fakultas ? $user->fakultas->nama_fakultas : '-' }}</td>
+            <td class="user-prodi">{{ $user->prodi ? $user->prodi->nama_prodi : '-' }}</td>
+            <td class="user-nomor-telepon">{{ $user->nomor_telepon ?? '-' }}</td>
+            <td class="user-role">{{ $user->role ?? '-' }}</td>
+            <td class="user-status">
               @if($user->status == 'active')
               <span class="badge bg-success">Aktif</span>
               @elseif($user->status == 'pending')
@@ -74,17 +74,15 @@
               @endif
             </td>
             <td>
-              <button class="btn btn-sm btn-primary"
-                data-toggle="modal"
-                data-target="#modalEditUser"
+              <button class="btn btn-sm btn-primary btn-edit-user"
                 data-user-id="{{ $user->id }}"
                 data-user-name="{{ $user->name }}"
                 data-user-email="{{ $user->email }}"
                 data-user-nomor-telepon="{{ $user->nomor_telepon }}"
                 data-user-fakultas-id="{{ $user->fakultas_id }}"
                 data-user-prodi-id="{{ $user->prodi_id }}"
-                data-user-role="{{ $user->role }}"
-                data-user-status="{{ $user->status }}">
+                data-user-role="{{ $user->role ?: 'Mahasiswa' }}"
+                data-user-status="{{ $user->status ?: 'active' }}">
                 <i class="bi bi-pencil-square"></i>
               </button>
               <form action="{{ route('user.destroy', $user) }}" method="POST" class="d-inline">
@@ -260,18 +258,18 @@
 </main><!-- End #main -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Handle edit button click
-    document.querySelectorAll('[data-bs-target="#modalEditUser"]').forEach(btn => {
-      btn.addEventListener('click', function() {
-        // Get user data from button attributes
-        const userId = this.getAttribute('data-user-id');
-        const userName = this.getAttribute('data-user-name');
-        const userEmail = this.getAttribute('data-user-email');
-        const userNomorTelepon = this.getAttribute('data-user-nomor-telepon');
-        const userFakultasId = this.getAttribute('data-user-fakultas-id');
-        const userProdiId = this.getAttribute('data-user-prodi-id');
-        const userRole = this.getAttribute('data-user-role');
-        const userStatus = this.getAttribute('data-user-status');
+    // Handle edit button click using event delegation
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('btn-edit-user') || e.target.closest('.btn-edit-user')) {
+        const btn = e.target.classList.contains('btn-edit-user') ? e.target : e.target.closest('.btn-edit-user');
+        const userId = btn.getAttribute('data-user-id');
+        const userName = btn.getAttribute('data-user-name');
+        const userEmail = btn.getAttribute('data-user-email');
+        const userNomorTelepon = btn.getAttribute('data-user-nomor-telepon');
+        const userFakultasId = btn.getAttribute('data-user-fakultas-id');
+        const userProdiId = btn.getAttribute('data-user-prodi-id');
+        const userRole = btn.getAttribute('data-user-role');
+        const userStatus = btn.getAttribute('data-user-status');
 
         // Populate modal fields
         document.getElementById('edit_username').value = userName;
@@ -281,10 +279,14 @@
         document.getElementById('edit_prodi').value = userProdiId;
         document.getElementById('edit_role').value = userRole;
         document.getElementById('edit_status').value = userStatus;
+        document.getElementById('edit_password').value = ''; // Always empty for password
 
         // Set form action URL
         document.getElementById('editUserForm').action = `/user/${userId}`;
-      });
+
+        // Show modal
+        new bootstrap.Modal(document.getElementById('modalEditUser')).show();
+      }
     });
 
     // Handle edit form submission
@@ -365,10 +367,11 @@
         });
     });
 
-    // Handle delete button click
-    document.querySelectorAll('.btn-hapus').forEach(btn => {
-      btn.addEventListener('click', function(e) {
+    // Handle delete button click using event delegation
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('btn-hapus') || e.target.closest('.btn-hapus')) {
         e.preventDefault();
+        const btn = e.target.classList.contains('btn-hapus') ? e.target : e.target.closest('.btn-hapus');
         Swal.fire({
           title: 'Hapus User?',
           text: 'Data User akan dihapus dari sistem.',
@@ -379,10 +382,10 @@
         }).then((result) => {
           if (result.isConfirmed) {
             // Submit the form
-            this.closest('form').submit();
+            btn.closest('form').submit();
           }
         });
-      });
+      }
     });
   });
 </script>
