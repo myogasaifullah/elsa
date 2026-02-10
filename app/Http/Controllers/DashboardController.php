@@ -116,6 +116,11 @@ class DashboardController extends Controller
                 ->pluck('total_progress', 'nama')
                 ->toArray(),
 
+            'booking_status_distribution' => Booking::selectRaw('status, COUNT(*) as total')
+                ->groupBy('status')
+                ->pluck('total', 'status')
+                ->toArray(),
+
             'monthly_growth' => [
                 'users' => User::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
                     ->whereYear('created_at', date('Y'))

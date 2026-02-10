@@ -395,6 +395,18 @@
                         </div>
                     </div>
 
+                    <!-- Booking Status Distribution Polar Area Chart -->
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Booking Status Distribution</h5>
+                                <div class="chart-container" style="height: 300px;">
+                                    <canvas id="bookingStatusChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Monthly Growth Multi-Line Chart -->
                     <div class="col-lg-12">
                         <div class="card">
@@ -1233,6 +1245,71 @@
                     },
                     animation: {
                         duration: 2000
+                    }
+                }
+            });
+
+            // Booking Status Distribution Polar Area Chart
+            const bookingStatusCtx = document.getElementById('bookingStatusChart').getContext('2d');
+            const bookingStatusData = @json($data['booking_status_distribution']);
+
+            new Chart(bookingStatusCtx, {
+                type: 'polarArea',
+                data: {
+                    labels: Object.keys(bookingStatusData),
+                    datasets: [{
+                        data: Object.values(bookingStatusData),
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 205, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(153, 102, 255, 0.8)',
+                            'rgba(255, 159, 64, 0.8)',
+                            'rgba(201, 203, 207, 0.8)',
+                            'rgba(255, 99, 71, 0.8)'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff',
+                        hoverBorderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                    return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true,
+                        duration: 2000,
+                        easing: 'easeInOutQuart'
+                    },
+                    scales: {
+                        r: {
+                            ticks: {
+                                display: false
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
                     }
                 }
             });
