@@ -1,8 +1,6 @@
-@extends('layout.header')
+@extends('layouts.admin')
 
-@section('title', 'Laporan Fakultas')
-
-@include('layout.sidebar')
+@section('content')
 
 <style>
   /* DataTables Buttons - Transparent Style */

@@ -1,8 +1,6 @@
-@extends('layout.header')
+@extends('layouts.admin')
 
-@section('title', 'Laporan Mooc')
-
-@include('layout.sidebar')
+@section('content')
 
 
 

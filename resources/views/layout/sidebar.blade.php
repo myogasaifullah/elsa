@@ -35,8 +35,8 @@
     </li>
 
     <!-- User -->
-    <li class="nav-item"> <a class="nav-link {{ Request::is('listuser', 'verifikasi') ? '' : 'collapsed' }}" data-bs-target="#user-nav" data-bs-toggle="collapse" href="#"> <i class="bi bi-person"></i><span>User</span><i class="bi bi-chevron-down ms-auto"></i> </a>
-      <ul id="user-nav" class="nav-content collapse {{ Request::is('listuser', 'verifikasi') ? 'show' : '' }}" data-bs-parent="#sidebar-nav">
+    <li class="nav-item"> <a class="nav-link {{ Request::is('listuser', 'verifikasi') ? '' : 'collapsed' }}" data-target="#user-nav" data-toggle="collapse" href="#"> <i class="bi bi-person"></i><span>User</span><i class="bi bi-chevron-down ms-auto"></i> </a>
+      <ul id="user-nav" class="nav-content collapse {{ Request::is('listuser', 'verifikasi') ? 'show' : '' }}" data-parent="#sidebar-nav">
         <li> <a href="{{ url('listuser') }}" class="{{ Request::is('listuser') ? 'active' : '' }}"> <i class="bi bi-circle"></i><span>List user</span> </a> </li>
         <li> <a href="{{ url('verifikasi') }}" class="{{ Request::is('verifikasi') ? 'active' : '' }}"> <i class="bi bi-circle"></i><span>Verifikasi</span> </a> </li>
       </ul>
@@ -45,10 +45,10 @@
     <!-- Akademik -->
     <li class="nav-item">
       <a class="nav-link {{ Request::is('fakultas-prodi*','studio-matkul*','dosen-mooc*') ? '' : 'collapsed' }}"
-        data-bs-target="#akademik-nav" data-bs-toggle="collapse" href="#">
+        data-target="#akademik-nav" data-toggle="collapse" href="#">
         <i class="bi bi-layout-text-window-reverse"></i><span>Akademik</span><i class="bi bi-chevron-down ms-auto"></i>
       </a>
-      <ul id="akademik-nav" class="nav-content collapse {{ Request::is('fakultas-prodi*','studio-matkul*','dosen-mooc*') ? 'show' : '' }}" data-bs-parent="#sidebar-nav">
+      <ul id="akademik-nav" class="nav-content collapse {{ Request::is('fakultas-prodi*','studio-matkul*','dosen-mooc*') ? 'show' : '' }}" data-parent="#sidebar-nav">
         <li>
           <a href="{{ url('fakultas-prodi') }}" class="{{ Request::is('fakultas-prodi*') ? 'active' : '' }}">
             <i class="bi bi-circle"></i><span>Fakultas-Prodi</span>
@@ -75,10 +75,10 @@
 
     <!-- Kelola Booking -->
     <li class="nav-item">
-      <a class="nav-link {{ Request::is('','acc*','booking*') ? '' : 'collapsed' }}" data-bs-target="#booking-nav" data-bs-toggle="collapse" href="#">
+      <a class="nav-link {{ Request::is('','acc*','booking*') ? '' : 'collapsed' }}" data-target="#booking-nav" data-toggle="collapse" href="#">
         <i class="bi bi-menu-button-wide"></i><span>Kelola Booking</span><i class="bi bi-chevron-down ms-auto"></i>
       </a>
-      <ul id="booking-nav" class="nav-content collapse {{ Request::is('','acc*','booking*') ? 'show' : '' }}" data-bs-parent="#sidebar-nav">
+      <ul id="booking-nav" class="nav-content collapse {{ Request::is('','acc*','booking*') ? 'show' : '' }}" data-parent="#sidebar-nav">
         <li>
           <a href="{{ url('acc') }}" class="{{ Request::is('acc*') ? 'active' : '' }}">
             <i class="bi bi-circle"></i><span>Acc Booking</span>
@@ -100,8 +100,8 @@
     </li>
 
     <!-- Laporan -->
-    <li class="nav-item"> <a class="nav-link {{ Request::is('laporan*') ? '' : 'collapsed' }}" data-bs-target="#laporan-nav" data-bs-toggle="collapse" href="#"> <i class="bi bi-file-earmark"></i><span>Laporan</span><i class="bi bi-chevron-down ms-auto"></i> </a>
-      <ul id="laporan-nav" class="nav-content collapse {{ Request::is('laporan*') ? 'show' : '' }}" data-bs-parent="#sidebar-nav">
+    <li class="nav-item"> <a class="nav-link {{ Request::is('laporan*') ? '' : 'collapsed' }}" data-target="#laporan-nav" data-toggle="collapse" href="#"> <i class="bi bi-file-earmark"></i><span>Laporan</span><i class="bi bi-chevron-down ms-auto"></i> </a>
+      <ul id="laporan-nav" class="nav-content collapse {{ Request::is('laporan*') ? 'show' : '' }}" data-parent="#sidebar-nav">
         <li> <a href="{{ url('laporan/editor') }}" class="{{ Request::is('laporan/editor') ? 'active' : '' }}"> <i class="bi bi-circle"></i><span>Editor</span> </a> </li>
         <li> <a href="{{ url('laporan/jadwal') }}" class="{{ Request::is('laporan/jadwal') ? 'active' : '' }}"> <i class="bi bi-circle"></i><span>Jadwal</span> </a> </li>
         <li> <a href="{{ url('laporan/mooc') }}" class="{{ Request::is('laporan/mooc') ? 'active' : '' }}"> <i class="bi bi-circle"></i><span>Mooc</span> </a> </li>

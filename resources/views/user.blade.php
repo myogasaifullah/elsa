@@ -66,25 +66,25 @@
             <td>{{ $user->role ?? '-' }}</td>
             <td>
               @if($user->status == 'active')
-                <span class="badge bg-success">Aktif</span>
+              <span class="badge bg-success">Aktif</span>
               @elseif($user->status == 'pending')
-                <span class="badge bg-warning">Pending</span>
+              <span class="badge bg-warning">Pending</span>
               @else
-                <span class="badge bg-secondary">{{ $user->status }}</span>
+              <span class="badge bg-secondary">{{ $user->status }}</span>
               @endif
             </td>
             <td>
               <button class="btn btn-sm btn-primary"
-                      data-bs-toggle="modal"
-                      data-bs-target="#modalEditUser"
-                      data-user-id="{{ $user->id }}"
-                      data-user-name="{{ $user->name }}"
-                      data-user-email="{{ $user->email }}"
-                      data-user-nomor-telepon="{{ $user->nomor_telepon }}"
-                      data-user-fakultas-id="{{ $user->fakultas_id }}"
-                      data-user-prodi-id="{{ $user->prodi_id }}"
-                      data-user-role="{{ $user->role }}"
-                      data-user-status="{{ $user->status }}">
+                data-toggle="modal"
+                data-target="#modalEditUser"
+                data-user-id="{{ $user->id }}"
+                data-user-name="{{ $user->name }}"
+                data-user-email="{{ $user->email }}"
+                data-user-nomor-telepon="{{ $user->nomor_telepon }}"
+                data-user-fakultas-id="{{ $user->fakultas_id }}"
+                data-user-prodi-id="{{ $user->prodi_id }}"
+                data-user-role="{{ $user->role }}"
+                data-user-status="{{ $user->status }}">
                 <i class="bi bi-pencil-square"></i>
               </button>
               <form action="{{ route('user.destroy', $user) }}" method="POST" class="d-inline">
@@ -309,60 +309,60 @@
 
       // Send AJAX request
       fetch(this.action, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-          'Accept': 'application/json'
-        }
-      })
-      .then(response => {
-        console.log('Response status:', response.status);
-        return response.json().then(data => {
-          if (response.ok) {
-            return data;
+          method: 'POST',
+          body: formData,
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+          }
+        })
+        .then(response => {
+          console.log('Response status:', response.status);
+          return response.json().then(data => {
+            if (response.ok) {
+              return data;
+            } else {
+              throw new Error(data.message || 'Gagal memperbarui data');
+            }
+          });
+        })
+        .then(data => {
+          console.log('Response data:', data);
+          if (data.success) {
+            Swal.fire({
+              title: 'Berhasil!',
+              text: data.message || 'Data user berhasil diperbarui.',
+              icon: 'success',
+              confirmButtonText: 'OK'
+            }).then(() => {
+              location.reload();
+            });
           } else {
             throw new Error(data.message || 'Gagal memperbarui data');
           }
-        });
-      })
-      .then(data => {
-        console.log('Response data:', data);
-        if (data.success) {
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          let errorMessage = 'Terjadi kesalahan saat memperbarui data';
+
+          if (error.message.includes('Validation failed')) {
+            errorMessage = 'Validation Error: Please check your input data';
+          } else {
+            errorMessage = error.message;
+          }
+
           Swal.fire({
-            title: 'Berhasil!',
-            text: data.message || 'Data user berhasil diperbarui.',
-            icon: 'success',
+            title: 'Error!',
+            text: errorMessage,
+            icon: 'error',
             confirmButtonText: 'OK'
-          }).then(() => {
-            location.reload();
           });
-        } else {
-          throw new Error(data.message || 'Gagal memperbarui data');
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        let errorMessage = 'Terjadi kesalahan saat memperbarui data';
-
-        if (error.message.includes('Validation failed')) {
-          errorMessage = 'Validation Error: Please check your input data';
-        } else {
-          errorMessage = error.message;
-        }
-
-        Swal.fire({
-          title: 'Error!',
-          text: errorMessage,
-          icon: 'error',
-          confirmButtonText: 'OK'
+        })
+        .finally(() => {
+          // Reset button state
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
         });
-      })
-      .finally(() => {
-        // Reset button state
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-      });
     });
 
     // Handle delete button click
