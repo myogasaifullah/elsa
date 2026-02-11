@@ -24,9 +24,9 @@ class RegisteredUserController extends Controller
     {
         $fakultas = Fakultas::all();
         $prodis = Prodi::all();
-        
+
         ActivityLogService::log('view', 'Melihat halaman registrasi user baru');
-        
+
         return view('auth.register', compact('fakultas', 'prodis'));
     }
 
@@ -39,7 +39,7 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'fakultas_id' => ['nullable', 'exists:fakultas,id'],
             'prodi_id' => ['nullable', 'exists:prodis,id'],
@@ -60,8 +60,6 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        Auth::login($user);
-
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('login', absolute: false));
     }
 }

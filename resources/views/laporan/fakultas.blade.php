@@ -179,4 +179,3 @@
 
 </main>
 
-@include('layout.footer')

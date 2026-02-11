@@ -88,4 +88,3 @@
 
 </main>
 
-@include('layout.footer')

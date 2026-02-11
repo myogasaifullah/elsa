@@ -200,7 +200,7 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.3.2/css/fixedHeader.bootstrap5.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
 
-@include('layout.footer')
+
 
 <!-- Initialize DataTable after all scripts are loaded -->
 <script>

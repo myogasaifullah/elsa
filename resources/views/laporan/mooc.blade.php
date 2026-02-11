@@ -120,4 +120,3 @@
 
 </main>
 
-@include('layout.footer')
