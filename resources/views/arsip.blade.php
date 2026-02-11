@@ -127,6 +127,101 @@
                             </div>
                         </div>
 
+                        <!-- Additional Filters Row -->
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <label for="filterDosen" class="form-label">Filter Dosen</label>
+                                <select class="form-select form-select-sm" id="filterDosen">
+                                    <option value="">Semua Dosen</option>
+                                    @php
+                                    $dosenOptions = $progress->pluck('jadwalBooking.dosen.nama_dosen')->unique()->filter()->sort();
+                                    @endphp
+                                    @foreach($dosenOptions as $dosen)
+                                    <option value="{{ $dosen }}">{{ $dosen }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="filterFakultas" class="form-label">Filter Fakultas</label>
+                                <select class="form-select form-select-sm" id="filterFakultas">
+                                    <option value="">Semua Fakultas</option>
+                                    @php
+                                    $fakultasOptions = $progress->pluck('jadwalBooking.dosen.fakultas.nama_fakultas')->unique()->filter()->sort();
+                                    @endphp
+                                    @foreach($fakultasOptions as $fakultas)
+                                    <option value="{{ $fakultas }}">{{ $fakultas }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="filterProdi" class="form-label">Filter Prodi</label>
+                                <select class="form-select form-select-sm" id="filterProdi">
+                                    <option value="">Semua Prodi</option>
+                                    @php
+                                    $prodiOptions = $progress->pluck('jadwalBooking.dosen.prodi.nama_prodi')->unique()->filter()->sort();
+                                    @endphp
+                                    @foreach($prodiOptions as $prodi)
+                                    <option value="{{ $prodi }}">{{ $prodi }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="filterMataKuliah" class="form-label">Filter Mata Kuliah</label>
+                                <select class="form-select form-select-sm" id="filterMataKuliah">
+                                    <option value="">Semua Mata Kuliah</option>
+                                    @php
+                                    $mataKuliahOptions = $progress->pluck('jadwalBooking.nama_mata_kuliah')->unique()->filter()->sort();
+                                    @endphp
+                                    @foreach($mataKuliahOptions as $mataKuliah)
+                                    <option value="{{ $mataKuliah }}">{{ $mataKuliah }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- More Filters Row -->
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <label for="filterKategoriMooc" class="form-label">Filter Kategori MOOC</label>
+                                <select class="form-select form-select-sm" id="filterKategoriMooc">
+                                    <option value="">Semua Kategori MOOC</option>
+                                    @php
+                                    $kategoriMoocOptions = $progress->pluck('jadwalBooking.kategori_mooc')->unique()->filter()->sort();
+                                    @endphp
+                                    @foreach($kategoriMoocOptions as $kategoriMooc)
+                                    <option value="{{ $kategoriMooc }}">{{ $kategoriMooc }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="filterStudio" class="form-label">Filter Studio</label>
+                                <select class="form-select form-select-sm" id="filterStudio">
+                                    <option value="">Semua Studio</option>
+                                    @php
+                                    $studioOptions = $progress->pluck('jadwalBooking.studio.nama_studio')->unique()->filter()->sort();
+                                    @endphp
+                                    @foreach($studioOptions as $studio)
+                                    <option value="{{ $studio }}">{{ $studio }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="filterJenisKategori" class="form-label">Filter Jenis Kategori</label>
+                                <select class="form-select form-select-sm" id="filterJenisKategori">
+                                    <option value="">Semua Jenis Kategori</option>
+                                    @php
+                                    $jenisKategoriOptions = $progress->pluck('jadwalBooking.jenis_kategori')->unique()->filter()->sort();
+                                    @endphp
+                                    @foreach($jenisKategoriOptions as $jenisKategori)
+                                    <option value="{{ $jenisKategori }}">{{ $jenisKategori }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button type="button" class="btn btn-secondary btn-sm" id="clearFilters">Clear Filters</button>
+                            </div>
+                        </div>
+
                         <div class="table-responsive">
                             <table id="arsipTable" class="table table-sm  align-middle">
                                 <thead class="table-light text-center">
@@ -217,12 +312,12 @@
 
                                         {{-- Fakultas --}}
                                         <td class="text-center">
-                                            {{ $item->jadwalBooking->user->fakultas->nama_fakultas ?? '-' }}
+                                            {{ $item->jadwalBooking->dosen->fakultas->nama_fakultas ?? '-' }}
                                         </td>
 
                                         {{-- Prodi --}}
                                         <td class="text-center">
-                                            {{ $item->jadwalBooking->user->prodi->nama_prodi ?? '-' }}
+                                            {{ $item->jadwalBooking->dosen->prodi->nama_prodi ?? '-' }}
                                         </td>
 
                                         {{-- Mata Kuliah --}}
@@ -641,7 +736,8 @@
                         {
                             extend: 'pdf',
                             text: '<i class="bi bi-file-earmark-pdf"></i> PDF',
-                            className: 'btn btn-sm btn-outline-danger'
+                            className: 'btn btn-sm btn-outline-danger',
+                            orientation: 'landscape'
                         },
                         {
                             extend: 'print',
@@ -666,8 +762,75 @@
                     fixedHeader: {
                         header: true,
                         footer: false
+                    },
+                    initComplete: function() {
+                        // Filter dropdowns are already populated by PHP
                     }
                 });
+
+                // Function to populate filter dropdowns
+                function populateFilterDropdowns(table) {
+                    const dosenSet = new Set();
+                    const fakultasSet = new Set();
+                    const prodiSet = new Set();
+                    const mataKuliahSet = new Set();
+                    const kategoriMoocSet = new Set();
+                    const studioSet = new Set();
+                    const jenisKategoriSet = new Set();
+
+                    table.rows().every(function() {
+                        const data = this.data();
+                        if (data[1] && data[1] !== '-') dosenSet.add(data[1]); // Dosen
+                        if (data[12] && data[12] !== '-') fakultasSet.add(data[12]); // Fakultas
+                        if (data[13] && data[13] !== '-') prodiSet.add(data[13]); // Prodi
+                        if (data[14] && data[14] !== '-') mataKuliahSet.add(data[14]); // Mata Kuliah
+                        if (data[15] && data[15] !== '-') kategoriMoocSet.add(data[15]); // Kategori MOOC
+                        if (data[16] && data[16] !== '-') studioSet.add(data[16]); // Studio
+                        if (data[18] && data[18] !== '-') jenisKategoriSet.add(data[18]); // Jenis Kategori
+                    });
+
+                    // Populate Dosen filter
+                    const dosenSelect = $('#filterDosen');
+                    Array.from(dosenSet).sort().forEach(value => {
+                        dosenSelect.append(`<option value="${value}">${value}</option>`);
+                    });
+
+                    // Populate Fakultas filter
+                    const fakultasSelect = $('#filterFakultas');
+                    Array.from(fakultasSet).sort().forEach(value => {
+                        fakultasSelect.append(`<option value="${value}">${value}</option>`);
+                    });
+
+                    // Populate Prodi filter
+                    const prodiSelect = $('#filterProdi');
+                    Array.from(prodiSet).sort().forEach(value => {
+                        prodiSelect.append(`<option value="${value}">${value}</option>`);
+                    });
+
+                    // Populate Mata Kuliah filter
+                    const mataKuliahSelect = $('#filterMataKuliah');
+                    Array.from(mataKuliahSet).sort().forEach(value => {
+                        mataKuliahSelect.append(`<option value="${value}">${value}</option>`);
+                    });
+
+                    // Populate Kategori MOOC filter
+                    const kategoriMoocSelect = $('#filterKategoriMooc');
+                    Array.from(kategoriMoocSet).sort().forEach(value => {
+                        kategoriMoocSelect.append(`<option value="${value}">${value}</option>`);
+                    });
+
+                    // Populate Studio filter
+                    const studioSelect = $('#filterStudio');
+                    Array.from(studioSet).sort().forEach(value => {
+                        studioSelect.append(`<option value="${value}">${value}</option>`);
+                    });
+
+                    // Populate Jenis Kategori filter
+                    const jenisKategoriSelect = $('#filterJenisKategori');
+                    Array.from(jenisKategoriSet).sort().forEach(value => {
+                        jenisKategoriSelect.append(`<option value="${value}">${value}</option>`);
+                    });
+                }
 
                 // Filter functionality for status
                 $('.filter-status').on('click', function(e) {
@@ -707,62 +870,73 @@
                     $(this).addClass('active');
                 });
 
-                // Filter functionality for date, month, and year
-                function applyDateFilters() {
+                // Combined filter functionality
+                function applyFilters() {
                     const selectedDate = $('#filterDate').val();
                     const selectedMonth = $('#filterMonth').val();
                     const selectedYear = $('#filterYear').val();
+                    const selectedDosen = $('#filterDosen').val();
+                    const selectedFakultas = $('#filterFakultas').val();
+                    const selectedProdi = $('#filterProdi').val();
+                    const selectedMataKuliah = $('#filterMataKuliah').val();
+                    const selectedKategoriMooc = $('#filterKategoriMooc').val();
+                    const selectedStudio = $('#filterStudio').val();
+                    const selectedJenisKategori = $('#filterJenisKategori').val();
 
-                    // If no filters are selected, clear all filters
-                    if (!selectedDate && !selectedMonth && !selectedYear) {
-                        table.search('').columns().search('').draw();
-                        return;
+                    // Apply column searches for individual filters
+                    table.column(1).search(selectedDosen || '', false, false); // Dosen
+                    table.column(12).search(selectedFakultas || '', false, false); // Fakultas
+                    table.column(13).search(selectedProdi || '', false, false); // Prodi
+                    table.column(14).search(selectedMataKuliah || '', false, false); // Mata Kuliah
+                    table.column(15).search(selectedKategoriMooc || '', false, false); // Kategori MOOC
+                    table.column(16).search(selectedStudio || '', false, false); // Studio
+                    table.column(18).search(selectedJenisKategori || '', false, false); // Jenis Kategori
+
+                    // Handle date filters with column search
+                    let dateSearch = '';
+                    let dateRegex = false;
+                    if (selectedDate) {
+                        const date = new Date(selectedDate);
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                        const year = date.getFullYear();
+                        dateSearch = `${day}/${month}/${year}`;
+                        dateRegex = false;
+                    } else if (selectedMonth && selectedYear) {
+                        dateSearch = `/${selectedMonth}/${selectedYear}$`;
+                        dateRegex = true;
+                    } else if (selectedMonth) {
+                        dateSearch = `/${selectedMonth}/`;
+                        dateRegex = true;
+                    } else if (selectedYear) {
+                        dateSearch = `/${selectedYear}$`;
+                        dateRegex = true;
                     }
+                    table.column(10).search(dateSearch, dateRegex, false); // Tgl Upload YouTube
 
-                    // Apply custom search function
-                    table.search(function(searchData, data, dataIndex) {
-                        const dateValue = data[10]; // Tgl Upload YouTube column
-
-                        if (!dateValue || dateValue === '-') {
-                            return false;
-                        }
-
-                        // Parse the date from d/m/Y format
-                        const parts = dateValue.split('/');
-                        if (parts.length !== 3) {
-                            return false;
-                        }
-
-                        const day = parseInt(parts[0], 10);
-                        const month = parseInt(parts[1], 10);
-                        const year = parseInt(parts[2], 10);
-
-                        // Check date filter
-                        if (selectedDate) {
-                            const filterDate = new Date(selectedDate);
-                            const rowDate = new Date(year, month - 1, day);
-                            if (rowDate.toDateString() !== filterDate.toDateString()) {
-                                return false;
-                            }
-                        }
-
-                        // Check month filter
-                        if (selectedMonth && month !== parseInt(selectedMonth, 10)) {
-                            return false;
-                        }
-
-                        // Check year filter
-                        if (selectedYear && year !== parseInt(selectedYear, 10)) {
-                            return false;
-                        }
-
-                        return true;
-                    }).draw();
+                    table.draw();
                 }
 
-                // Event listeners for date filters
-                $('#filterDate, #filterMonth, #filterYear').on('change', function() {
-                    applyDateFilters();
+                // Event listeners for all filters
+                $('#filterDate, #filterMonth, #filterYear, #filterDosen, #filterFakultas, #filterProdi, #filterMataKuliah, #filterKategoriMooc, #filterStudio, #filterJenisKategori').on('change', function() {
+                    applyFilters();
+                });
+
+                // Clear filters button
+                $('#clearFilters').on('click', function() {
+                    $('#filterDate').val('');
+                    $('#filterMonth').val('');
+                    $('#filterYear').val('');
+                    $('#filterDosen').val('');
+                    $('#filterFakultas').val('');
+                    $('#filterProdi').val('');
+                    $('#filterMataKuliah').val('');
+                    $('#filterKategoriMooc').val('');
+                    $('#filterStudio').val('');
+                    $('#filterJenisKategori').val('');
+                    $('.filter-status').removeClass('active');
+                    $('.filter-keterangan').removeClass('active');
+                    table.search('').columns().search('').draw();
                 });
             });
         } else {
