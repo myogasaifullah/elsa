@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Artisan;
 // routes/web.php
 
 use App\Http\Controllers\FakultasProdiController;
@@ -13,6 +14,11 @@ use App\Http\Controllers\EditorController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProgresController;
+
+Route::get('/storage-link', function () {
+    Artisan::call('storage:link');
+    return 'Storage link created';
+});
 
 Route::get('laporan/export/combined-fakultas/pdf', [LaporanController::class, 'exportCombinedFakultasPdf'])->name('laporan.export.combined-fakultas.pdf');
 Route::get('laporan/export/combined-fakultas/excel', [LaporanController::class, 'exportCombinedFakultasExcel'])->name('laporan.export.combined-fakultas.excel');
@@ -40,8 +46,8 @@ Route::middleware('admin')->group(function () {
     Route::post('/prodi/import', [FakultasProdiController::class, 'importProdi'])->name('prodi.import');
 });
 
-// Admin routes for Studio & Mata Kuliah
-Route::middleware('admin')->group(function () {
+// Admin or Dosen routes for Studio & Mata Kuliah
+Route::middleware('admin_or_dosen')->group(function () {
     // Studio & Mata Kuliah
     Route::get('/studio-matkul', [StudioMatkulController::class, 'index'])->name('studio-matkul.index');
 
@@ -117,11 +123,6 @@ Route::middleware('admin')->group(function () {
     Route::get('/verifikasi', [App\Http\Controllers\UserController::class, 'verifikasi'])->name('user.verifikasi');
     Route::put('/verifikasi/status/{id}', [App\Http\Controllers\UserController::class, 'updateStatus'])->name('user.updateStatus');
 
-    Route::get('/dosen', [App\Http\Controllers\UserController::class, 'dosenIndex'])->name('dosen.index');
-
-    // Dosen & MOOC Routes
-    Route::get('/dosen-mooc', [DosenMoocController::class, 'index'])->name('dosen-mooc.index');
-
     // Dosen Routes
     Route::post('/dosen', [DosenMoocController::class, 'storeDosen'])->name('dosen.store');
     Route::put('/dosen/{dosen}', [DosenMoocController::class, 'updateDosen'])->name('dosen.update');
@@ -133,6 +134,30 @@ Route::middleware('admin')->group(function () {
     Route::put('/mooc/{mooc}', [DosenMoocController::class, 'updateMooc'])->name('mooc.update');
     Route::delete('/mooc/{mooc}', [DosenMoocController::class, 'destroyMooc'])->name('mooc.destroy');
     Route::post('/mooc/import', [DosenMoocController::class, 'importMooc'])->name('mooc.import');
+
+    // Studio
+    Route::post('/studio', [StudioMatkulController::class, 'storeStudio'])->name('studio.store');
+    Route::put('/studio/{id}', [StudioMatkulController::class, 'updateStudio'])->name('studio.update');
+    Route::delete('/studio/{id}', [StudioMatkulController::class, 'destroyStudio'])->name('studio.destroy');
+
+    // Gambar Studio
+    Route::delete('/gambar-studio/{id}', [StudioMatkulController::class, 'destroyGambarStudio'])->name('gambar-studio.destroy');
+
+    // Mata Kuliah
+    Route::post('/mata-kuliah', [StudioMatkulController::class, 'storeMataKuliah'])->name('mata-kuliah.store');
+    Route::put('/mata-kuliah/{id}', [StudioMatkulController::class, 'updateMataKuliah'])->name('mata-kuliah.update');
+    Route::delete('/mata-kuliah/{id}', [StudioMatkulController::class, 'destroyMataKuliah'])->name('mata-kuliah.destroy');
+    Route::post('/mata-kuliah/import', [StudioMatkulController::class, 'importMataKuliah'])->name('mata-kuliah.import');
+});
+
+// Admin or Dosen routes
+Route::middleware('admin_or_dosen')->group(function () {
+    Route::get('/dosen', [App\Http\Controllers\UserController::class, 'dosenIndex'])->name('dosen.index');
+
+    // Dosen & MOOC Routes
+    Route::get('/dosen-mooc', [DosenMoocController::class, 'index'])->name('dosen-mooc.index');
+
+    Route::get('/studio-matkul', [StudioMatkulController::class, 'index'])->name('studio-matkul.index');
 });
 
 Route::middleware('auth')->group(function () {
