@@ -39,24 +39,16 @@ class ProgresController extends Controller
         ActivityLogService::log('lihat_progress_editor', 'Melihat progress untuk editor');
 
         $user = Auth::user();
-        $userId = $user->id;
+        $userRole = strtolower($user->role);
 
-        // Get editor_id for the logged-in user
-        $editor = Editor::where('email', $user->email)->first();
-
-        if (!$editor) {
-            // If no editor record exists, return empty collection
-            $progress = collect();
-            $progressThisMonth = collect();
-            $showAlert = false;
-        } else {
+        if ($userRole === 'admin') {
+            // Admin sees all progress
             $progress = Progress::with([
                 'jadwalBooking.dosen.fakultas',
                 'jadwalBooking.dosen.prodi',
                 'jadwalBooking.studio',
                 'editor'
             ])
-                ->where('editor_id', $editor->id)
                 ->orderBy('created_at', 'desc')
                 ->paginate(10); // Add pagination with 10 items per page
 
@@ -67,15 +59,55 @@ class ProgresController extends Controller
                 'jadwalBooking.studio',
                 'editor'
             ])
-                ->where('editor_id', $editor->id)
                 ->whereMonth('target_upload', now()->month)
                 ->whereYear('target_upload', now()->year)
                 ->orderBy('target_upload', 'desc')
                 ->get();
 
-            // Check if published content is less than 10 for alert
-            $publishedCount = $progressThisMonth->where('keterangan', 'sudah terbit')->count();
-            $showAlert = $publishedCount < 10;
+            // No alert for admin
+            $showAlert = false;
+        } elseif ($userRole === 'editor') {
+            // Get editor_id for the logged-in user
+            $editor = Editor::where('email', $user->email)->first();
+
+            if (!$editor) {
+                // If no editor record exists, return empty collection
+                $progress = collect();
+                $progressThisMonth = collect();
+                $showAlert = false;
+            } else {
+                $progress = Progress::with([
+                    'jadwalBooking.dosen.fakultas',
+                    'jadwalBooking.dosen.prodi',
+                    'jadwalBooking.studio',
+                    'editor'
+                ])
+                    ->where('editor_id', $editor->id)
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(10); // Add pagination with 10 items per page
+
+                // Get progress data for current month based on target_upload
+                $progressThisMonth = Progress::with([
+                    'jadwalBooking.dosen.fakultas',
+                    'jadwalBooking.dosen.prodi',
+                    'jadwalBooking.studio',
+                    'editor'
+                ])
+                    ->where('editor_id', $editor->id)
+                    ->whereMonth('target_upload', now()->month)
+                    ->whereYear('target_upload', now()->year)
+                    ->orderBy('target_upload', 'desc')
+                    ->get();
+
+                // Check if published content is less than 10 for alert
+                $publishedCount = $progressThisMonth->where('keterangan', 'sudah terbit')->count();
+                $showAlert = $publishedCount < 10;
+            }
+        } else {
+            // For other roles, show empty data
+            $progress = collect();
+            $progressThisMonth = collect();
+            $showAlert = false;
         }
 
         return view('editor', compact('progress', 'progressThisMonth', 'showAlert'));

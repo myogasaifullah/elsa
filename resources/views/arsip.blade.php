@@ -737,7 +737,19 @@
                             extend: 'pdf',
                             text: '<i class="bi bi-file-earmark-pdf"></i> PDF',
                             className: 'btn btn-sm btn-outline-danger',
-                            orientation: 'landscape'
+                            orientation: 'landscape',
+                            pageSize: 'A3',
+                            exportOptions: {
+                                columns: ':not(:last-child)' // Exclude the last column (Actions)
+                            },
+                            customize: function(doc) {
+                                // Adjust table width to fit the page
+                                doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                                doc.styles.tableHeader.fontSize = 6;
+                                doc.styles.tableBodyEven.fontSize = 5;
+                                doc.styles.tableBodyOdd.fontSize = 5;
+                                doc.pageMargins = [5, 5, 5, 5];
+                            }
                         },
                         {
                             extend: 'print',
