@@ -358,7 +358,7 @@
                                             <form action="{{ route('arsip.destroy', $item->id) }}" method="POST" style="display: inline;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                                <button type="submit" class="btn btn-sm btn-danger" onclick="event.preventDefault(); Swal.fire({title: 'Hapus Data?', text: 'Apakah Anda yakin ingin menghapus data ini?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#3085d6', confirmButtonText: 'Ya, Hapus!', cancelButtonText: 'Batal'}).then((result) => { if (result.isConfirmed) { this.closest('form').submit(); } })">
                                                     <i class="bi bi-trash"></i> Hapus
                                                 </button>
                                             </form>
