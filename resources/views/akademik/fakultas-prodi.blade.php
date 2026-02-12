@@ -224,9 +224,10 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Konfirmasi hapus Fakultas
-    document.querySelectorAll('.btn-hapusfakultas').forEach(button => {
-      button.addEventListener('click', function(e) {
+    // Konfirmasi hapus Fakultas - using event delegation for DataTables compatibility
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('btn-hapusfakultas')) {
+        const button = e.target;
         const form = button.closest('.form-hapus-fakultas');
         Swal.fire({
           title: 'Hapus Fakultas?',
@@ -240,12 +241,13 @@
             form.submit();
           }
         });
-      });
+      }
     });
 
-    // Konfirmasi hapus Prodi
-    document.querySelectorAll('.btn-hapusprodi').forEach(button => {
-      button.addEventListener('click', function(e) {
+    // Konfirmasi hapus Prodi - using event delegation for DataTables compatibility
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('btn-hapusprodi')) {
+        const button = e.target;
         const form = button.closest('.form-hapus-prodi');
         Swal.fire({
           title: 'Hapus Program Studi?',
@@ -259,7 +261,7 @@
             form.submit();
           }
         });
-      });
+      }
     });
   });
 </script>

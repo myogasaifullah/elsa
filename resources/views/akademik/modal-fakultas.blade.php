@@ -67,12 +67,14 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.btn-edit').forEach(button => {
-      button.addEventListener('click', function() {
-        const id = this.dataset.id;
-        const nama = this.dataset.nama;
-        const kode = this.dataset.kode;
-        const singkatan = this.dataset.singkatan;
+    // Edit Fakultas - using event delegation for DataTables compatibility
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('btn-edit')) {
+        const button = e.target;
+        const id = button.dataset.id;
+        const nama = button.dataset.nama;
+        const kode = button.dataset.kode;
+        const singkatan = button.dataset.singkatan;
 
         document.getElementById('edit_nama_fakultas').value = nama;
         document.getElementById('edit_kode_fakultas').value = kode;
@@ -80,7 +82,7 @@
         document.getElementById('formEditFakultas').action = `/fakultas/${id}`;
 
         new bootstrap.Modal(document.getElementById('modalEditFakultas')).show();
-      });
+      }
     });
   });
 </script>

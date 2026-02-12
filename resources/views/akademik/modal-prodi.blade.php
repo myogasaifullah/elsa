@@ -91,14 +91,15 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.btn-edit-prodi').forEach(button => {
-            button.addEventListener('click', function() {
-                const id = this.dataset.id;
-                const nama = this.dataset.nama;
-                const kode = this.dataset.kode;
-                const singkatan = this.dataset.singkatan;
-                const idFakultas = this.dataset.fakultas;
-
+        // Edit Prodi - using event delegation for DataTables compatibility
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('btn-edit-prodi')) {
+                const button = e.target;
+                const id = button.dataset.id;
+                const nama = button.dataset.nama;
+                const kode = button.dataset.kode;
+                const singkatan = button.dataset.singkatan;
+                const idFakultas = button.dataset.fakultas;
 
                 document.getElementById('edit_nama_prodi').value = nama;
                 document.getElementById('edit_kode_prodi').value = kode;
@@ -107,7 +108,7 @@
                 document.getElementById('formEditProdi').action = `/prodi/${id}`;
 
                 new bootstrap.Modal(document.getElementById('modalEditProdi')).show();
-            });
+            }
         });
     });
 </script>

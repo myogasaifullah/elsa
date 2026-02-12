@@ -25,14 +25,14 @@
     </li>
 
     <!-- Dosen -->
-    <li class="nav-item"> <a class="nav-link {{ Request::is('dosen*') ? '' : 'collapsed' }}" href="{{ url('dosen') }}"> <i class="bi bi-person-badge"></i> <span>Dosen</span> </a> </li>
+    <!-- <li class="nav-item"> <a class="nav-link {{ Request::is('dosen*') ? '' : 'collapsed' }}" href="{{ url('dosen') }}"> <i class="bi bi-person-badge"></i> <span>Dosen</span> </a> </li> -->
 
     <!-- Editor -->
-    <li class="nav-item">
+    <!-- <li class="nav-item">
       <a class="nav-link {{ Request::is('editor*') ? '' : 'collapsed' }}" href="{{ url('editor') }}">
         <i class="bi bi-card-list"></i><span>Editor</span>
       </a>
-    </li>
+    </li> -->
 
     <!-- User -->
     <li class="nav-item"> <a class="nav-link {{ Request::is('listuser', 'verifikasi') ? '' : 'collapsed' }}" data-target="#user-nav" data-toggle="collapse" href="#"> <i class="bi bi-person"></i><span>User</span><i class="bi bi-chevron-down ms-auto"></i> </a>
