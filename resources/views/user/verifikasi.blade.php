@@ -81,9 +81,9 @@
       <div class="card-body d-flex justify-content-between align-items-center mb-3">
         <h5 class="card-title">Data Editor <span>| Today</span></h5>
           <!-- <h2>Jumlah Editor: {{ isset($editors) ? $editors->count() : 0 }}</h2> -->
-          <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahEditor">
+          <!-- <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalTambahEditor">
             <i class="bi bi-plus-circle "></i> Tambah Editor
-          </button>
+          </button> -->
         </div>
 
         <table class="table table-borderless datatable">
@@ -230,11 +230,12 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Edit
-    document.querySelectorAll('.btn-edit-editor').forEach(button => {
-      button.addEventListener('click', function() {
-        const row = this.closest('tr');
-        const id = this.dataset.id;
+    // Edit - using event delegation for DataTables compatibility
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('btn-edit-editor')) {
+        const button = e.target;
+        const row = button.closest('tr');
+        const id = button.dataset.id;
         const nama = row.querySelector('.nama-editor').textContent.trim();
         const email = row.querySelector('.email-editor').textContent.trim();
 
@@ -243,7 +244,7 @@
         document.getElementById('editEmailEditor').value = email;
 
         new bootstrap.Modal(document.getElementById('modalEditEditor')).show();
-      });
+      }
     });
 
     // Simpan Edit
@@ -278,11 +279,12 @@
         });
     });
 
-    // Hapus
-    document.querySelectorAll('.btn-hapus-editor').forEach(button => {
-      button.addEventListener('click', function() {
-        const id = this.dataset.id;
-        const row = this.closest('tr');
+    // Hapus - using event delegation for DataTables compatibility
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('btn-hapus-editor')) {
+        const button = e.target;
+        const id = button.dataset.id;
+        const row = button.closest('tr');
         const nama = row.querySelector('.nama-editor').textContent.trim();
 
         Swal.fire({
@@ -309,7 +311,7 @@
               });
           }
         });
-      });
+      }
     });
   });
 </script>
