@@ -38,7 +38,7 @@ class JadwalBookingPolicy
     public function update(User $user, JadwalBooking $jadwalBooking): bool
     {
         // Admin can update all, others can only update their own
-        return $user->role === 'Admin' || $user->id === $jadwalBooking->user_id;
+        return strtolower($user->role) === 'admin' || $user->id === $jadwalBooking->user_id;
     }
 
     /**
@@ -47,7 +47,7 @@ class JadwalBookingPolicy
     public function delete(User $user, JadwalBooking $jadwalBooking): bool
     {
         // Admin can delete all, others can only delete their own
-        return $user->role === 'Admin' || $user->id === $jadwalBooking->user_id;
+        return strtolower($user->role) === 'admin' || $user->id === $jadwalBooking->user_id;
     }
 
     /**

@@ -103,6 +103,8 @@ class JadwalBookingController extends Controller
 
     public function destroy(JadwalBooking $jadwal)
     {
+        $this->authorize('delete', $jadwal);
+
         // Catat aktivitas: menghapus jadwal booking
         ActivityLogService::delete('jadwal_booking', "Menghapus jadwal booking ID {$jadwal->id} dengan judul {$jadwal->judul_course}");
 
