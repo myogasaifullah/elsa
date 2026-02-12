@@ -91,15 +91,15 @@
                   <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" style="display: inline" data-bs-target="#detailModal{{ $booking->id }}">
                     <i class="bi bi-eye"></i> Detail
                   </button>
-                  <form action="{{ route('booking.approve', $booking) }}" method="POST" style="display: inline;">
+                  <form action="{{ route('booking.approve', $booking) }}" method="POST" style="display: inline;" id="approveForm{{ $booking->id }}">
                     @csrf
-                    <button type="submit" class="btn btn-sm btn-success">
+                    <button type="button" class="btn btn-sm btn-success btn-approve" data-id="{{ $booking->id }}" data-judul="{{ $booking->judul_course }}">
                       <i class="bi bi-check-circle"></i> ACC
                     </button>
                   </form>
-                  <form action="{{ route('booking.reject', $booking) }}" method="POST" style="display: inline;">
+                  <form action="{{ route('booking.reject', $booking) }}" method="POST" style="display: inline;" id="rejectForm{{ $booking->id }}">
                     @csrf
-                    <button type="submit" class="btn btn-sm btn-danger">
+                    <button type="button" class="btn btn-sm btn-danger btn-reject" data-id="{{ $booking->id }}" data-judul="{{ $booking->judul_course }}">
                       <i class="bi bi-x-circle"></i> Tolak
                     </button>
                   </form>
@@ -167,3 +167,53 @@
 </main>
 
 @include('layout.footer')
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Handle Approve Button Click
+    document.querySelectorAll('.btn-approve').forEach(button => {
+      button.addEventListener('click', function() {
+        const id = this.dataset.id;
+        const judul = this.dataset.judul;
+
+        Swal.fire({
+          title: 'Apakah Anda yakin?',
+          text: `ACC booking untuk "${judul}"?`,
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#28a745',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Ya, ACC',
+          cancelButtonText: 'Batal'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            document.getElementById('approveForm' + id).submit();
+          }
+        });
+      });
+    });
+
+    // Handle Reject Button Click
+    document.querySelectorAll('.btn-reject').forEach(button => {
+      button.addEventListener('click', function() {
+        const id = this.dataset.id;
+        const judul = this.dataset.judul;
+
+        Swal.fire({
+          title: 'Apakah Anda yakin?',
+          text: `Tolak booking untuk "${judul}"?`,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#dc3545',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Ya, Tolak',
+          cancelButtonText: 'Batal'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            document.getElementById('rejectForm' + id).submit();
+          }
+        });
+      });
+    });
+  });
+</script>
