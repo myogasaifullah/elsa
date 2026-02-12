@@ -213,81 +213,85 @@
 
 <!-- Modal Detail Jadwal -->
 <div class="modal fade" id="modalDetailJadwal" tabindex="-1" aria-labelledby="modalDetailJadwalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Detail Jadwal</h5>
+        <h5 class="modal-title" id="modalDetailJadwalLabel">Detail Jadwal</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
       </div>
       <div class="modal-body">
         <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label fw-bold">Tanggal:</label>
-            <p id="detailTanggal"></p>
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Tanggal</label>
+            <input type="text" class="form-control" id="detailTanggal" readonly>
           </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label fw-bold">Jam:</label>
-            <p id="detailJam"></p>
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Jam Mulai</label>
+            <input type="text" class="form-control" id="detailJamMulai" readonly>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label fw-bold">Jenis Kategori:</label>
-            <p id="detailJenis"></p>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label fw-bold">Kategori MOOC:</label>
-            <p id="detailKategori"></p>
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Jam Selesai</label>
+            <input type="text" class="form-control" id="detailJamSelesai" readonly>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6 mb-3">
-            <label class="form-label fw-bold">Studio:</label>
-            <p id="detailStudio"></p>
+            <label class="form-label">Jenis Kategori</label>
+            <input type="text" class="form-control" id="detailJenis" readonly>
           </div>
           <div class="col-md-6 mb-3">
-            <label class="form-label fw-bold">Mata Kuliah:</label>
-            <p id="detailMatkul"></p>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label fw-bold">Judul Course:</label>
-            <p id="detailJudul"></p>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label fw-bold">Dosen:</label>
-            <p id="detailDosen"></p>
+            <label class="form-label">Kategori MOOC</label>
+            <input type="text" class="form-control" id="detailKategori" readonly>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6 mb-3">
-            <label class="form-label fw-bold">Status:</label>
-            <p id="detailStatus"></p>
+            <label class="form-label">Studio</label>
+            <input type="text" class="form-control" id="detailStudio" readonly>
           </div>
           <div class="col-md-6 mb-3">
-            <label class="form-label fw-bold">User Name:</label>
-            <p id="detailUsername"></p>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label fw-bold">Email:</label>
-            <p id="detailEmail"></p>
-          </div>
-          <div class="col-md-6 mb-3">
-            <label class="form-label fw-bold">Telepon:</label>
-            <p id="detailTelepon"></p>
+            <label class="form-label">Nama Mata Kuliah</label>
+            <input type="text" class="form-control" id="detailMatkul" readonly>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6 mb-3">
-            <label class="form-label fw-bold">Fakultas:</label>
-            <p id="detailFakultas"></p>
+            <label class="form-label">Judul Course</label>
+            <input type="text" class="form-control" id="detailJudul" readonly>
           </div>
           <div class="col-md-6 mb-3">
-            <label class="form-label fw-bold">Prodi:</label>
-            <p id="detailProdi"></p>
+            <label class="form-label">Dosen</label>
+            <input type="text" class="form-control" id="detailDosen" readonly>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Status</label>
+            <input type="text" class="form-control" id="detailStatus" readonly>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">User Name</label>
+            <input type="text" class="form-control" id="detailUsername" readonly>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Email</label>
+            <input type="text" class="form-control" id="detailEmail" readonly>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Telepon</label>
+            <input type="text" class="form-control" id="detailTelepon" readonly>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Fakultas</label>
+            <input type="text" class="form-control" id="detailFakultas" readonly>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Prodi</label>
+            <input type="text" class="form-control" id="detailProdi" readonly>
           </div>
         </div>
       </div>

@@ -244,20 +244,25 @@
       // Handle Detail Button Click
       document.querySelectorAll('.btn-detailJadwal').forEach(btn => {
         btn.addEventListener('click', function() {
-          document.getElementById('detailTanggal').textContent = this.dataset.tanggal;
-          document.getElementById('detailJam').textContent = this.dataset.jam;
-          document.getElementById('detailJenis').textContent = this.dataset.jenis;
-          document.getElementById('detailKategori').textContent = this.dataset.kategori;
-          document.getElementById('detailStudio').textContent = this.dataset.studio;
-          document.getElementById('detailMatkul').textContent = this.dataset.matkul;
-          document.getElementById('detailJudul').textContent = this.dataset.judul;
-          document.getElementById('detailDosen').textContent = this.dataset.dosen;
-          document.getElementById('detailStatus').textContent = this.dataset.status;
-          document.getElementById('detailUsername').textContent = this.dataset.username;
-          document.getElementById('detailEmail').textContent = this.dataset.email;
-          document.getElementById('detailTelepon').textContent = this.dataset.telepon;
-          document.getElementById('detailFakultas').textContent = this.dataset.fakultas;
-          document.getElementById('detailProdi').textContent = this.dataset.prodi;
+          const jamParts = this.dataset.jam.split(' - ');
+          const jamMulai = jamParts[0] ? jamParts[0].replace(' WIB', '') : '';
+          const jamSelesai = jamParts[1] ? jamParts[1].replace(' WIB', '') : '';
+
+          document.getElementById('detailTanggal').value = this.dataset.tanggal;
+          document.getElementById('detailJamMulai').value = jamMulai;
+          document.getElementById('detailJamSelesai').value = jamSelesai;
+          document.getElementById('detailJenis').value = this.dataset.jenis;
+          document.getElementById('detailKategori').value = this.dataset.kategori;
+          document.getElementById('detailStudio').value = this.dataset.studio;
+          document.getElementById('detailMatkul').value = this.dataset.matkul;
+          document.getElementById('detailJudul').value = this.dataset.judul;
+          document.getElementById('detailDosen').value = this.dataset.dosen;
+          document.getElementById('detailStatus').value = this.dataset.status;
+          document.getElementById('detailUsername').value = this.dataset.username;
+          document.getElementById('detailEmail').value = this.dataset.email;
+          document.getElementById('detailTelepon').value = this.dataset.telepon;
+          document.getElementById('detailFakultas').value = this.dataset.fakultas;
+          document.getElementById('detailProdi').value = this.dataset.prodi;
         });
       });
     });
