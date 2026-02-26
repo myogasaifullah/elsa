@@ -16,7 +16,7 @@ class BookingController extends Controller
     {
         // Log activity
         ActivityLogService::booking('view_pending', 'Admin viewed pending bookings list');
-        
+
         // Fetch bookings with status 'pending' and eager load related data
         $bookings = JadwalBooking::with(['user', 'studio', 'dosen'])
             ->where('status', 'pending')
@@ -32,7 +32,7 @@ class BookingController extends Controller
      */
     public function approve(Request $request, JadwalBooking $booking)
     {
-        $booking->update(['status' => 'approved']);
+        $booking->update(['status' => 'belum shooting']);
 
         // Log activity
         $description = "Approved booking ID {$booking->id} for {$booking->user->name} - Studio {$booking->studio->nama_studio} on {$booking->tanggal} at {$booking->jam}";
@@ -87,7 +87,7 @@ class BookingController extends Controller
         } catch (\Exception $e) {
             // Log error activity
             ActivityLogService::log('error', "Failed to mark booking ID {$jadwal->id} as done: " . $e->getMessage());
-            
+
             return redirect()->back()->with('error', 'Failed to mark booking as done: ' . $e->getMessage());
         }
     }

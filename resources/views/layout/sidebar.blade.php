@@ -177,11 +177,11 @@
       </a>
     </li>
 
-    <li class="nav-item">
+    <!-- <li class="nav-item">
       <a class="nav-link {{ Request::is('studio-matkul*') ? '' : 'collapsed' }}" href="{{ url('studio-matkul') }}">
         <i class="bi bi-layout-text-window-reverse"></i><span>Mata Kuliah</span>
       </a>
-    </li>
+    </li> -->
 
     {{-- ================= EDITOR ================= --}}
     @elseif(Auth::check() && strtolower(Auth::user()->role) === 'editor')

@@ -48,8 +48,7 @@
               data-telpon="{{ $jadwal->user->nomor_telepon ?? '-' }}"
               data-fakultas="{{ $jadwal->user->fakultas->nama_fakultas ?? '-' }}"
               data-prodi="{{ $jadwal->user->prodi->nama_prodi ?? '-' }}"
-              data-dosen="{{ $jadwal->dosen->nama_dosen ?? '-' }}"
-            >
+              data-dosen="{{ $jadwal->dosen->nama_dosen ?? '-' }}">
               <th>{{ $index + 1 }}</th>
               <td>{{ \Carbon\Carbon::parse($jadwal->tanggal)->format('d/m/Y') }}</td>
               <td>{{ $jadwal->jam }}</td>
@@ -85,80 +84,82 @@
 
 {{-- SCRIPT --}}
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', function() {
 
-  // DONE BUTTON
-  document.querySelectorAll('.btn-done').forEach(btn => {
-    btn.addEventListener('click', function () {
-      const row = this.closest('tr');
-      const jadwalId = row.dataset.id;
+    // DONE BUTTON - Using event delegation for dynamic content
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('btn-done') || e.target.closest('.btn-done')) {
+        const btn = e.target.classList.contains('btn-done') ? e.target : e.target.closest('.btn-done');
+        const row = btn.closest('tr');
+        const jadwalId = row.dataset.id;
 
-      Swal.fire({
-        title: 'Tandai Sudah Shooting?',
-        text: 'Status akan diubah menjadi sudah shooting.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Ya, Tandai',
-        cancelButtonText: 'Batal'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          fetch(`/jadwal/${jadwalId}/done`, {
-            method: 'POST',
-            headers: {
-              'X-CSRF-TOKEN': '{{ csrf_token() }}',
-              'Content-Type': 'application/json'
-            }
-          })
-          .then(res => res.json())
-          .then(data => {
-            if (data.success) {
-              row.querySelector('.status-cell').innerHTML =
-                `<span class="badge bg-success text-white">
+        Swal.fire({
+          title: 'Tandai Sudah Shooting?',
+          text: 'Status akan diubah menjadi sudah shooting.',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Ya, Tandai',
+          cancelButtonText: 'Batal'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            fetch(`/jadwal/${jadwalId}/done`, {
+                method: 'POST',
+                headers: {
+                  'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                  'Content-Type': 'application/json'
+                }
+              })
+              .then(res => res.json())
+              .then(data => {
+                if (data.success) {
+                  row.querySelector('.status-cell').innerHTML =
+                    `<span class="badge bg-success text-white">
                   <i class="bi bi-camera-video me-1"></i> Sudah Shooting
                 </span>`;
 
-              btn.parentElement.innerHTML =
-                `<span class="text-success">
+                  btn.parentElement.innerHTML =
+                    `<span class="text-success">
                   <i class="bi bi-check-circle"></i> Selesai
                 </span>`;
 
-              Swal.fire('Sukses!', data.message, 'success');
-            } else {
-              Swal.fire('Gagal!', data.message, 'error');
-            }
-          })
-          .catch(() => {
-            Swal.fire('Gagal!', 'Terjadi kesalahan.', 'error');
-          });
-        }
-      });
+                  Swal.fire('Sukses!', data.message, 'success');
+                } else {
+                  Swal.fire('Gagal!', data.message, 'error');
+                }
+              })
+              .catch(() => {
+                Swal.fire('Gagal!', 'Terjadi kesalahan.', 'error');
+              });
+          }
+        });
+      }
     });
-  });
 
-  // DETAIL MODAL
-  document.querySelectorAll('.btn-detail').forEach(btn => {
-    btn.addEventListener('click', function () {
-      const row = this.closest('tr');
-      const cells = row.children;
+    // DETAIL MODAL - Using event delegation for dynamic content
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('btn-detail') || e.target.closest('.btn-detail')) {
+        const btn = e.target.classList.contains('btn-detail') ? e.target : e.target.closest('.btn-detail');
+        const row = btn.closest('tr');
+        const cells = row.children;
 
-      document.getElementById('modal-tanggal').textContent = cells[1].textContent;
-      document.getElementById('modal-jam').textContent = cells[2].textContent;
-      document.getElementById('modal-nama').textContent = row.dataset.nama;
-      document.getElementById('modal-email').textContent = row.dataset.email;
-      document.getElementById('modal-telpon').textContent = row.dataset.telpon;
-      document.getElementById('modal-fakultas').textContent = row.dataset.fakultas;
-      document.getElementById('modal-prodi').textContent = row.dataset.prodi;
-      document.getElementById('modal-dosen').textContent = row.dataset.dosen;
-      document.getElementById('modal-jenis-kategori').textContent = cells[4].textContent;
-      document.getElementById('modal-kategori-mooc').textContent = cells[5].textContent;
-      document.getElementById('modal-studio').textContent = cells[6].textContent;
-      document.getElementById('modal-mata-kuliah').textContent = cells[7].textContent;
-      document.getElementById('modal-judul-course').textContent = cells[8].textContent;
-      document.getElementById('modal-status').textContent = cells[9].innerText.trim();
+        document.getElementById('modal-tanggal').textContent = cells[1].textContent;
+        document.getElementById('modal-jam').textContent = cells[2].textContent;
+        document.getElementById('modal-nama').textContent = row.dataset.nama;
+        document.getElementById('modal-email').textContent = row.dataset.email;
+        document.getElementById('modal-telpon').textContent = row.dataset.telpon;
+        document.getElementById('modal-fakultas').textContent = row.dataset.fakultas;
+        document.getElementById('modal-prodi').textContent = row.dataset.prodi;
+        document.getElementById('modal-dosen').textContent = row.dataset.dosen;
+        document.getElementById('modal-jenis-kategori').textContent = cells[4].textContent;
+        document.getElementById('modal-kategori-mooc').textContent = cells[5].textContent;
+        document.getElementById('modal-studio').textContent = cells[6].textContent;
+        document.getElementById('modal-mata-kuliah').textContent = cells[7].textContent;
+        document.getElementById('modal-judul-course').textContent = cells[8].textContent;
+        document.getElementById('modal-status').textContent = cells[9].innerText.trim();
+      }
     });
-  });
 
-});
+  });
 </script>
 
 {{-- MODAL DETAIL --}}
