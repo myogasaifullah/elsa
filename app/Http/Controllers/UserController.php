@@ -255,6 +255,15 @@ class UserController extends Controller
         $user->status = $request->status;
         $user->save();
 
+        if ($request->status === 'active') {
+            Editor::firstOrCreate(
+                ['email' => $user->email],
+                ['nama' => $user->name]
+            );
+            ActivityLogService::create('Editor', "Menambahkan editor otomatis dari verifikasi user: {$user->name} ({$user->email})");
+            return redirect()->route('user.verifikasi')->with('success', 'Status pengguna berhasil diperbarui dan ditambahkan sebagai editor.');
+        }
+
         Log::info('Status pengguna diperbarui', [
             'user_id' => $id,
             'status_baru' => $request->status,
