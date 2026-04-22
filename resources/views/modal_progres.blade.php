@@ -160,40 +160,55 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const transferButton = document.getElementById('transferDataButton');
+    const transferButton = document.getElementById('transferDataButton');
 
             if (transferButton) {
                 transferButton.addEventListener('click', function() {
                     const progressId = this.getAttribute('data-progress-id');
+                    const form = document.querySelector('form');
 
-                    if (confirm('Apakah Anda yakin ingin mentransfer data dari persentase ke progress?')) {
+                    if (confirm('Simpan persentase dulu lalu transfer?')) {
                         transferButton.disabled = true;
-                        transferButton.innerHTML = '<i class="bi bi-arrow-down-up"></i> Memproses...';
+                        transferButton.innerHTML = '<i class="bi bi-arrow-down-up"></i> Saving...';
 
-                        fetch(`/progres/transfer-data/${progressId}`, {
+                        // First save persentase form via AJAX
+                        const formData = new FormData(form);
+                        fetch(form.action, {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            }
+                        })
+                        .then(response => response.text())
+                        .then(() => {
+                            transferButton.innerHTML = '<i class="bi bi-arrow-down-up"></i> Transferring...';
+                            // Then transfer
+                            return fetch(`/progres/transfer-data/${progressId}`, {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
                                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                                 }
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    alert('Data berhasil ditransfer!');
-                                    location.reload();
-                                } else {
-                                    alert('Gagal mentransfer data: ' + data.message);
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                alert('Terjadi kesalahan saat mentransfer data');
-                            })
-                            .finally(() => {
-                                transferButton.disabled = false;
-                                transferButton.innerHTML = '<i class="bi bi-arrow-down-up"></i> Transfer Data dari Persentase';
                             });
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert('Persentase disimpan dan data berhasil ditransfer!');
+                                location.reload();
+                            } else {
+                                alert('Transfer gagal: ' + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Error saving or transferring');
+                        })
+                        .finally(() => {
+                            transferButton.disabled = false;
+                            transferButton.innerHTML = '<i class="bi bi-arrow-down-up"></i> Transfer Data dari Persentase';
+                        });
                     }
                 });
             }
@@ -332,12 +347,19 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingCatatan1">
                     <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan1" aria-expanded="false" aria-controls="collapseCatatan1">
-                        1. Pra-produksi (10%)
+                        1. Pra-produksi (10%) <span id="status1" class="badge bg-secondary ms-2">Pending</span>
                     </button>
                 </h2>
                 <div id="collapseCatatan1" class="accordion-collapse collapse" aria-labelledby="headingCatatan1" data-parent="#accordionProgres">
                     <div class="accordion-body">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan1">Isi Catatan Pra-produksi</button>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="checkbox1" name="checkbox1">
+                            <label class="form-check-label" for="checkbox1">
+                                Quick Complete (Auto-fill "(sudah)")
+                            </label>
+                            <input type="hidden" id="catatan1" name="catatan1" value="{{ old('catatan1', $existingPersentase->catatan1 ?? '') }}">
+                        </div>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan1">Edit Detail</button>
                     </div>
                 </div>
             </div>
@@ -352,15 +374,20 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="catatan1" class="form-label">Menerima brief dari dosen/pengampu;
-                                    Menyusun rencana editing;
-                                    Memastikan ketersediaan materi (video, audio, slide, dll)</label>
-                                <input type="text" class="form-control @error('catatan1') is-invalid @enderror" id="catatan1" name="catatan1"
-                                    value="{{ old('catatan1', $existingPersentase->catatan1 ?? '') }}" placeholder="Masukkan catatan Pra-produksi">
+                                <label for="catatan1_detail" class="form-label">Detail Catatan (Override checkbox)</label>
+                                <input type="text" class="form-control @error('catatan1') is-invalid @enderror" id="catatan1_detail" placeholder="Edit detail (opsional)" value="{{ old('catatan1', $existingPersentase->catatan1 ?? '') }}">
+                                <div class="form-text">Checkbox quick-fill used default text; edit here to override.</div>
                                 @error('catatan1')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <script>
+                                // Sync modal input to hidden
+                                document.getElementById('catatan1_detail').addEventListener('input', function() {
+                                    document.getElementById('catatan1').value = this.value;
+                                    calculatePercentage();
+                                });
+                            </script>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -374,12 +401,19 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingCatatan2">
                     <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan2" aria-expanded="false" aria-controls="collapseCatatan2">
-                        2. Import dan Organisasi Materi (5%)
+                        2. Import dan Organisasi Materi (5%) <span id="status2" class="badge bg-secondary ms-2">Pending</span>
                     </button>
                 </h2>
                 <div id="collapseCatatan2" class="accordion-collapse collapse" aria-labelledby="headingCatatan2" data-parent="#accordionProgres">
                     <div class="accordion-body">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan2">Isi Catatan Import dan Organisasi Materi</button>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="checkbox2" name="checkbox2">
+                            <label class="form-check-label" for="checkbox2">
+                                Quick Complete (Auto-fill "(sudah)")
+                            </label>
+                            <input type="hidden" id="catatan2" name="catatan2" value="{{ old('catatan2', $existingPersentase->catatan2 ?? '') }}">
+                        </div>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan2">Edit Detail</button>
                     </div>
                 </div>
             </div>
@@ -394,14 +428,19 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="catatan2" class="form-label">Mengimpor footage, audio, dan bahan pendukung ke software;
-                                    Membuat folder kerja terstruktur (bining)</label>
-                                <input type="text" class="form-control @error('catatan2') is-invalid @enderror" id="catatan2" name="catatan2"
-                                    value="{{ old('catatan2', $existingPersentase->catatan2 ?? '') }}" placeholder="Masukkan catatan Import dan Organisasi Materi">
+                                <label for="catatan2_detail" class="form-label">Detail Catatan (Override checkbox)</label>
+                                <input type="text" class="form-control @error('catatan2') is-invalid @enderror" id="catatan2_detail" placeholder="Edit detail (opsional)" value="{{ old('catatan2', $existingPersentase->catatan2 ?? '') }}">
+                                <div class="form-text">Checkbox quick-fill used default text; edit here to override.</div>
                                 @error('catatan2')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <script>
+                                document.getElementById('catatan2_detail').addEventListener('input', function() {
+                                    document.getElementById('catatan2').value = this.value;
+                                    calculatePercentage();
+                                });
+                            </script>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -415,12 +454,19 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingCatatan3">
                     <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan3" aria-expanded="false" aria-controls="collapseCatatan3">
-                        3. Rough Cut (15%)
+                        3. Rough Cut (15%) <span id="status3" class="badge bg-secondary ms-2">Pending</span>
                     </button>
                 </h2>
                 <div id="collapseCatatan3" class="accordion-collapse collapse" aria-labelledby="headingCatatan3" data-parent="#accordionProgres">
                     <div class="accordion-body">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan3">Isi Catatan Rough Cut</button>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="checkbox3" name="checkbox3">
+                            <label class="form-check-label" for="checkbox3">
+                                Quick Complete (Auto-fill "(sudah)")
+                            </label>
+                            <input type="hidden" id="catatan3" name="catatan3" value="{{ old('catatan3', $existingPersentase->catatan3 ?? '') }}">
+                        </div>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan3">Edit Detail</button>
                     </div>
                 </div>
             </div>
@@ -435,15 +481,19 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="catatan3" class="form-label">Memilih bagian-bagian penting video;
-                                    Menyusun urutan sesuai alur pembelajaran;
-                                    Menghapus bagian yang tidak diperlukan</label>
-                                <input type="text" class="form-control @error('catatan3') is-invalid @enderror" id="catatan3" name="catatan3"
-                                    value="{{ old('catatan3', $existingPersentase->catatan3 ?? '') }}" placeholder="Masukkan catatan Rough Cut">
+                                <label for="catatan3_detail" class="form-label">Detail Catatan (Override checkbox)</label>
+                                <input type="text" class="form-control @error('catatan3') is-invalid @enderror" id="catatan3_detail" placeholder="Edit detail (opsional)" value="{{ old('catatan3', $existingPersentase->catatan3 ?? '') }}">
+                                <div class="form-text">Checkbox quick-fill used default text; edit here to override.</div>
                                 @error('catatan3')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <script>
+                                document.getElementById('catatan3_detail').addEventListener('input', function() {
+                                    document.getElementById('catatan3').value = this.value;
+                                    calculatePercentage();
+                                });
+                            </script>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -457,12 +507,19 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingCatatan4">
                     <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan4" aria-expanded="false" aria-controls="collapseCatatan4">
-                        4. Fine Cut (Cutting Halus) (15%)
+                        4. Fine Cut (Cutting Halus) (15%) <span id="status4" class="badge bg-secondary ms-2">Pending</span>
                     </button>
                 </h2>
                 <div id="collapseCatatan4" class="accordion-collapse collapse" aria-labelledby="headingCatatan4" data-parent="#accordionProgres">
                     <div class="accordion-body">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan4">Isi Catatan Fine Cut (Cutting Halus)</button>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="checkbox4" name="checkbox4">
+                            <label class="form-check-label" for="checkbox4">
+                                Quick Complete (Auto-fill "(sudah)")
+                            </label>
+                            <input type="hidden" id="catatan4" name="catatan4" value="{{ old('catatan4', $existingPersentase->catatan4 ?? '') }}">
+                        </div>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan4">Edit Detail</button>
                     </div>
                 </div>
             </div>
@@ -477,15 +534,19 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="catatan4" class="form-label">Memperhalus transisi antar bagian;
-                                    Sinkronisasi audio dan video;
-                                    Koreksi durasi agar efisien</label>
-                                <input type="text" class="form-control @error('catatan4') is-invalid @enderror" id="catatan4" name="catatan4"
-                                    value="{{ old('catatan4', $existingPersentase->catatan4 ?? '') }}" placeholder="Masukkan catatan Fine Cut (Cutting Halus)">
+                                <label for="catatan4_detail" class="form-label">Detail Catatan (Override checkbox)</label>
+                                <input type="text" class="form-control @error('catatan4') is-invalid @enderror" id="catatan4_detail" placeholder="Edit detail (opsional)" value="{{ old('catatan4', $existingPersentase->catatan4 ?? '') }}">
+                                <div class="form-text">Checkbox quick-fill used default text; edit here to override.</div>
                                 @error('catatan4')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <script>
+                                document.getElementById('catatan4_detail').addEventListener('input', function() {
+                                    document.getElementById('catatan4').value = this.value;
+                                    calculatePercentage();
+                                });
+                            </script>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -499,12 +560,19 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingCatatan5">
                     <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan5" aria-expanded="false" aria-controls="collapseCatatan5">
-                        5. Penambahan Elemen Grafis & Visual (20%)
+                        5. Penambahan Elemen Grafis & Visual (20%) <span id="status5" class="badge bg-secondary ms-2">Pending</span>
                     </button>
                 </h2>
                 <div id="collapseCatatan5" class="accordion-collapse collapse" aria-labelledby="headingCatatan5" data-parent="#accordionProgres">
                     <div class="accordion-body">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan5">Isi Catatan Penambahan Elemen Grafis & Visual</button>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="checkbox5" name="checkbox5">
+                            <label class="form-check-label" for="checkbox5">
+                                Quick Complete (Auto-fill "(sudah)")
+                            </label>
+                            <input type="hidden" id="catatan5" name="catatan5" value="{{ old('catatan5', $existingPersentase->catatan5 ?? '') }}">
+                        </div>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan5">Edit Detail</button>
                     </div>
                 </div>
             </div>
@@ -519,15 +587,19 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="catatan5" class="form-label">Menambahkan judul, nama narasumber, transisi visual;
-                                    Menyisipkan gambar, ilustrasi, atau animasi penunjang materi
-                                    Menyisipkan bumper opening video</label>
-                                <input type="text" class="form-control @error('catatan5') is-invalid @enderror" id="catatan5" name="catatan5"
-                                    value="{{ old('catatan5', $existingPersentase->catatan5 ?? '') }}" placeholder="Masukkan catatan Penambahan Elemen Grafis & Visual">
+                                <label for="catatan5_detail" class="form-label">Detail Catatan (Override checkbox)</label>
+                                <input type="text" class="form-control @error('catatan5') is-invalid @enderror" id="catatan5_detail" placeholder="Edit detail (opsional)" value="{{ old('catatan5', $existingPersentase->catatan5 ?? '') }}">
+                                <div class="form-text">Checkbox quick-fill used default text; edit here to override.</div>
                                 @error('catatan5')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <script>
+                                document.getElementById('catatan5_detail').addEventListener('input', function() {
+                                    document.getElementById('catatan5').value = this.value;
+                                    calculatePercentage();
+                                });
+                            </script>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -541,12 +613,19 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingCatatan6">
                     <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan6" aria-expanded="false" aria-controls="collapseCatatan6">
-                        6. Penyuntingan Audio (10%)
+                        6. Penyuntingan Audio (10%) <span id="status6" class="badge bg-secondary ms-2">Pending</span>
                     </button>
                 </h2>
                 <div id="collapseCatatan6" class="accordion-collapse collapse" aria-labelledby="headingCatatan6" data-parent="#accordionProgres">
                     <div class="accordion-body">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan6">Isi Catatan Penyuntingan Audio</button>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="checkbox6" name="checkbox6">
+                            <label class="form-check-label" for="checkbox6">
+                                Quick Complete (Auto-fill "(sudah)")
+                            </label>
+                            <input type="hidden" id="catatan6" name="catatan6" value="{{ old('catatan6', $existingPersentase->catatan6 ?? '') }}">
+                        </div>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan6">Edit Detail</button>
                     </div>
                 </div>
             </div>
@@ -561,15 +640,19 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="catatan6" class="form-label">Membersihkan noise;
-                                    Menyesuaikan level suara (voice over, musik latar);
-                                    Menambahkan sound effect jika dibutuhkan</label>
-                                <input type="text" class="form-control @error('catatan6') is-invalid @enderror" id="catatan6" name="catatan6"
-                                    value="{{ old('catatan6', $existingPersentase->catatan6 ?? '') }}" placeholder="Masukkan catatan Penyuntingan Audio">
+                                <label for="catatan6_detail" class="form-label">Detail Catatan (Override checkbox)</label>
+                                <input type="text" class="form-control @error('catatan6') is-invalid @enderror" id="catatan6_detail" placeholder="Edit detail (opsional)" value="{{ old('catatan6', $existingPersentase->catatan6 ?? '') }}">
+                                <div class="form-text">Checkbox quick-fill used default text; edit here to override.</div>
                                 @error('catatan6')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <script>
+                                document.getElementById('catatan6_detail').addEventListener('input', function() {
+                                    document.getElementById('catatan6').value = this.value;
+                                    calculatePercentage();
+                                });
+                            </script>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -583,12 +666,19 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingCatatan7">
                     <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan7" aria-expanded="false" aria-controls="collapseCatatan7">
-                        7. Penyisipan Subtitle atau Teks Narasi (10%)
+                        7. Penyisipan Subtitle atau Teks Narasi (10%) <span id="status7" class="badge bg-secondary ms-2">Pending</span>
                     </button>
                 </h2>
                 <div id="collapseCatatan7" class="accordion-collapse collapse" aria-labelledby="headingCatatan7" data-parent="#accordionProgres">
                     <div class="accordion-body">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan7">Isi Catatan Penyisipan Subtitle atau Teks Narasi</button>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="checkbox7" name="checkbox7">
+                            <label class="form-check-label" for="checkbox7">
+                                Quick Complete (Auto-fill "(sudah)")
+                            </label>
+                            <input type="hidden" id="catatan7" name="catatan7" value="{{ old('catatan7', $existingPersentase->catatan7 ?? '') }}">
+                        </div>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan7">Edit Detail</button>
                     </div>
                 </div>
             </div>
@@ -603,13 +693,19 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="catatan7" class="form-label">Menambahkan subtitle (bila diperlukan); Menyisipkan poin penting materi dalam bentuk teks visual</label>
-                                <input type="text" class="form-control @error('catatan7') is-invalid @enderror" id="catatan7" name="catatan7"
-                                    value="{{ old('catatan7', $existingPersentase->catatan7 ?? '') }}" placeholder="Masukkan catatan Penyisipan Subtitle atau Teks Narasi">
+                                <label for="catatan7_detail" class="form-label">Detail Catatan (Override checkbox)</label>
+                                <input type="text" class="form-control @error('catatan7') is-invalid @enderror" id="catatan7_detail" placeholder="Edit detail (opsional)" value="{{ old('catatan7', $existingPersentase->catatan7 ?? '') }}">
+                                <div class="form-text">Checkbox quick-fill used default text; edit here to override.</div>
                                 @error('catatan7')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <script>
+                                document.getElementById('catatan7_detail').addEventListener('input', function() {
+                                    document.getElementById('catatan7').value = this.value;
+                                    calculatePercentage();
+                                });
+                            </script>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -623,12 +719,19 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingCatatan8">
                     <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan8" aria-expanded="false" aria-controls="collapseCatatan8">
-                        8. Quality Control (QC) dan Revisi (5%)
+                        8. Quality Control (QC) dan Revisi (5%) <span id="status8" class="badge bg-secondary ms-2">Pending</span>
                     </button>
                 </h2>
                 <div id="collapseCatatan8" class="accordion-collapse collapse" aria-labelledby="headingCatatan8" data-parent="#accordionProgres">
                     <div class="accordion-body">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan8">Isi Catatan Quality Control (QC) dan Revisi</button>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="checkbox8" name="checkbox8">
+                            <label class="form-check-label" for="checkbox8">
+                                Quick Complete (Auto-fill "(sudah)")
+                            </label>
+                            <input type="hidden" id="catatan8" name="catatan8" value="{{ old('catatan8', $existingPersentase->catatan8 ?? '') }}">
+                        </div>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan8">Edit Detail</button>
                     </div>
                 </div>
             </div>
@@ -643,13 +746,19 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="catatan8" class="form-label">Menonton ulang hasil edit untuk deteksi kesalahan; Menyesuaikan revisi dari dosen</label>
-                                <input type="text" class="form-control @error('catatan8') is-invalid @enderror" id="catatan8" name="catatan8"
-                                    value="{{ old('catatan8', $existingPersentase->catatan8 ?? '') }}" placeholder="Masukkan catatan Quality Control (QC) dan Revisi">
+                                <label for="catatan8_detail" class="form-label">Detail Catatan (Override checkbox)</label>
+                                <input type="text" class="form-control @error('catatan8') is-invalid @enderror" id="catatan8_detail" placeholder="Edit detail (opsional)" value="{{ old('catatan8', $existingPersentase->catatan8 ?? '') }}">
+                                <div class="form-text">Checkbox quick-fill used default text; edit here to override.</div>
                                 @error('catatan8')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <script>
+                                document.getElementById('catatan8_detail').addEventListener('input', function() {
+                                    document.getElementById('catatan8').value = this.value;
+                                    calculatePercentage();
+                                });
+                            </script>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -663,12 +772,19 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingCatatan9">
                     <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan9" aria-expanded="false" aria-controls="collapseCatatan9">
-                        9. Export dan Finalisasi (5%)
+                        9. Export dan Finalisasi (5%) <span id="status9" class="badge bg-secondary ms-2">Pending</span>
                     </button>
                 </h2>
                 <div id="collapseCatatan9" class="accordion-collapse collapse" aria-labelledby="headingCatatan9" data-parent="#accordionProgres">
                     <div class="accordion-body">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan9">Isi Catatan Export dan Finalisasi</button>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="checkbox9" name="checkbox9">
+                            <label class="form-check-label" for="checkbox9">
+                                Quick Complete (Auto-fill "(sudah)")
+                            </label>
+                            <input type="hidden" id="catatan9" name="catatan9" value="{{ old('catatan9', $existingPersentase->catatan9 ?? '') }}">
+                        </div>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan9">Edit Detail</button>
                     </div>
                 </div>
             </div>
@@ -683,14 +799,19 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="catatan9" class="form-label">Mengekspor video dalam format dan resolusi sesuai kebutuhan;
-                                    Menyimpan arsip kerja</label>
-                                <input type="text" class="form-control @error('catatan9') is-invalid @enderror" id="catatan9" name="catatan9"
-                                    value="{{ old('catatan9', $existingPersentase->catatan9 ?? '') }}" placeholder="Masukkan catatan Export dan Finalisasi">
+                                <label for="catatan9_detail" class="form-label">Detail Catatan (Override checkbox)</label>
+                                <input type="text" class="form-control @error('catatan9') is-invalid @enderror" id="catatan9_detail" placeholder="Edit detail (opsional)" value="{{ old('catatan9', $existingPersentase->catatan9 ?? '') }}">
+                                <div class="form-text">Checkbox quick-fill used default text; edit here to override.</div>
                                 @error('catatan9')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <script>
+                                document.getElementById('catatan9_detail').addEventListener('input', function() {
+                                    document.getElementById('catatan9').value = this.value;
+                                    calculatePercentage();
+                                });
+                            </script>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -704,12 +825,19 @@
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingCatatan10">
                     <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseCatatan10" aria-expanded="false" aria-controls="collapseCatatan10">
-                        10. Pasca Produksi (5%)
+                        10. Pasca Produksi (5%) <span id="status10" class="badge bg-secondary ms-2">Pending</span>
                     </button>
                 </h2>
                 <div id="collapseCatatan10" class="accordion-collapse collapse" aria-labelledby="headingCatatan10" data-parent="#accordionProgres">
                     <div class="accordion-body">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan10">Isi Catatan Pasca Produksi</button>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="checkbox10" name="checkbox10">
+                            <label class="form-check-label" for="checkbox10">
+                                Quick Complete (Auto-fill "(sudah)")
+                            </label>
+                            <input type="hidden" id="catatan10" name="catatan10" value="{{ old('catatan10', $existingPersentase->catatan10 ?? '') }}">
+                        </div>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCatatan10">Edit Detail</button>
                     </div>
                 </div>
             </div>
@@ -724,13 +852,19 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="catatan10" class="form-label">Editor mengupload video dengan dilengkapi judul, caption, thumbnail, dan elemen lain yang sesuai dengan video</label>
-                                <input type="text" class="form-control @error('catatan10') is-invalid @enderror" id="catatan10" name="catatan10"
-                                    value="{{ old('catatan10', $existingPersentase->catatan10 ?? '') }}" placeholder="Masukkan catatan Pasca Produksi">
+                                <label for="catatan10_detail" class="form-label">Detail Catatan (Override checkbox)</label>
+                                <input type="text" class="form-control @error('catatan10') is-invalid @enderror" id="catatan10_detail" placeholder="Edit detail (opsional)" value="{{ old('catatan10', $existingPersentase->catatan10 ?? '') }}">
+                                <div class="form-text">Checkbox quick-fill used default text; edit here to override.</div>
                                 @error('catatan10')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <script>
+                                document.getElementById('catatan10_detail').addEventListener('input', function() {
+                                    document.getElementById('catatan10').value = this.value;
+                                    calculatePercentage();
+                                });
+                            </script>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -740,6 +874,16 @@
                 </div>
             </div>
 
+            <div class="card mt-4">
+                <div class="card-body text-center">
+                    <button type="submit" id="globalSaveBtn" class="btn btn-success btn-lg">
+                        <i class="bi bi-save"></i> Simpan Semua Perubahan (<span id="currentPct">{{ $existingPersentase->persentase ?? 0 }}%</span>)
+                    </button>
+                    <p class="mt-2 text-muted">
+                        <small>Gunakan checkbox di bawah untuk quick fill otomatis, atau edit detail di modal</small>
+                    </p>
+                </div>
+            </div>
         </div> {{-- end accordion --}}
     </form>
 
@@ -749,6 +893,20 @@
 @include('layout.footer')
 
 <script>
+    // Data for each stage: % and default text
+    const stageData = {
+        1: {pct: 10, text: 'Menerima brief dari dosen/pengampu; Menyusun rencana editing; Memastikan ketersediaan materi (video, audio, slide, dll)'},
+        2: {pct: 5, text: 'Mengimpor footage, audio, dan bahan pendukung ke software; Membuat folder kerja terstruktur (bining)'},
+        3: {pct: 15, text: 'Memilih bagian-bagian penting video; Menyusun urutan sesuai alur pembelajaran; Menghapus bagian yang tidak diperlukan'},
+        4: {pct: 15, text: 'Memperhalus transisi antar bagian; Sinkronisasi audio dan video; Koreksi durasi agar efisien'},
+        5: {pct: 20, text: 'Menambahkan judul, nama narasumber, transisi visual; Menyisipkan gambar, ilustrasi, atau animasi penunjang materi; Menyisipkan bumper opening video'},
+        6: {pct: 10, text: 'Membersihkan noise; Menyesuaikan level suara (voice over, musik latar); Menambahkan sound effect jika dibutuhkan'},
+        7: {pct: 10, text: 'Menambahkan subtitle (bila diperlukan); Menyisipkan poin penting materi dalam bentuk teks visual'},
+        8: {pct: 5, text: 'Menonton ulang hasil edit untuk deteksi kesalahan; Menyesuaikan revisi dari dosen'},
+        9: {pct: 5, text: 'Mengekspor video dalam format dan resolusi sesuai kebutuhan; Menyimpan arsip kerja'},
+        10: {pct: 5, text: 'Editor mengupload video dengan dilengkapi judul, caption, thumbnail, dan elemen lain yang sesuai dengan video'}
+    };
+
     // Fungsi untuk mendapatkan persentase berdasarkan nomor catatan
     function getPersentaseCatatan(catatanNumber) {
         const persentaseMap = {
@@ -792,8 +950,55 @@
         }
     }
 
-    // Hitung persentase saat halaman dimuat
+    // Checkbox event listeners
     document.addEventListener('DOMContentLoaded', function() {
+        // Existing calculate
         calculatePercentage();
+
+        // Checkbox handlers
+        document.querySelectorAll('input[name^=\"checkbox\"]').forEach(function(cb) {
+            cb.addEventListener('change', function(e) {
+                const num = this.name.match(/checkbox(\d+)/)[1];
+                const catInput = document.getElementById('catatan' + num);
+                const statusSpan = document.getElementById('status' + num);
+                
+                if (this.checked) {
+                    catInput.value = '(sudah)';
+                    if (statusSpan) statusSpan.textContent = 'Done';
+                    statusSpan.className = 'badge bg-success ms-2';
+                } else {
+                    catInput.value = '';
+                    if (statusSpan) statusSpan.textContent = 'Pending';
+                    statusSpan.className = 'badge bg-secondary ms-2';
+                }
+                calculatePercentage();
+            });
+        });
+
+        // Init checkboxes from existing data
+        for (let i = 1; i <= 10; i++) {
+            const catInput = document.getElementById('catatan' + i);
+            const cb = document.getElementById('checkbox' + i);
+            const statusSpan = document.getElementById('status' + i);
+            if (catInput && catInput.value.trim() !== '') {
+                if (cb) cb.checked = true;
+                if (statusSpan) statusSpan.className = 'badge bg-success ms-2';
+            } else {
+                if (cb) cb.checked = false;
+                if (statusSpan) statusSpan.className = 'badge bg-secondary ms-2';
+            }
+        }
+
+        // Live update save btn % if exists
+        const saveBtn = document.getElementById('globalSaveBtn');
+        if (saveBtn) {
+            const updateBtnText = () => {
+                const pct = document.getElementById('persentase').value;
+                saveBtn.innerHTML = `Simpan Progres (${pct}%)`;
+            };
+            updateBtnText();
+            // Listen for changes
+            document.getElementById('persentase').addEventListener('change', updateBtnText);
+        }
     });
 </script>

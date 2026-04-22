@@ -1,9 +1,7 @@
-# TODO: Implement Automatic Editor Creation on User Verification
+# Progress Tracking for Checkbox Auto-fill Task ✓
 
 ## Steps:
-
-- [x] Step 1: Edit `app/Http/Controllers/UserController.php` - Modify `updateStatus` method to create Editor record when status set to 'active'.
-- [x] Step 2: Test the changes manually via /verifikasi page. (Manual test: Login as admin, visit /verifikasi, approve a pending user → verify editor record created in DB and shown on page.)
-- [x] Step 3: Mark complete and cleanup TODO.md.
-
-**Status:** All steps complete. Changes implemented successfully.
+- [x] Step 1: Create this TODO.md
+- [x] Step 2: Edit modal_progres.blade.php JS to set checkbox value to '(sudah)' only
+- [x] Step 3: Update TODO.md to mark completion
+- [x] Step 4: Test functionality and complete task
