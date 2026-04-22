@@ -42,12 +42,13 @@
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">Jenis Kategori</label>
-              <select class="form-select" name="jenis_kategori" id="jenisKategori" required>
+<select class="form-select" name="jenis_kategori" id="jenisKategori" required>
                 <option selected disabled>Pilih Kategori</option>
                 <option value="Lomba">Lomba</option>
                 <option value="Marketing">Marketing</option>
                 <option value="E-Learning">E-Learning</option>
                 <option value="Mooc">Mooc</option>
+                <option value="Lainya">Lainya</option>
               </select>
             </div>
             <div class="col-md-6 mb-3 d-none" id="kategoriMoocGroup">
@@ -158,12 +159,13 @@
           <div class="row">
             <div class="col-md-6 mb-3">
               <label class="form-label">Jenis Kategori</label>
-              <select class="form-select" name="jenis_kategori" id="editJenisKategori" required>
+<select class="form-select" name="jenis_kategori" id="editJenisKategori" required>
                 <option selected disabled>Pilih Kategori</option>
                 <option value="Lomba">Lomba</option>
                 <option value="Marketing">Marketing</option>
                 <option value="E-Learning">E-Learning</option>
                 <option value="Mooc">Mooc</option>
+                <option value="Lainya">Lainya</option>
               </select>
             </div>
             <div class="col-md-6 mb-3 d-none" id="editKategoriMoocGroup">

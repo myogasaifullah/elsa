@@ -41,7 +41,7 @@ class JadwalBookingController extends Controller
             'nama_mata_kuliah' => 'nullable|string|max:255',
             'deskripsi' => 'nullable|string',
             'judul_course' => 'required|string|max:255',
-            'dosen_id' => 'required|exists:dosens,id',
+            'dosen_id' => 'nullable|exists:dosens,id',
         ]);
 
         try {
@@ -85,7 +85,7 @@ class JadwalBookingController extends Controller
             'nama_mata_kuliah' => 'nullable|string|max:255',
             'deskripsi' => 'nullable|string',
             'judul_course' => 'required|string|max:255',
-            'dosen_id' => 'required|exists:dosens,id',
+            'dosen_id' => 'nullable|exists:dosens,id',
         ]);
 
         $oldData = $jadwal->toArray();

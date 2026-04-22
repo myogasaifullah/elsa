@@ -97,7 +97,7 @@
                 <th scope="col">Studio</th>
                 <th scope="col">Mata Kuliah</th>
 <th scope="col">Judul Course</th>
-                <th scope="col">Deskripsi</th>
+                <!-- <th scope="col">Deskripsi</th> -->
                 <th scope="col">Dosen</th>
                 <th scope="col">Status</th>
                 <th scope="col">User Name</th>
@@ -119,7 +119,7 @@
                 <td>{{ $jadwal->studio->nama_studio }}</td>
                 <td>{{ $jadwal->nama_mata_kuliah }}</td>
                 <td>{{ $jadwal->judul_course }}</td>
-                <td>{{ Str::limit($jadwal->deskripsi ?? '-', 50) }}</td>
+                <!-- <td>{{ Str::limit($jadwal->deskripsi ?? '-', 50) }}</td> -->
                 <td>{{ $jadwal->dosen->nama_dosen ?? '-' }}</td>
                 <td>
                   @if($jadwal->status == 'pending')
@@ -289,6 +289,7 @@
           document.getElementById('detailTelepon').value = this.dataset.telepon;
           document.getElementById('detailFakultas').value = this.dataset.fakultas;
           document.getElementById('detailProdi').value = this.dataset.prodi;
+          document.getElementById('detailDeskripsi').value = this.dataset.deskripsi;
         });
       });
     });
