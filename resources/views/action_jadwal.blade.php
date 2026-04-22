@@ -9,6 +9,18 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
         </div>
         <div class="modal-body">
+          @if ($errors->any())
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <strong>Error!</strong>
+            <ul class="mb-0 mt-2">
+              @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+              @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+          @endif
           <div class="row">
             <div class="col-md-4 mb-3">
               <label class="form-label">Tanggal</label>
@@ -62,6 +74,7 @@
               <label class="form-label">Nama Mata Kuliah</label>
               <select class="form-select" name="nama_mata_kuliah" id="tambahNamaMataKuliah">
                 <option selected disabled>Pilih Mata Kuliah</option>
+                <option value="">Kosong (tidak ada mata kuliah)</option>
                 @foreach($mataKuliahs as $mataKuliah)
                 <option value="{{ $mataKuliah->nama_mata_kuliah }}">{{ $mataKuliah->nama_mata_kuliah }}</option>
                 @endforeach
@@ -105,6 +118,18 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
         </div>
         <div class="modal-body">
+          @if ($errors->any())
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <strong>Error!</strong>
+            <ul class="mb-0 mt-2">
+              @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+              @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+          @endif
           <input type="hidden" name="id" id="editId">
           <div class="row">
             <div class="col-md-4 mb-3">
@@ -157,8 +182,9 @@
             </div>
             <div class="col-md-6 mb-3">
               <label class="form-label">Nama Mata Kuliah</label>
-              <select class="form-select" name="nama_mata_kuliah" id="editNamaMataKuliah" required>
+              <select class="form-select" name="nama_mata_kuliah" id="editNamaMataKuliah">
                 <option selected disabled>Pilih Mata Kuliah</option>
+                <option value="">Kosong (tidak ada mata kuliah)</option>
                 @foreach($mataKuliahs as $mataKuliah)
                 <option value="{{ $mataKuliah->nama_mata_kuliah }}">{{ $mataKuliah->nama_mata_kuliah }}</option>
                 @endforeach

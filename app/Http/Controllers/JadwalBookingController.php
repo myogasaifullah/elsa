@@ -7,9 +7,12 @@ use App\Models\Studio;
 use App\Services\ActivityLogService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class JadwalBookingController extends Controller
 {
+    use \Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
     public function index()
     {
         // Catat aktivitas: melihat halaman jadwal booking
@@ -26,6 +29,8 @@ class JadwalBookingController extends Controller
 
     public function store(Request $request)
     {
+        Log::info('JadwalBooking store called', $request->all());
+
         $request->validate([
             'tanggal' => 'required|date|after_or_equal:today',
             'jam_mulai' => 'required|date_format:H:i',
@@ -38,34 +43,36 @@ class JadwalBookingController extends Controller
             'dosen_id' => 'required|exists:dosens,id',
         ]);
 
-        // Additional validation: nama_mata_kuliah required unless jenis_kategori is MOOC
-        if ($request->jenis_kategori !== 'Mooc' && empty($request->nama_mata_kuliah)) {
-            return back()->withErrors(['nama_mata_kuliah' => 'Nama Mata Kuliah wajib diisi kecuali untuk kategori MOOC.'])->withInput();
+        try {
+            $jadwal = JadwalBooking::create([
+                'tanggal' => $request->tanggal,
+                'jam' => $request->jam_mulai . ' - ' . $request->jam_selesai,
+                'jenis_kategori' => $request->jenis_kategori,
+                'kategori_mooc' => $request->kategori_mooc,
+                'studio_id' => $request->studio_id,
+                'nama_mata_kuliah' => $request->nama_mata_kuliah ?: null,
+                'judul_course' => $request->judul_course,
+                'user_id' => Auth::id(),
+                'dosen_id' => $request->dosen_id,
+                'status' => 'pending'
+            ]);
+
+            // Catat aktivitas: menambahkan jadwal booking baru
+            ActivityLogService::create('jadwal_booking', "Menambahkan jadwal booking baru: {$jadwal->judul_course} pada tanggal {$jadwal->tanggal}");
+
+            return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil ditambahkan');
+        } catch (\Exception $e) {
+            Log::error('Gagal menyimpan jadwal booking: ' . $e->getMessage(), $request->all());
+            return back()->with('error', 'Gagal menyimpan jadwal ke database. Pastikan nama mata kuliah diisi jika diperlukan. Error: ' . $e->getMessage())->withInput();
         }
-
-        $jadwal = JadwalBooking::create([
-            'tanggal' => $request->tanggal,
-            'jam' => $request->jam_mulai . ' - ' . $request->jam_selesai,
-            'jenis_kategori' => $request->jenis_kategori,
-            'kategori_mooc' => $request->kategori_mooc,
-            'studio_id' => $request->studio_id,
-            'nama_mata_kuliah' => $request->nama_mata_kuliah,
-            'judul_course' => $request->judul_course,
-            'user_id' => Auth::id(),
-            'dosen_id' => $request->dosen_id,
-            'status' => 'pending'
-        ]);
-
-        // Catat aktivitas: menambahkan jadwal booking baru
-        ActivityLogService::create('jadwal_booking', "Menambahkan jadwal booking baru: {$jadwal->judul_course} pada tanggal {$jadwal->tanggal}");
-
-        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil ditambahkan');
     }
 
     public function update(Request $request, JadwalBooking $jadwal)
     {
         $this->authorize('update', $jadwal);
 
+        Log::info('JadwalBooking update called', $request->all());
+
         $request->validate([
             'tanggal' => 'required|date|after_or_equal:today',
             'jam_mulai' => 'required|date_format:H:i',
@@ -78,27 +85,26 @@ class JadwalBookingController extends Controller
             'dosen_id' => 'required|exists:dosens,id',
         ]);
 
-        // Additional validation: nama_mata_kuliah required unless jenis_kategori is MOOC
-        if ($request->jenis_kategori !== 'Mooc' && empty($request->nama_mata_kuliah)) {
-            return back()->withErrors(['nama_mata_kuliah' => 'Nama Mata Kuliah wajib diisi kecuali untuk kategori MOOC.'])->withInput();
-        }
-
         $oldData = $jadwal->toArray();
-        $jadwal->update([
-            'tanggal' => $request->tanggal,
-            'jam' => $request->jam_mulai . ' - ' . $request->jam_selesai,
-            'jenis_kategori' => $request->jenis_kategori,
-            'kategori_mooc' => $request->kategori_mooc,
-            'studio_id' => $request->studio_id,
-            'nama_mata_kuliah' => $request->nama_mata_kuliah,
-            'judul_course' => $request->judul_course,
-            'dosen_id' => $request->dosen_id,
-        ]);
+        try {
+            $jadwal->update([
+                'tanggal' => $request->tanggal,
+                'jam' => $request->jam_mulai . ' - ' . $request->jam_selesai,
+                'jenis_kategori' => $request->jenis_kategori,
+                'kategori_mooc' => $request->kategori_mooc,
+                'studio_id' => $request->studio_id,
+                'nama_mata_kuliah' => $request->nama_mata_kuliah ?: null,
+                'judul_course' => $request->judul_course,
+                'dosen_id' => $request->dosen_id,
+            ]);
 
-        // Catat aktivitas: memperbarui jadwal booking
-        ActivityLogService::update('jadwal_booking', "Memperbarui jadwal booking ID {$jadwal->id}. Data lama: " . json_encode($oldData) . " -> Data baru: " . json_encode($jadwal));
+            ActivityLogService::update('jadwal_booking', "Memperbarui jadwal booking ID {$jadwal->id}. Data lama: " . json_encode($oldData) . " -> Data baru: " . json_encode($jadwal));
 
-        return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil diperbarui');
+            return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil diperbarui');
+        } catch (\Exception $e) {
+            Log::error('Gagal update jadwal booking: ' . $e->getMessage(), $request->all());
+            return back()->with('error', 'Gagal update jadwal ke database. Error: ' . $e->getMessage())->withInput();
+        }
     }
 
     public function destroy(JadwalBooking $jadwal)
@@ -142,7 +148,7 @@ class JadwalBookingController extends Controller
             try {
                 ActivityLogService::log('mark_as_done', "Menandai jadwal booking ID {$jadwal->id} sebagai sudah shooting");
             } catch (\Exception $e) {
-                \Log::error('Error logging activity in markAsDone: ' . $e->getMessage());
+                Log::error('Error logging activity in markAsDone: ' . $e->getMessage());
                 // Continue without failing the operation
             }
 
@@ -161,7 +167,7 @@ class JadwalBookingController extends Controller
                 ]);
                 $progressCreated = true;
             } catch (\Exception $e) {
-                \Log::error('Error creating progress in markAsDone: ' . $e->getMessage(), [
+                Log::error('Error creating progress in markAsDone: ' . $e->getMessage(), [
                     'jadwal_id' => $jadwal->id,
                     'trace' => $e->getTraceAsString()
                 ]);
@@ -177,7 +183,7 @@ class JadwalBookingController extends Controller
                 'message' => $message
             ]);
         } catch (\Exception $e) {
-            \Log::error('Error in markAsDone: ' . $e->getMessage(), [
+            Log::error('Error in markAsDone: ' . $e->getMessage(), [
                 'jadwal_id' => $jadwal->id,
                 'trace' => $e->getTraceAsString()
             ]);
@@ -243,6 +249,7 @@ class JadwalBookingController extends Controller
             'studio' => $jadwal->studio->nama_studio ?? '-',
             'mata_kuliah' => $jadwal->nama_mata_kuliah,
             'judul_course' => $jadwal->judul_course,
+            'status' => $jadwal->status === 'approved' ? 'Belum Shooting' : ($jadwal->status === 'sudah shooting' ? 'Sudah Shooting' : $status),
             'status' => $jadwal->status === 'approved' ? 'Belum Shooting' : ($jadwal->status === 'sudah shooting' ? 'Sudah Shooting' : $jadwal->status),
         ]);
     }
@@ -292,3 +299,4 @@ class JadwalBookingController extends Controller
         return response()->json($approvedEvents);
     }
 }
+
