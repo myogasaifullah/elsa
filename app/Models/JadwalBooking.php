@@ -13,6 +13,7 @@ class JadwalBooking extends Model
         'kategori_mooc',
         'studio',
         'nama_mata_kuliah',
+        'deskripsi',
         'judul_course',
         'status',
         'user_id',

@@ -96,7 +96,8 @@
                 <th scope="col">Kategori MOOC</th>
                 <th scope="col">Studio</th>
                 <th scope="col">Mata Kuliah</th>
-                <th scope="col">Judul Course</th>
+<th scope="col">Judul Course</th>
+                <th scope="col">Deskripsi</th>
                 <th scope="col">Dosen</th>
                 <th scope="col">Status</th>
                 <th scope="col">User Name</th>
@@ -118,6 +119,7 @@
                 <td>{{ $jadwal->studio->nama_studio }}</td>
                 <td>{{ $jadwal->nama_mata_kuliah }}</td>
                 <td>{{ $jadwal->judul_course }}</td>
+                <td>{{ Str::limit($jadwal->deskripsi ?? '-', 50) }}</td>
                 <td>{{ $jadwal->dosen->nama_dosen ?? '-' }}</td>
                 <td>
                   @if($jadwal->status == 'pending')
@@ -154,6 +156,7 @@
                     data-telepon="{{ $jadwal->user->nomor_telepon ?? '-' }}"
                     data-fakultas="{{ $jadwal->user->fakultas->singkatan ?? '-' }}"
                     data-prodi="{{ $jadwal->user->prodi->singkatan ?? '-' }}"
+                    data-deskripsi="{{ $jadwal->deskripsi ?? '' }}"
                     data-bs-toggle="modal"
                     data-bs-target="#modalDetailJadwal"
                     title="Detail">
@@ -168,6 +171,7 @@
                     data-kategori="{{ $jadwal->kategori_mooc }}"
                     data-studio="{{ $jadwal->studio_id }}"
                     data-matkul="{{ $jadwal->nama_mata_kuliah }}"
+                    data-deskripsi="{{ $jadwal->deskripsi ?? '' }}"
                     data-judul="{{ $jadwal->judul_course }}"
                     data-dosen="{{ $jadwal->dosen_id }}"
                     data-bs-toggle="modal"

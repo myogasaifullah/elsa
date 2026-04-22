@@ -96,6 +96,12 @@
               </select>
             </div>
           </div>
+          <div class="row">
+            <div class="col-12 mb-3">
+              <label class="form-label">Deskripsi <span class="text-muted">(Opsional)</span></label>
+              <textarea class="form-control" name="deskripsi" id="tambahDeskripsi" rows="3" placeholder="Masukkan deskripsi tambahan..."></textarea>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -206,6 +212,12 @@
               </select>
             </div>
           </div>
+          <div class="row">
+            <div class="col-12 mb-3">
+              <label class="form-label">Deskripsi <span class="text-muted">(Opsional)</span></label>
+              <textarea class="form-control" name="deskripsi" id="editDeskripsi" rows="3" placeholder="Masukkan deskripsi tambahan..."></textarea>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -277,13 +289,19 @@
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Nama Mata Kuliah</label>
-            <input type="text" class="form-control" id="detailMatkul" readonly>
+              <input type="text" class="form-control" id="detailMatkul" readonly>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6 mb-3">
-            <label class="form-label">Judul Course</label>
-            <input type="text" class="form-control" id="detailJudul" readonly>
+          <div class="row mb-3">
+            <div class="col-12">
+              <label class="form-label">Deskripsi</label>
+              <textarea class="form-control" id="detailDeskripsi" readonly rows="3" style="font-size: 0.9em;"></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Judul Course</label>
+              <input type="text" class="form-control" id="detailJudul" readonly>
           </div>
           <div class="col-md-6 mb-3">
             <label class="form-label">Dosen</label>
@@ -473,6 +491,7 @@
         document.getElementById('editJudulCourse').value = judul;
         document.getElementById('editDosen').value = dosen || '';
         document.getElementById('editKategoriMooc').value = kategori || '';
+        document.getElementById('editDeskripsi').value = this.dataset.deskripsi || '';
 
         // Clear any previous error messages
         showError('errorEditJumat', false);

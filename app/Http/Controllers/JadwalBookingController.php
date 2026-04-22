@@ -39,6 +39,7 @@ class JadwalBookingController extends Controller
             'kategori_mooc' => 'nullable|string',
             'studio_id' => 'required|exists:studios,id',
             'nama_mata_kuliah' => 'nullable|string|max:255',
+            'deskripsi' => 'nullable|string',
             'judul_course' => 'required|string|max:255',
             'dosen_id' => 'required|exists:dosens,id',
         ]);
@@ -51,6 +52,7 @@ class JadwalBookingController extends Controller
                 'kategori_mooc' => $request->kategori_mooc,
                 'studio_id' => $request->studio_id,
                 'nama_mata_kuliah' => $request->nama_mata_kuliah ?: null,
+                'deskripsi' => $request->deskripsi ?: null,
                 'judul_course' => $request->judul_course,
                 'user_id' => Auth::id(),
                 'dosen_id' => $request->dosen_id,
@@ -81,6 +83,7 @@ class JadwalBookingController extends Controller
             'kategori_mooc' => 'nullable|string',
             'studio_id' => 'required|exists:studios,id',
             'nama_mata_kuliah' => 'nullable|string|max:255',
+            'deskripsi' => 'nullable|string',
             'judul_course' => 'required|string|max:255',
             'dosen_id' => 'required|exists:dosens,id',
         ]);
@@ -94,6 +97,7 @@ class JadwalBookingController extends Controller
                 'kategori_mooc' => $request->kategori_mooc,
                 'studio_id' => $request->studio_id,
                 'nama_mata_kuliah' => $request->nama_mata_kuliah ?: null,
+                'deskripsi' => $request->deskripsi ?: null,
                 'judul_course' => $request->judul_course,
                 'dosen_id' => $request->dosen_id,
             ]);
