@@ -94,6 +94,16 @@ class UserController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
+        // Auto create Editor if role is Editor
+        if ($request->role === 'Editor') {
+            Editor::create([
+                'user_id' => $user->id,
+                'nama' => $user->name,
+                'email' => $user->email,
+            ]);
+            ActivityLogService::create('Editor', "Menambahkan editor otomatis dari tambah user: {$user->name} ({$user->email})");
+        }
+
         // Log aktivitas create user
         ActivityLogService::create('User', "Menambahkan user baru: {$user->name}");
 

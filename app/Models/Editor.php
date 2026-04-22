@@ -9,5 +9,10 @@ class Editor extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nama', 'email'];
+    protected $fillable = ['nama', 'email', 'user_id'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
