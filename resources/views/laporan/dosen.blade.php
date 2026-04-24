@@ -6,7 +6,7 @@
 
     <div class="card p-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="fw-bold mb-3">REKAPITULASI SHOOTING MOOC DOSEN</h4>
+            <h4 class="fw-bold mb-3">REKAPITULASI VIDEO DOSEN</h4>
             <div>
                 <a href="{{ route('laporan.export.rekap.pdf', request()->query()) }}" class="btn btn-danger btn-sm">PDF</a>
                 <a href="{{ route('laporan.export.rekap.excel', request()->query()) }}" class="btn btn-success btn-sm">Excel</a>
@@ -87,4 +87,3 @@
     </div>
 
 </main>
-

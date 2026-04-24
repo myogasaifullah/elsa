@@ -29,7 +29,7 @@
 
 <body>
     <h2 style="text-align: center;">REKAP VIDEO PEMBELAJARAN DOSEN TETAP</h2>
-    <h3 style="text-align: center;">FAKULTAS TEKNIK DAN ILMU KOMPUTER<br>UNIVERSITAS TEKNOKRAT INDONESIA</h3>
+    <h3 style="text-align: center;"></h3>
     <table>
         <thead>
             <tr>

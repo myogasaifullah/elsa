@@ -8,7 +8,7 @@
          <div class="d-flex justify-content-between align-items-center mb-3">
              <div>
                  <h5 class="text-center fw-bold">REKAP VIDEO PEMBELAJARAN DOSEN TETAP</h5>
-                 <h6 class="text-center mb-3">FAKULTAS TEKNIK DAN ILMU KOMPUTER<br>UNIVERSITAS TEKNOKRAT INDONESIA</h6>
+                 <h6 class="text-center mb-3">UNIVERSITAS TEKNOKRAT INDONESIA</h6>
              </div>
              <div>
                  <a href="{{ route('laporan.export.fakultas.pdf', request()->query()) }}" class="btn btn-danger btn-sm">PDF</a>

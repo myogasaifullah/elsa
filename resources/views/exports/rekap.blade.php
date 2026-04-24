@@ -28,7 +28,7 @@
 </head>
 
 <body>
-    <h2 style="text-align: center;">REKAPITULASI SHOOTING MOOC DOSEN</h2>
+    <h2 style="text-align: center;">REKAPITULASI VIDEO DOSEN</h2>
     <table>
         <thead>
             <tr>

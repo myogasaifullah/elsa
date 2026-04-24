@@ -43,7 +43,7 @@
         <div class="d-flex justify-content-center align-items-center mb-3">
             <div>
                 <h4 class="text-center fw-bold">UNIVERSITAS TEKNOKRAT INDONESIA</h4>
-                <h5 class="text-center mb-4"><br>DOSEN MOOC</h5>
+                <h5 class="text-center mb-4"><br>VIDEO DOSEN</h5>
             </div>
         </div>
 
@@ -127,7 +127,7 @@
                     <tr>
                         <th>No</th>
                         <th>Nama Dosen</th>
-                        <th>Judul Video MOOC</th>
+                        <th>Judul Video</th>
                         <th>Link Video YouTube</th>
                         <th>Durasi</th>
                         <th>Tanggal Upload YouTube</th>
