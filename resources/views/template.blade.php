@@ -15,7 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
 
     <!-- Favicons -->
-    <link href="assets/img/favicon.png" rel="icon">
+    <link href="assets/img/logo.png" rel="icon" type="image/png">
     <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
@@ -69,14 +69,14 @@
     <header id="header" class="header fixed-top d-flex align-items-center">
 
         <div class="d-flex align-items-center justify-content-between">
-    <a href="index.html" class="logo d-flex align-items-center">
-        <img src="assets/img/logo.png" alt="" style="height: 30px;">
-        <span class="d-block d-lg-block">Elsa</span>
-        <!-- Ganti d-none jadi d-block supaya terlihat di semua ukuran -->
-    </a>
-    <!-- <i class="bi bi-list toggle-sidebar-btn "></i> -->
-    <!-- Tambahkan d-block d-lg-none agar toggle muncul di mobile, tidak di desktop -->
-</div>
+            <a href="index.html" class="logo d-flex align-items-center">
+                <img src="assets/img/logo.png" alt="" style="height: 30px;">
+                <span class="d-block d-lg-block">Elsa</span>
+                <!-- Ganti d-none jadi d-block supaya terlihat di semua ukuran -->
+            </a>
+            <!-- <i class="bi bi-list toggle-sidebar-btn "></i> -->
+            <!-- Tambahkan d-block d-lg-none agar toggle muncul di mobile, tidak di desktop -->
+        </div>
 
 
         <div class="search-bar">

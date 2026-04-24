@@ -16,7 +16,7 @@
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
 
   <!-- Favicons -->
-  <link href="{{ asset('assets/favicon.ico') }}" rel="icon" type="image/x-icon">
+  <link href="{{ asset('assets/img/logo.png') }}" rel="icon" type="image/png">
   <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
