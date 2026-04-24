@@ -165,7 +165,7 @@ class LaporanController extends Controller
 
     private function getFilteredJadwal($filters)
     {
-        $query = JadwalBooking::with(['dosen', 'studio'])->orderBy('tanggal', 'desc');
+        $query = JadwalBooking::with(['dosen.fakultas', 'studio'])->orderBy('tanggal', 'desc');
 
         // Apply filters
         if (!empty($filters['jadwal_date_from'])) {
@@ -183,7 +183,21 @@ class LaporanController extends Controller
         }
 
         if (!empty($filters['jadwal_studio'])) {
-            $query->where('studio_id', $filters['jadwal_studio']);
+            $query->whereHas('studio', function ($q) use ($filters) {
+                $q->where('nama_studio', $filters['jadwal_studio']);
+            });
+        }
+
+        if (!empty($filters['jadwal_jenis_kategori'])) {
+            $query->where('jenis_kategori', $filters['jadwal_jenis_kategori']);
+        }
+
+        if (!empty($filters['jadwal_year'])) {
+            $query->whereYear('tanggal', $filters['jadwal_year']);
+        }
+
+        if (!empty($filters['jadwal_month'])) {
+            $query->whereMonth('tanggal', $filters['jadwal_month']);
         }
 
         return $query->get();
@@ -417,13 +431,9 @@ class LaporanController extends Controller
     {
         ActivityLogService::log('lihat_laporan_jadwal', 'Melihat halaman laporan jadwal');
 
-        $filterJadwal = $request->only(['jadwal_date_from', 'jadwal_date_to', 'jadwal_dosen', 'jadwal_studio']);
-        $progress = $this->getFilteredProgress($filterJadwal); // Get progress to extract jadwal bookings
+        $filterJadwal = $request->only(['jadwal_date_from', 'jadwal_date_to', 'jadwal_dosen', 'jadwal_studio', 'jadwal_jenis_kategori', 'jadwal_year', 'jadwal_month']);
+        $jadwalBookings = $this->getFilteredJadwal($filterJadwal);
 
-        $jadwalBookings = collect();
-        if ($progress->isNotEmpty()) {
-            $jadwalBookings = $progress->pluck('jadwalBooking')->filter()->values();
-        }
         $groupedJadwal = $jadwalBookings->groupBy('tanggal')->sortKeys();
         $studios = Studio::all();
 
