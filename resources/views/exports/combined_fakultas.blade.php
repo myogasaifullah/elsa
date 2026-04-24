@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Rekap Video Pembelajaran Dosen Gabungan</title>
+    <title>Rekap Fakultas Gabungan</title>
     <style>
         table {
             width: 100%;
