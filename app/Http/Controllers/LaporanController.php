@@ -267,7 +267,7 @@ class LaporanController extends Controller
         $filters = $request->only(['rekap_date_from', 'rekap_date_to', 'rekap_dosen', 'rekap_kategori_mooc', 'rekap_fakultas', 'rekap_year', 'rekap_month']);
         $export = new MoocExport($filters);
 
-        return Pdf::loadView('exports.mooc', $export->view()->getData())->setPaper('a4', 'landscape')->download('laporan-mooc.pdf');
+        return Pdf::loadView('exports.mooc', $export->view()->getData())->setPaper('a4', 'portrait')->download('laporan-mooc.pdf');
     }
 
     public function exportMoocExcel(Request $request)
