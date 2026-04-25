@@ -7,6 +7,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-bottom: 20px;
         }
 
         table,
@@ -24,12 +25,20 @@
         th {
             background-color: #f2f2f2;
         }
+
+        h3 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 
 <body>
     <h2 style="text-align: center;">REKAP VIDEO PEMBELAJARAN DOSEN TETAP</h2>
-    <h3 style="text-align: center;"></h3>
+    <h3 style="text-align: center;">UNIVERSITAS TEKNOKRAT INDONESIA</h3>
+
+    @foreach($groupedByFakultas as $fakultas => $groupedByDosen)
+    <h3>{{ $fakultas }}</h3>
     <table>
         <thead>
             <tr>
@@ -47,9 +56,10 @@
             </tr>
         </thead>
         <tbody>
+            @php $no = 1; @endphp
             @foreach($groupedByDosen as $index => $data)
             <tr>
-                <td>{{ $index + 1 }}</td>
+                <td>{{ $no++ }}</td>
                 <td>{{ $data['dosen']->nuptk_dosen ?? '-' }}</td>
                 <td>{{ $data['dosen']->nama_dosen ?? '-' }}</td>
                 <td>{{ $data['progres_count'] }}</td>
@@ -59,8 +69,17 @@
                 <td>{{ $data['dosen']->target_video_dosen ?? '-' }}</td>
             </tr>
             @endforeach
+            <tr style="font-weight: bold;">
+                <td colspan="3">TOTAL</td>
+                <td>{{ array_sum(array_column($groupedByDosen, 'progres_count')) }}</td>
+                <td>{{ array_sum(array_column($groupedByDosen, 'elearning_count')) }}</td>
+                <td>{{ array_sum(array_column($groupedByDosen, 'mooc_count')) }}</td>
+                <td>{{ array_sum(array_column($groupedByDosen, 'total_video')) }}</td>
+                <td></td>
+            </tr>
         </tbody>
     </table>
+    @endforeach
 </body>
 
 </html>

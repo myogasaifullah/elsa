@@ -11,17 +11,17 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class FakultasExport implements FromView, ShouldAutoSize, WithStyles
 {
-    protected $groupedByDosen;
+    protected $groupedByFakultas;
 
-    public function __construct($groupedByDosen = [])
+    public function __construct($groupedByFakultas = [])
     {
-        $this->groupedByDosen = $groupedByDosen;
+        $this->groupedByFakultas = $groupedByFakultas;
     }
 
     public function view(): View
     {
         return view('exports.fakultas', [
-            'groupedByDosen' => $this->groupedByDosen
+            'groupedByFakultas' => $this->groupedByFakultas
         ]);
     }
 
