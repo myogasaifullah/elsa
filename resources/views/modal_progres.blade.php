@@ -160,7 +160,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-    const transferButton = document.getElementById('transferDataButton');
+            const transferButton = document.getElementById('transferDataButton');
 
             if (transferButton) {
                 transferButton.addEventListener('click', function() {
@@ -174,41 +174,41 @@
                         // First save persentase form via AJAX
                         const formData = new FormData(form);
                         fetch(form.action, {
-                            method: 'POST',
-                            body: formData,
-                            headers: {
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                            }
-                        })
-                        .then(response => response.text())
-                        .then(() => {
-                            transferButton.innerHTML = '<i class="bi bi-arrow-down-up"></i> Transferring...';
-                            // Then transfer
-                            return fetch(`/progres/transfer-data/${progressId}`, {
                                 method: 'POST',
+                                body: formData,
                                 headers: {
-                                    'Content-Type': 'application/json',
                                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                                 }
+                            })
+                            .then(response => response.text())
+                            .then(() => {
+                                transferButton.innerHTML = '<i class="bi bi-arrow-down-up"></i> Transferring...';
+                                // Then transfer
+                                return fetch(`/progres/transfer-data/${progressId}`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                                    }
+                                });
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    alert('Persentase disimpan dan data berhasil ditransfer!');
+                                    location.reload();
+                                } else {
+                                    alert('Transfer gagal: ' + data.message);
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('Error saving or transferring');
+                            })
+                            .finally(() => {
+                                transferButton.disabled = false;
+                                transferButton.innerHTML = '<i class="bi bi-arrow-down-up"></i> Transfer Data dari Persentase';
                             });
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                alert('Persentase disimpan dan data berhasil ditransfer!');
-                                location.reload();
-                            } else {
-                                alert('Transfer gagal: ' + data.message);
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('Error saving or transferring');
-                        })
-                        .finally(() => {
-                            transferButton.disabled = false;
-                            transferButton.innerHTML = '<i class="bi bi-arrow-down-up"></i> Transfer Data dari Persentase';
-                        });
                     }
                 });
             }
@@ -888,7 +888,7 @@
 
             <div class="card mt-4">
                 <div class="card-body text-center">
-                    <button type="submit" id="globalSaveBtn" class="btn btn-success btn-lg">
+                    <button type="button" id="globalSaveBtn" class="btn btn-success btn-lg" data-progress-id="{{ $progress->id }}">
                         <i class="bi bi-save"></i> Simpan Semua Perubahan (<span id="currentPct">{{ $existingPersentase->persentase ?? 0 }}%</span>)
                     </button>
                     <p class="mt-2 text-muted">
@@ -907,16 +907,46 @@
 <script>
     // Data for each stage: % and default text
     const stageData = {
-        1: {pct: 10, text: 'Menerima brief dari dosen/pengampu; Menyusun rencana editing; Memastikan ketersediaan materi (video, audio, slide, dll)'},
-        2: {pct: 5, text: 'Mengimpor footage, audio, dan bahan pendukung ke software; Membuat folder kerja terstruktur (bining)'},
-        3: {pct: 15, text: 'Memilih bagian-bagian penting video; Menyusun urutan sesuai alur pembelajaran; Menghapus bagian yang tidak diperlukan'},
-        4: {pct: 15, text: 'Memperhalus transisi antar bagian; Sinkronisasi audio dan video; Koreksi durasi agar efisien'},
-        5: {pct: 20, text: 'Menambahkan judul, nama narasumber, transisi visual; Menyisipkan gambar, ilustrasi, atau animasi penunjang materi; Menyisipkan bumper opening video'},
-        6: {pct: 10, text: 'Membersihkan noise; Menyesuaikan level suara (voice over, musik latar); Menambahkan sound effect jika dibutuhkan'},
-        7: {pct: 10, text: 'Menambahkan subtitle (bila diperlukan); Menyisipkan poin penting materi dalam bentuk teks visual'},
-        8: {pct: 5, text: 'Menonton ulang hasil edit untuk deteksi kesalahan; Menyesuaikan revisi dari dosen'},
-        9: {pct: 5, text: 'Mengekspor video dalam format dan resolusi sesuai kebutuhan; Menyimpan arsip kerja'},
-        10: {pct: 5, text: 'Editor mengupload video dengan dilengkapi judul, caption, thumbnail, dan elemen lain yang sesuai dengan video'}
+        1: {
+            pct: 10,
+            text: 'Menerima brief dari dosen/pengampu; Menyusun rencana editing; Memastikan ketersediaan materi (video, audio, slide, dll)'
+        },
+        2: {
+            pct: 5,
+            text: 'Mengimpor footage, audio, dan bahan pendukung ke software; Membuat folder kerja terstruktur (bining)'
+        },
+        3: {
+            pct: 15,
+            text: 'Memilih bagian-bagian penting video; Menyusun urutan sesuai alur pembelajaran; Menghapus bagian yang tidak diperlukan'
+        },
+        4: {
+            pct: 15,
+            text: 'Memperhalus transisi antar bagian; Sinkronisasi audio dan video; Koreksi durasi agar efisien'
+        },
+        5: {
+            pct: 20,
+            text: 'Menambahkan judul, nama narasumber, transisi visual; Menyisipkan gambar, ilustrasi, atau animasi penunjang materi; Menyisipkan bumper opening video'
+        },
+        6: {
+            pct: 10,
+            text: 'Membersihkan noise; Menyesuaikan level suara (voice over, musik latar); Menambahkan sound effect jika dibutuhkan'
+        },
+        7: {
+            pct: 10,
+            text: 'Menambahkan subtitle (bila diperlukan); Menyisipkan poin penting materi dalam bentuk teks visual'
+        },
+        8: {
+            pct: 5,
+            text: 'Menonton ulang hasil edit untuk deteksi kesalahan; Menyesuaikan revisi dari dosen'
+        },
+        9: {
+            pct: 5,
+            text: 'Mengekspor video dalam format dan resolusi sesuai kebutuhan; Menyimpan arsip kerja'
+        },
+        10: {
+            pct: 5,
+            text: 'Editor mengupload video dengan dilengkapi judul, caption, thumbnail, dan elemen lain yang sesuai dengan video'
+        }
     };
 
     // Fungsi untuk mendapatkan persentase berdasarkan nomor catatan
@@ -973,7 +1003,7 @@
                 const num = this.name.match(/checkbox(\d+)/)[1];
                 const catInput = document.getElementById('catatan' + num);
                 const statusSpan = document.getElementById('status' + num);
-                
+
                 if (this.checked) {
                     catInput.value = '(sudah)';
                     if (statusSpan) statusSpan.textContent = 'Done';
@@ -1006,11 +1036,63 @@
         if (saveBtn) {
             const updateBtnText = () => {
                 const pct = document.getElementById('persentase').value;
-                saveBtn.innerHTML = `Simpan Progres (${pct}%)`;
+                saveBtn.innerHTML = `<i class="bi bi-save"></i> Simpan Semua Perubahan (<span id="currentPct">${pct}%</span>)`;
             };
             updateBtnText();
             // Listen for changes
             document.getElementById('persentase').addEventListener('change', updateBtnText);
+
+            // Add transfer functionality same as transferDataButton
+            saveBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const progressId = this.getAttribute('data-progress-id');
+                const form = document.querySelector('form');
+
+                if (confirm('Simpan persentase dulu lalu transfer?')) {
+                    saveBtn.disabled = true;
+                    const originalHtml = saveBtn.innerHTML;
+                    saveBtn.innerHTML = '<i class="bi bi-save"></i> Menyimpan...';
+
+                    // First save persentase form via AJAX
+                    const formData = new FormData(form);
+                    fetch(form.action, {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            }
+                        })
+                        .then(response => response.text())
+                        .then(() => {
+                            saveBtn.innerHTML = '<i class="bi bi-arrow-down-up"></i> Mentransfer...';
+                            // Then transfer
+                            return fetch(`/progres/transfer-data/${progressId}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                                }
+                            });
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert('Persentase disimpan dan data berhasil ditransfer!');
+                                location.reload();
+                            } else {
+                                alert('Transfer gagal: ' + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Error saving or transferring');
+                        })
+                        .finally(() => {
+                            saveBtn.disabled = false;
+                            saveBtn.innerHTML = originalHtml;
+                        });
+                }
+            });
         }
     });
 </script>
