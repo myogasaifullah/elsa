@@ -67,7 +67,7 @@
             if ($item->progres == 'progres') {
             $groupedProgress[$dosenName]['proses']++;
             }
-            if ($item->jadwalBooking->status == 'belum shooting') {
+            if ($item->jadwalBooking->status == 'approved') {
             $groupedProgress[$dosenName]['belum']++;
             }
             if ($item->progres == 'selesai') {

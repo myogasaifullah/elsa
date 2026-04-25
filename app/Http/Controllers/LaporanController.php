@@ -62,7 +62,7 @@ class LaporanController extends Controller
 
         $sudahShooting = $allProgress->where('status', 'sudah shooting')->count();
         $prosesEdit = $allProgress->where('progres', 'progres')->count();
-        $belumShooting = $allProgress->where('status', 'belum shooting')->count();
+        $belumShooting = $allProgress->where('status', 'approved')->count();
         $sudahTerbit = $allProgress->where('progres', 'selesai')->count();
 
         // Get filter options
@@ -584,7 +584,7 @@ class LaporanController extends Controller
             if ($item->progres == 'progres') {
                 $groupedProgress[$dosenName]['proses']++;
             }
-            if ($item->jadwalBooking->status == 'belum shooting') {
+            if ($item->jadwalBooking->status == 'approved') {
                 $groupedProgress[$dosenName]['belum']++;
             }
             if ($item->progres == 'selesai') {

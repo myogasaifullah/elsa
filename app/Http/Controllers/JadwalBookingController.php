@@ -253,7 +253,6 @@ class JadwalBookingController extends Controller
             'studio' => $jadwal->studio->nama_studio ?? '-',
             'mata_kuliah' => $jadwal->nama_mata_kuliah,
             'judul_course' => $jadwal->judul_course,
-            'status' => $jadwal->status === 'approved' ? 'Belum Shooting' : ($jadwal->status === 'sudah shooting' ? 'Sudah Shooting' : $status),
             'status' => $jadwal->status === 'approved' ? 'Belum Shooting' : ($jadwal->status === 'sudah shooting' ? 'Sudah Shooting' : $jadwal->status),
         ]);
     }
@@ -303,4 +302,3 @@ class JadwalBookingController extends Controller
         return response()->json($approvedEvents);
     }
 }
-

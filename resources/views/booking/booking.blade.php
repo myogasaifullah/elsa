@@ -59,9 +59,19 @@
               <td>{{ $jadwal->nama_mata_kuliah }}</td>
               <td>{{ $jadwal->judul_course }}</td>
               <td class="status-cell">
+                @if($jadwal->status == 'approved')
                 <span class="badge bg-secondary text-white">
                   <i class="bi bi-camera-video-off me-1"></i> Belum Shooting
                 </span>
+                @elseif($jadwal->status == 'sudah shooting')
+                <span class="badge bg-success text-white">
+                  <i class="bi bi-camera-video me-1"></i> Sudah Shooting
+                </span>
+                @else
+                <span class="badge bg-secondary text-white">
+                  <i class="bi bi-question-circle me-1"></i> {{ $jadwal->status }}
+                </span>
+                @endif
               </td>
               <td>
                 <button class="btn btn-sm btn-info btn-detail" data-toggle="modal" data-target="#detailModal">

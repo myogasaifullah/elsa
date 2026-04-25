@@ -32,7 +32,7 @@ class BookingController extends Controller
      */
     public function approve(Request $request, JadwalBooking $booking)
     {
-        $booking->update(['status' => 'belum shooting']);
+        $booking->update(['status' => 'approved']);
 
         // Log activity
         $description = "Approved booking ID {$booking->id} for {$booking->user->name} - Studio {$booking->studio->nama_studio} on {$booking->tanggal} at {$booking->jam}";
