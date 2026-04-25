@@ -26,7 +26,6 @@ class ProgresController extends Controller
             'jadwalBooking.studio',
             'editor'
         ])
-            ->where('keterangan', '!=', 'sudah terbit')
             ->where('persentase', '!=', 100)
             ->orderBy('created_at', 'desc')
             ->get();
