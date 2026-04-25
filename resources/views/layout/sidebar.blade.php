@@ -215,6 +215,28 @@
     </li>
 
 
+    {{-- ================= SUPERVISI ================= --}}
+    @elseif(Auth::check() && strtolower(Auth::user()->role) === 'supervisi')
+    <!-- Home -->
+    <li class="nav-item">
+      <a class="nav-link {{ Request::is('/') ? '' : 'collapsed' }}" href="{{ url('/') }}">
+        <i class="bi bi-house"></i><span>Home</span>
+      </a>
+    </li>
+
+    <!-- Dashboard -->
+    <li class="nav-item">
+      <a class="nav-link {{ Request::is('dashboard*') ? '' : 'collapsed' }}" href="{{ url('dashboard') }}">
+        <i class="bi bi-grid"></i><span>Dashboard</span>
+      </a>
+    </li>
+    <!-- Progres -->
+    <li class="nav-item">
+      <a class="nav-link {{ Request::is('progres*') ? '' : 'collapsed' }}" href="{{ url('progres') }}">
+        <i class="bi bi-bar-chart"></i><span>Progres</span>
+      </a>
+    </li>
+
     @endif
 
     @else

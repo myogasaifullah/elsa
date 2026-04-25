@@ -68,7 +68,7 @@
     </div><!-- End Bookings Card -->
 
     <!-- Studios Card -->
-    <div class="col-xxl-4 col-xl-12">
+    <div class="col-xxl-4 col-md-6">
       <div class="card info-card studios-card">
 
         <div class="filter">
@@ -196,44 +196,46 @@
         <div class="card-body">
           <h5 class="card-title">Data Bookings ({{ $data['bookings']->count() }})</h5>
 
-          <table class="table datatable">
-            <thead>
-              <tr>
-                <!-- <th>ID</th> -->
-                <th>User</th>
-                <th>Tanggal</th>
-                <th>Jam</th>
-                <th>Jenis Kategori</th>
-                <th>Kategori MOOC</th>
-                <th>Studio</th>
-                <th>Nama Mata Kuliah</th>
-                <th>Judul Course</th>
-                <th>Status</th>
-                <th>Dosen</th>
-                <!-- <th>Created At</th>
-                <th>Updated At</th> -->
-              </tr>
-            </thead>
-            <tbody>
-              @foreach($data['bookings'] as $booking)
-              <tr>
-                <!-- <td>{{ $booking->id }}</td> -->
-                <td>{{ $booking->user->name ?? '-' }}</td>
-                <td>{{ $booking->tanggal ? \Carbon\Carbon::parse($booking->tanggal)->format('d/m/Y') : '-' }}</td>
-                <td>{{ $booking->jam ?? '-' }}</td>
-                <td>{{ $booking->jenis_kategori ?? '-' }}</td>
-                <td>{{ $booking->kategori_mooc ?? '-' }}</td>
-                <td>{{ $booking->studio->nama_studio ?? '-' }}</td>
-                <td>{{ $booking->nama_mata_kuliah ?? '-' }}</td>
-                <td>{{ $booking->judul_course ?? '-' }}</td>
-                <td><span class="badge bg-{{ $booking->status == 'approved' ? 'success' : ($booking->status == 'pending' ? 'warning' : 'danger') }}">{{ $booking->status ?? '-' }}</span></td>
-                <td>{{ $booking->dosen->nama_dosen ?? '-' }}</td>
-                <!-- <td>{{ $booking->created_at ? $booking->created_at->format('d/m/Y H:i') : '-' }}</td>
-                <td>{{ $booking->updated_at ? $booking->updated_at->format('d/m/Y H:i') : '-' }}</td> -->
-              </tr>
-              @endforeach
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="table datatable">
+              <thead>
+                <tr>
+                  <!-- <th>ID</th> -->
+                  <th>User</th>
+                  <th>Tanggal</th>
+                  <th>Jam</th>
+                  <th>Jenis Kategori</th>
+                  <th>Kategori MOOC</th>
+                  <th>Studio</th>
+                  <th>Nama Mata Kuliah</th>
+                  <th>Judul Course</th>
+                  <th>Status</th>
+                  <th>Dosen</th>
+                  <!-- <th>Created At</th>
+                  <th>Updated At</th> -->
+                </tr>
+              </thead>
+              <tbody>
+                @foreach($data['bookings'] as $booking)
+                <tr>
+                  <!-- <td>{{ $booking->id }}</td> -->
+                  <td>{{ $booking->user->name ?? '-' }}</td>
+                  <td>{{ $booking->tanggal ? \Carbon\Carbon::parse($booking->tanggal)->format('d/m/Y') : '-' }}</td>
+                  <td>{{ $booking->jam ?? '-' }}</td>
+                  <td>{{ $booking->jenis_kategori ?? '-' }}</td>
+                  <td>{{ $booking->kategori_mooc ?? '-' }}</td>
+                  <td>{{ $booking->studio->nama_studio ?? '-' }}</td>
+                  <td>{{ $booking->nama_mata_kuliah ?? '-' }}</td>
+                  <td>{{ $booking->judul_course ?? '-' }}</td>
+                  <td><span class="badge bg-{{ $booking->status == 'approved' ? 'success' : ($booking->status == 'pending' ? 'warning' : 'success') }}">{{ $booking->status ?? '-' }}</span></td>
+                  <td>{{ $booking->dosen->nama_dosen ?? '-' }}</td>
+                  <!-- <td>{{ $booking->created_at ? $booking->created_at->format('d/m/Y H:i') : '-' }}</td>
+                  <td>{{ $booking->updated_at ? $booking->updated_at->format('d/m/Y H:i') : '-' }}</td> -->
+                </tr>
+                @endforeach
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -380,36 +382,38 @@
         <div class="card-body">
           <h5 class="card-title">Data Mata Kuliah ({{ $data['mata_kuliahs']->count() }})</h5>
 
-          <table class="table datatable">
-            <thead>
-              <tr>
-                <!-- <th>ID</th> -->
-                <th>Fakultas</th>
-                <th>Prodi</th>
-                <th>Nama Mata Kuliah</th>
-                <th>Kode Matakuliah</th>
-                <th>SKS</th>
-                <th>Keterangan</th>
-                <!-- <th>Created At</th>
-                <th>Updated At</th> -->
-              </tr>
-            </thead>
-            <tbody>
-              @foreach($data['mata_kuliahs'] as $matkul)
-              <tr>
-                <!-- <td>{{ $matkul->id }}</td> -->
-                <td>{{ $matkul->fakultas->nama_fakultas ?? '-' }}</td>
-                <td>{{ $matkul->prodi->nama_prodi ?? '-' }}</td>
-                <td>{{ $matkul->nama_mata_kuliah }}</td>
-                <td>{{ $matkul->kode_matakuliah ?? '-' }}</td>
-                <td>{{ $matkul->sks ?? '-' }}</td>
-                <td>{{ $matkul->keterangan ?? '-' }}</td>
-                <!-- <td>{{ $matkul->created_at ? $matkul->created_at->format('d/m/Y H:i') : '-' }}</td>
-                <td>{{ $matkul->updated_at ? $matkul->updated_at->format('d/m/Y H:i') : '-' }}</td> -->
-              </tr>
-              @endforeach
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="table datatable">
+              <thead>
+                <tr>
+                  <!-- <th>ID</th> -->
+                  <th>Fakultas</th>
+                  <th>Prodi</th>
+                  <th>Nama Mata Kuliah</th>
+                  <th>Kode Matakuliah</th>
+                  <th>SKS</th>
+                  <th>Keterangan</th>
+                  <!-- <th>Created At</th>
+                  <th>Updated At</th> -->
+                </tr>
+              </thead>
+              <tbody>
+                @foreach($data['mata_kuliahs'] as $matkul)
+                <tr>
+                  <!-- <td>{{ $matkul->id }}</td> -->
+                  <td>{{ $matkul->fakultas->nama_fakultas ?? '-' }}</td>
+                  <td>{{ $matkul->prodi->nama_prodi ?? '-' }}</td>
+                  <td>{{ $matkul->nama_mata_kuliah }}</td>
+                  <td>{{ $matkul->kode_matakuliah ?? '-' }}</td>
+                  <td>{{ $matkul->sks ?? '-' }}</td>
+                  <td>{{ $matkul->keterangan ?? '-' }}</td>
+                  <!-- <td>{{ $matkul->created_at ? $matkul->created_at->format('d/m/Y H:i') : '-' }}</td>
+                  <td>{{ $matkul->updated_at ? $matkul->updated_at->format('d/m/Y H:i') : '-' }}</td> -->
+                </tr>
+                @endforeach
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -422,60 +426,62 @@
         <div class="card-body">
           <h5 class="card-title">Data Progress ({{ $data['progresses']->count() }})</h5>
 
-          <table class="table datatable">
-            <thead>
-              <tr>
-                <!-- <th>ID</th> -->
-                <!-- <th>Jadwal Booking ID</th> -->
-                <!-- <th>Editor ID</th> -->
-                <th>Jadwal Booking</th>
-                <th>Editor</th>
-                <th>Persentase</th>
-                <th>Keterangan</th>
-                <th>Publish Link YouTube</th>
-                <!-- <th>Created At</th>
-                <th>Updated At</th> -->
-              </tr>
-            </thead>
-            <tbody>
-              @foreach($data['progresses'] as $progress)
-              <tr>
-                <!-- <td>{{ $progress->id }}</td> -->
-                <!-- <td>{{ $progress->jadwal_booking_id ?? '-' }}</td>
-                <td>{{ $progress->editor_id ?? '-' }}</td> -->
-                <td>{{ $progress->jadwalBooking->judul_course ?? '-' }}</td>
-                <td>{{ $progress->editor->nama ?? '-' }}</td>
-                <td>
-                  <span class="badge
-                    @if($progress->persentase >= 0 && $progress->persentase <= 25) bg-danger
-                    @elseif($progress->persentase > 25 && $progress->persentase <= 50) bg-warning text-dark
-                    @elseif($progress->persentase > 50 && $progress->persentase <= 75) bg-info text-dark
-                    @elseif($progress->persentase > 75 && $progress->persentase <= 100) bg-success
-                    @else bg-secondary
-                    @endif">
-                    {{ $progress->persentase }}%
-                  </span>
-                </td>
-                <td>
-                  <span class="badge
-                    @if(strtolower($progress->keterangan) == 'draft') bg-secondary
-                    @elseif(strtolower($progress->keterangan) == 'review') bg-warning text-dark
-                    @elseif(strtolower($progress->keterangan) == 'editing') bg-info text-dark
-                    @elseif(strtolower($progress->keterangan) == 'completed' || strtolower($progress->keterangan) == 'finished') bg-success
-                    @elseif(strtolower($progress->keterangan) == 'published' || strtolower($progress->keterangan) == 'sudah terbit') bg-primary
-                    @elseif(strtolower($progress->keterangan) == 'belum terbit') bg-danger
-                    @else bg-light text-dark
-                    @endif">
-                    {{ $progress->keterangan ?? '-' }}
-                  </span>
-                </td>
-                <td>{!! $progress->publish_link_youtube ? '<a href="' . $progress->publish_link_youtube . '" target="_blank">Link Video</a>' : '-' !!}</td>
-                <!-- <td>{{ $progress->created_at ? $progress->created_at->format('d/m/Y H:i') : '-' }}</td>
-                <td>{{ $progress->updated_at ? $progress->updated_at->format('d/m/Y H:i') : '-' }}</td> -->
-              </tr>
-              @endforeach
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="table datatable">
+              <thead>
+                <tr>
+                  <!-- <th>ID</th> -->
+                  <!-- <th>Jadwal Booking ID</th> -->
+                  <!-- <th>Editor ID</th> -->
+                  <th>Jadwal Booking</th>
+                  <th>Editor</th>
+                  <th>Persentase</th>
+                  <th>Keterangan</th>
+                  <th>Publish Link YouTube</th>
+                  <!-- <th>Created At</th>
+                  <th>Updated At</th> -->
+                </tr>
+              </thead>
+              <tbody>
+                @foreach($data['progresses'] as $progress)
+                <tr>
+                  <!-- <td>{{ $progress->id }}</td> -->
+                  <!-- <td>{{ $progress->jadwal_booking_id ?? '-' }}</td>
+                  <td>{{ $progress->editor_id ?? '-' }}</td> -->
+                  <td>{{ $progress->jadwalBooking->judul_course ?? '-' }}</td>
+                  <td>{{ $progress->editor->nama ?? '-' }}</td>
+                  <td>
+                    <span class="badge
+                      @if($progress->persentase >= 0 && $progress->persentase <= 25) bg-danger
+                      @elseif($progress->persentase > 25 && $progress->persentase <= 50) bg-warning text-dark
+                      @elseif($progress->persentase > 50 && $progress->persentase <= 75) bg-info text-dark
+                      @elseif($progress->persentase > 75 && $progress->persentase <= 100) bg-success
+                      @else bg-secondary
+                      @endif">
+                      {{ $progress->persentase }}%
+                    </span>
+                  </td>
+                  <td>
+                    <span class="badge
+                      @if(strtolower($progress->keterangan) == 'draft') bg-secondary
+                      @elseif(strtolower($progress->keterangan) == 'review') bg-warning text-dark
+                      @elseif(strtolower($progress->keterangan) == 'editing') bg-info text-dark
+                      @elseif(strtolower($progress->keterangan) == 'completed' || strtolower($progress->keterangan) == 'finished') bg-success
+                      @elseif(strtolower($progress->keterangan) == 'published' || strtolower($progress->keterangan) == 'sudah terbit') bg-primary
+                      @elseif(strtolower($progress->keterangan) == 'belum terbit') bg-danger
+                      @else bg-light text-dark
+                      @endif">
+                      {{ $progress->keterangan ?? '-' }}
+                    </span>
+                  </td>
+                  <td>{!! $progress->publish_link_youtube ? '<a href="' . $progress->publish_link_youtube . '" target="_blank">Link Video</a>' : '-' !!}</td>
+                  <!-- <td>{{ $progress->created_at ? $progress->created_at->format('d/m/Y H:i') : '-' }}</td>
+                  <td>{{ $progress->updated_at ? $progress->updated_at->format('d/m/Y H:i') : '-' }}</td> -->
+                </tr>
+                @endforeach
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -524,30 +530,32 @@
       <div class="card-body">
         <h5 class="card-title">Log Aktivitas</h5>
 
-        <table class="table datatable">
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Waktu</th>
-              <th>Nama Pengguna</th>
-              <th>Role</th>
-              <!-- <th>IP Address</th> -->
-              <th>Aktivitas</th>
-            </tr>
-          </thead>
-          <tbody>
-            @foreach($data['logs'] as $index => $log)
-            <tr>
-              <td>{{ $index + 1 }}</td>
-              <td>{{ $log->created_at }}</td>
-              <td>{{ $log->user->name ?? '-' }}</td>
-              <td>{{ $log->user->role ?? '-' }}</td>
-              <!-- <td>-</td> -->
-              <td>{{ $log->action }} - {{ $log->description }}</td>
-            </tr>
-            @endforeach
-          </tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="table datatable">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Waktu</th>
+                <th>Nama Pengguna</th>
+                <th>Role</th>
+                <!-- <th>IP Address</th> -->
+                <th>Aktivitas</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($data['logs'] as $index => $log)
+              <tr>
+                <td>{{ $index + 1 }}</td>
+                <td>{{ $log->created_at }}</td>
+                <td>{{ $log->user->name ?? '-' }}</td>
+                <td>{{ $log->user->role ?? '-' }}</td>
+                <!-- <td>-</td> -->
+                <td>{{ $log->action }} - {{ $log->description }}</td>
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
+        </div>
 
       </div>
     </div>

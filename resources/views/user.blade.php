@@ -150,6 +150,7 @@
                   <option value="Admin">Admin</option>
                   <option value="Dosen">Dosen</option>
                   <option value="Mahasiswa">Mahasiswa</option>
+                  <option value="Supervisi">Supervisi</option>
                   <option value="Editor">Editor</option>
                 </select>
               </div>
@@ -229,6 +230,7 @@
                   <option value="Admin">Admin</option>
                   <option value="Dosen">Dosen</option>
                   <option value="Mahasiswa">Mahasiswa</option>
+                  <option value="Supervisi">Supervisi</option>
                   <option value="Editor">Editor</option>
                 </select>
               </div>
@@ -390,3 +392,4 @@
   });
 </script>
 @include('layout.footer')
+

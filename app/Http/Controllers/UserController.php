@@ -77,7 +77,7 @@ class UserController extends Controller
             'nomor_telepon' => 'nullable|string|max:20',
             'fakultas_id' => 'nullable|exists:fakultas,id',
             'prodi_id' => 'nullable|exists:prodis,id',
-            'role' => 'required|string|in:Mahasiswa,Dosen,Admin,Editor',
+            'role' => 'required|string|in:Mahasiswa,Dosen,Admin,Editor,Supervisi',
             'status' => 'required|string|in:active,pending,rejected',
             'password' => 'required|string|min:8|confirmed',
         ]);
@@ -164,7 +164,7 @@ class UserController extends Controller
                     'nomor_telepon' => 'nullable|string|max:20',
                     'fakultas_id' => 'nullable|exists:fakultas,id',
                     'prodi_id' => 'nullable|exists:prodis,id',
-                    'role' => 'required|string|in:Mahasiswa,Dosen,Admin,Editor',
+                    'role' => 'required|string|in:Mahasiswa,Dosen,Admin,Editor,Supervisi',
                     'status' => 'required|string|in:active,pending,rejected',
                     'password' => 'nullable|string|min:8',
                 ]);
