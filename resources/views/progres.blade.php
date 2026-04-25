@@ -75,12 +75,22 @@
 
                                         {{-- Keterangan --}}
                                         <td class="text-center">
+                                            @if($item->persentase == 100)
+                                            <span class="badge bg-success">Sudah Terbit</span>
+                                            @elseif($item->persentase == 95)
+                                            <span class="badge bg-success">Acc</span>
+                                            @elseif($item->persentase == 90)
+                                            <span class="badge bg-danger">Revisi</span>
+                                            @elseif($item->persentase == 85 || !empty($item->publish_link_youtube))
+                                            <span class="badge bg-warning text-dark">Menunggu Validasi</span>
+                                            @else
                                             <span class="badge 
-                                                @if($item->keterangan == 'belum terbit') bg-danger
-                                                @else bg-success
-                                                @endif">
+                                                    @if($item->keterangan == 'belum terbit') bg-danger
+                                                    @else bg-success
+                                                    @endif">
                                                 {{ ucfirst(str_replace('_', ' ', $item->keterangan)) }}
                                             </span>
+                                            @endif
                                         </td>
 
                                         <td class="text-center">{{ $item->durasi ?? '-' }}</td>

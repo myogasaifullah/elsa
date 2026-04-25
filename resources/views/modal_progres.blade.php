@@ -79,13 +79,24 @@
                                                 {{ ucfirst($progress->progres ?? '-') }}
                                             </span>
                                         </td>
-                                        <td>
+                                        {{-- Keterangan --}}
+                                        <td class="text-center">
+                                            @if($progress->persentase == 100)
+                                                <span class="badge bg-success">Sudah Terbit</span>
+                                            @elseif($progress->persentase == 95)
+                                                <span class="badge bg-success">Acc</span>
+                                            @elseif($progress->persentase == 90)
+                                                <span class="badge bg-danger">Revisi</span>
+                                            @elseif($progress->persentase == 85 || !empty($progress->publish_link_youtube))
+                                                <span class="badge bg-warning text-dark">Menunggu Validasi</span>
+                                            @else
                                             <span class="badge 
-                                                @if($progress->keterangan == 'belum terbit') bg-danger
-                                                @else bg-success
-                                                @endif">
-                                                {{ ucfirst(str_replace('_', ' ', $progress->keterangan ?? '-')) }}
+                                                    @if($progress->keterangan == 'belum terbit') bg-danger
+                                                    @else bg-success
+                                                    @endif">
+                                                {{ ucfirst(str_replace('_', ' ', $progress->keterangan)) }}
                                             </span>
+                                            @endif
                                         </td>
                                         <td>{{ $progress->durasi ?? '-' }}</td>
                                         <td>
