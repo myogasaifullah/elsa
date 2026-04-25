@@ -71,6 +71,102 @@ class LaporanController extends Controller
         $studios = Studio::all();
         $dosens = Dosen::all();
 
+        // Get unique years and months from jadwal booking dates for index page includes
+        $uniqueYears = $allProgress->pluck('jadwalBooking.tanggal')->filter()->map(function ($date) {
+            return $date ? \Carbon\Carbon::parse($date)->format('Y') : null;
+        })->unique()->filter()->sort()->values();
+
+        $uniqueMonths = $allProgress->pluck('jadwalBooking.tanggal')->filter()->map(function ($date) {
+            return $date ? \Carbon\Carbon::parse($date)->format('m') : null;
+        })->unique()->filter()->sort()->values();
+
+        // Build groupedByFakultas for dosen section (used by included view)
+        $groupedByFakultasDosen = [];
+        foreach ($allProgress as $item) {
+            $dosen = $item->jadwalBooking->dosen ?? null;
+            $dosenName = $dosen->nama_dosen ?? 'N/A';
+            $fakultasName = $dosen->fakultas->nama_fakultas ?? 'Tidak Diketahui';
+
+            if (!isset($groupedByFakultasDosen[$fakultasName])) {
+                $groupedByFakultasDosen[$fakultasName] = [];
+            }
+
+            if (!isset($groupedByFakultasDosen[$fakultasName][$dosenName])) {
+                $groupedByFakultasDosen[$fakultasName][$dosenName] = [
+                    'target' => $dosen->target_video_dosen ?? 0,
+                    'sudah' => 0,
+                    'proses' => 0,
+                    'belum' => 0,
+                    'terbit' => 0,
+                    'keterangan_shooting' => '-',
+                    'keterangan_video' => '-',
+                ];
+            }
+
+            if ($item->jadwalBooking->status == 'sudah shooting') {
+                $groupedByFakultasDosen[$fakultasName][$dosenName]['sudah']++;
+            }
+            if ($item->progres == 'progres') {
+                $groupedByFakultasDosen[$fakultasName][$dosenName]['proses']++;
+            }
+            if ($item->jadwalBooking->status == 'approved') {
+                $groupedByFakultasDosen[$fakultasName][$dosenName]['belum']++;
+            }
+            if ($item->progres == 'selesai') {
+                $groupedByFakultasDosen[$fakultasName][$dosenName]['terbit']++;
+            }
+
+            if ($groupedByFakultasDosen[$fakultasName][$dosenName]['target'] == $groupedByFakultasDosen[$fakultasName][$dosenName]['sudah']) {
+                $groupedByFakultasDosen[$fakultasName][$dosenName]['keterangan_shooting'] = 'sudah shooting';
+            } else {
+                $groupedByFakultasDosen[$fakultasName][$dosenName]['keterangan_shooting'] = 'belum selesai';
+            }
+
+            if ($groupedByFakultasDosen[$fakultasName][$dosenName]['target'] == $groupedByFakultasDosen[$fakultasName][$dosenName]['terbit']) {
+                $groupedByFakultasDosen[$fakultasName][$dosenName]['keterangan_video'] = 'selesai terbit';
+            } else {
+                $groupedByFakultasDosen[$fakultasName][$dosenName]['keterangan_video'] = 'belum terbit';
+            }
+        }
+
+        // Build groupedByFakultas for progres section (used by included view)
+        $groupedByFakultasProgres = [];
+        foreach ($allProgress as $item) {
+            $dosen = $item->jadwalBooking->dosen ?? null;
+            $jenisKategori = $item->jadwalBooking->jenis_kategori ?? null;
+
+            if ($dosen) {
+                $dosenId = $dosen->id;
+                $fakultasName = $dosen->fakultas->nama_fakultas ?? 'Tidak Diketahui';
+
+                if (!isset($groupedByFakultasProgres[$fakultasName])) {
+                    $groupedByFakultasProgres[$fakultasName] = [];
+                }
+
+                if (!isset($groupedByFakultasProgres[$fakultasName][$dosenId])) {
+                    $groupedByFakultasProgres[$fakultasName][$dosenId] = [
+                        'dosen' => $dosen,
+                        'elearning_count' => 0,
+                        'mooc_count' => 0,
+                        'total_video' => 0,
+                        'progres_count' => 0
+                    ];
+                }
+
+                if (strtolower($jenisKategori) === 'e-learning') {
+                    $groupedByFakultasProgres[$fakultasName][$dosenId]['elearning_count']++;
+                } elseif (strtolower($jenisKategori) === 'mooc') {
+                    $groupedByFakultasProgres[$fakultasName][$dosenId]['mooc_count']++;
+                }
+
+                $groupedByFakultasProgres[$fakultasName][$dosenId]['total_video']++;
+
+                if ($item->progres === 'progres') {
+                    $groupedByFakultasProgres[$fakultasName][$dosenId]['progres_count']++;
+                }
+            }
+        }
+
         return view('laporan', compact(
             'progress',
             'progressTetap',
@@ -90,7 +186,9 @@ class LaporanController extends Controller
             'fakultases',
             'studios',
             'dosens',
-            'terbitData'
+            'terbitData',
+            'groupedByFakultasDosen',
+            'groupedByFakultasProgres'
         ));
     }
 
@@ -563,12 +661,19 @@ class LaporanController extends Controller
             return $date ? \Carbon\Carbon::parse($date)->format('m') : null;
         })->unique()->filter()->sort()->values();
 
-        $groupedProgress = [];
+        $groupedByFakultas = [];
         foreach ($progress as $item) {
-            $dosenName = $item->jadwalBooking->dosen->nama_dosen ?? 'N/A';
-            if (!isset($groupedProgress[$dosenName])) {
-                $groupedProgress[$dosenName] = [
-                    'target' => $item->jadwalBooking->dosen->target_video_dosen ?? 0,
+            $dosen = $item->jadwalBooking->dosen ?? null;
+            $dosenName = $dosen->nama_dosen ?? 'N/A';
+            $fakultasName = $dosen->fakultas->nama_fakultas ?? 'Tidak Diketahui';
+
+            if (!isset($groupedByFakultas[$fakultasName])) {
+                $groupedByFakultas[$fakultasName] = [];
+            }
+
+            if (!isset($groupedByFakultas[$fakultasName][$dosenName])) {
+                $groupedByFakultas[$fakultasName][$dosenName] = [
+                    'target' => $dosen->target_video_dosen ?? 0,
                     'sudah' => 0,
                     'proses' => 0,
                     'belum' => 0,
@@ -579,32 +684,32 @@ class LaporanController extends Controller
             }
 
             if ($item->jadwalBooking->status == 'sudah shooting') {
-                $groupedProgress[$dosenName]['sudah']++;
+                $groupedByFakultas[$fakultasName][$dosenName]['sudah']++;
             }
             if ($item->progres == 'progres') {
-                $groupedProgress[$dosenName]['proses']++;
+                $groupedByFakultas[$fakultasName][$dosenName]['proses']++;
             }
             if ($item->jadwalBooking->status == 'approved') {
-                $groupedProgress[$dosenName]['belum']++;
+                $groupedByFakultas[$fakultasName][$dosenName]['belum']++;
             }
             if ($item->progres == 'selesai') {
-                $groupedProgress[$dosenName]['terbit']++;
+                $groupedByFakultas[$fakultasName][$dosenName]['terbit']++;
             }
 
-            if ($groupedProgress[$dosenName]['target'] == $groupedProgress[$dosenName]['sudah']) {
-                $groupedProgress[$dosenName]['keterangan_shooting'] = 'sudah shooting';
+            if ($groupedByFakultas[$fakultasName][$dosenName]['target'] == $groupedByFakultas[$fakultasName][$dosenName]['sudah']) {
+                $groupedByFakultas[$fakultasName][$dosenName]['keterangan_shooting'] = 'sudah shooting';
             } else {
-                $groupedProgress[$dosenName]['keterangan_shooting'] = 'belum selesai';
+                $groupedByFakultas[$fakultasName][$dosenName]['keterangan_shooting'] = 'belum selesai';
             }
 
-            if ($groupedProgress[$dosenName]['target'] == $groupedProgress[$dosenName]['terbit']) {
-                $groupedProgress[$dosenName]['keterangan_video'] = 'selesai terbit';
+            if ($groupedByFakultas[$fakultasName][$dosenName]['target'] == $groupedByFakultas[$fakultasName][$dosenName]['terbit']) {
+                $groupedByFakultas[$fakultasName][$dosenName]['keterangan_video'] = 'selesai terbit';
             } else {
-                $groupedProgress[$dosenName]['keterangan_video'] = 'belum terbit';
+                $groupedByFakultas[$fakultasName][$dosenName]['keterangan_video'] = 'belum terbit';
             }
         }
 
-        return view('laporan.dosen', compact('groupedProgress', 'filterRekap', 'uniqueYears', 'uniqueMonths'));
+        return view('laporan.dosen', compact('groupedByFakultas', 'filterRekap', 'uniqueYears', 'uniqueMonths'));
     }
 
     public function terbit(Request $request)
@@ -628,15 +733,21 @@ class LaporanController extends Controller
         $filterFakultas = $request->only(['fakultas_date_from', 'fakultas_date_to', 'fakultas_id', 'fakultas_year', 'fakultas_month']);
         $progress = $this->getFilteredProgress($filterFakultas);
 
-        $groupedByDosen = [];
+        $groupedByFakultas = [];
         foreach ($progress as $item) {
             $dosen = $item->jadwalBooking->dosen ?? null;
             $jenisKategori = $item->jadwalBooking->jenis_kategori ?? null;
 
             if ($dosen) {
                 $dosenId = $dosen->id;
-                if (!isset($groupedByDosen[$dosenId])) {
-                    $groupedByDosen[$dosenId] = [
+                $fakultasName = $dosen->fakultas->nama_fakultas ?? 'Tidak Diketahui';
+
+                if (!isset($groupedByFakultas[$fakultasName])) {
+                    $groupedByFakultas[$fakultasName] = [];
+                }
+
+                if (!isset($groupedByFakultas[$fakultasName][$dosenId])) {
+                    $groupedByFakultas[$fakultasName][$dosenId] = [
                         'dosen' => $dosen,
                         'elearning_count' => 0,
                         'mooc_count' => 0,
@@ -646,15 +757,15 @@ class LaporanController extends Controller
                 }
 
                 if (strtolower($jenisKategori) === 'e-learning') {
-                    $groupedByDosen[$dosenId]['elearning_count']++;
+                    $groupedByFakultas[$fakultasName][$dosenId]['elearning_count']++;
                 } elseif (strtolower($jenisKategori) === 'mooc') {
-                    $groupedByDosen[$dosenId]['mooc_count']++;
+                    $groupedByFakultas[$fakultasName][$dosenId]['mooc_count']++;
                 }
 
-                $groupedByDosen[$dosenId]['total_video']++;
+                $groupedByFakultas[$fakultasName][$dosenId]['total_video']++;
 
                 if ($item->progres === 'progres') {
-                    $groupedByDosen[$dosenId]['progres_count']++;
+                    $groupedByFakultas[$fakultasName][$dosenId]['progres_count']++;
                 }
             }
         }
@@ -671,7 +782,7 @@ class LaporanController extends Controller
             return $date ? \Carbon\Carbon::parse($date)->format('m') : null;
         })->unique()->filter()->sort()->values();
 
-        return view('laporan.progres', compact('groupedByDosen', 'filterFakultas', 'fakultases', 'uniqueYears', 'uniqueMonths'));
+        return view('laporan.progres', compact('groupedByFakultas', 'filterFakultas', 'fakultases', 'uniqueYears', 'uniqueMonths'));
     }
 
     public function fakultas(Request $request)

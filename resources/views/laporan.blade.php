@@ -19,9 +19,9 @@
   @include('laporan.editor')
   @include('laporan.jadwal')
   @include('laporan.mooc')
-  @include('laporan.dosen')
+  @include('laporan.dosen', ['groupedByFakultas' => $groupedByFakultasDosen, 'filterRekap' => $filterRekap, 'uniqueYears' => $uniqueYears, 'uniqueMonths' => $uniqueMonths])
   @include('laporan.terbit')
-  @include('laporan.progres')
+  @include('laporan.progres', ['groupedByFakultas' => $groupedByFakultasProgres, 'filterFakultas' => $filterFakultas, 'fakultases' => $fakultases, 'uniqueYears' => $uniqueYears, 'uniqueMonths' => $uniqueMonths])
   @include('laporan.fakultas')
 
 </main>

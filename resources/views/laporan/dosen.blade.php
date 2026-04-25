@@ -38,52 +38,63 @@
             <div class="row mt-3">
                 <div class="col-md-12">
                     <button type="submit" class="btn btn-primary">Filter</button>
-                    <a href="{{ route('laporan.index') }}" class="btn btn-secondary">Reset</a>
+                    <a href="{{ route('laporan.dosen') }}" class="btn btn-secondary">Reset</a>
                 </div>
             </div>
         </form>
 
-        <div class="table-responsive">
-            <table class="table table-bordered text-center align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th>No</th>
-                        <th>Nama Dosen</th>
-                        <th>Target Shooting</th>
-                        <th>Sudah Shooting</th>
-                        <th>Proses Edit</th>
-                        <th>Belum Shooting</th>
-                        <th>Sudah Terbit</th>
-                        <th>Keterangan Shooting</th>
-                        <th>Keterangan Video</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($groupedProgress as $dosen => $data)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $dosen }}</td>
-                        <td>{{ $data['target'] }}</td>
-                        <td>{{ $data['sudah'] }}</td>
-                        <td>{{ $data['proses'] }}</td>
-                        <td>{{ $data['belum'] }}</td>
-                        <td>{{ $data['terbit'] }}</td>
-                        <td>{{ $data['keterangan_shooting'] }}</td>
-                        <td>{{ $data['keterangan_video'] }}</td>
-                    </tr>
-                    @endforeach
-                    <tr>
-                        <td colspan="2">TOTAL</td>
-                        <td>{{ array_sum(array_column($groupedProgress, 'target')) }}</td>
-                        <td>{{ array_sum(array_column($groupedProgress, 'sudah')) }}</td>
-                        <td>{{ array_sum(array_column($groupedProgress, 'proses')) }}</td>
-                        <td>{{ array_sum(array_column($groupedProgress, 'belum')) }}</td>
-                        <td>{{ array_sum(array_column($groupedProgress, 'terbit')) }}</td>
-                        <td colspan="2"></td>
-                    </tr>
-                </tbody>
-            </table>
+        @forelse($groupedByFakultas as $fakultas => $groupedProgress)
+        <div class="mb-5">
+            <h5 class="fw-bold mb-3">{{ $fakultas }}</h5>
+            <div class="table-responsive">
+                <table class="table table-bordered text-center align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Dosen</th>
+                            <th>Target Shooting</th>
+                            <th>Sudah Shooting</th>
+                            <th>Proses Edit</th>
+                            <th>Belum Shooting</th>
+                            <th>Sudah Terbit</th>
+                            <th>Keterangan Shooting</th>
+                            <th>Keterangan Video</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($groupedProgress as $dosen => $data)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $dosen }}</td>
+                            <td>{{ $data['target'] }}</td>
+                            <td>{{ $data['sudah'] }}</td>
+                            <td>{{ $data['proses'] }}</td>
+                            <td>{{ $data['belum'] }}</td>
+                            <td>{{ $data['terbit'] }}</td>
+                            <td>{{ $data['keterangan_shooting'] }}</td>
+                            <td>{{ $data['keterangan_video'] }}</td>
+                        </tr>
+                        @endforeach
+                        <tr class="fw-bold">
+                            <td colspan="2">TOTAL</td>
+                            <td>{{ array_sum(array_column($groupedProgress, 'target')) }}</td>
+                            <td>{{ array_sum(array_column($groupedProgress, 'sudah')) }}</td>
+                            <td>{{ array_sum(array_column($groupedProgress, 'proses')) }}</td>
+                            <td>{{ array_sum(array_column($groupedProgress, 'belum')) }}</td>
+                            <td>{{ array_sum(array_column($groupedProgress, 'terbit')) }}</td>
+                            <td colspan="2"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
+        @empty
+        <div class="text-center">
+            <p>Tidak ada data dosen yang ditemukan.</p>
+        </div>
+        @endforelse
     </div>
 
 </main>
+
+@endsection
