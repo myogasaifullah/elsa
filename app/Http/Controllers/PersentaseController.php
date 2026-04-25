@@ -39,24 +39,24 @@ class PersentaseController extends Controller
 
         // Cek apakah sudah ada data persentase untuk progress ini
         $existing = Persentase::where('id_progres', $validated['id_progres'])->first();
-        
+
         if ($existing) {
             // Jika sudah ada, update data yang ada
             $existing->update($validated);
-            
+
             // Catat aktivitas: memperbarui data persentase
             $progress = Progress::find($validated['id_progres']);
             ActivityLogService::update('persentase', "Memperbarui data persentase untuk progress ID {$validated['id_progres']} dengan persentase {$persentase}%");
-            
+
             return redirect()->back()->with('success', 'Data persentase berhasil diperbarui!');
         } else {
             // Jika belum ada, buat data baru
             $persentaseData = Persentase::create($validated);
-            
+
             // Catat aktivitas: menambahkan data persentase baru
             $progress = Progress::find($validated['id_progres']);
             ActivityLogService::create('persentase', "Menambahkan data persentase baru untuk progress ID {$validated['id_progres']} dengan persentase {$persentase}%");
-            
+
             return redirect()->back()->with('success', 'Data persentase berhasil disimpan!');
         }
     }
@@ -68,7 +68,7 @@ class PersentaseController extends Controller
     {
         // Catat aktivitas: mengambil data persentase berdasarkan progress ID
         ActivityLogService::log('lihat_persentase', "Mengambil data persentase untuk progress ID {$id_progres}");
-        
+
         $persentase = Persentase::where('id_progres', $id_progres)->first();
         return response()->json($persentase);
     }
@@ -102,7 +102,7 @@ class PersentaseController extends Controller
 
         $oldPersentase = $persentase->persentase;
         $persentase->update($validated);
-        
+
         // Catat aktivitas: memperbarui data persentase
         ActivityLogService::update('persentase', "Memperbarui data persentase ID {$persentase->id} untuk progress ID {$persentase->id_progres}. Persentase lama: {$oldPersentase}% -> Persentase baru: {$persentaseValue}%");
 
@@ -111,13 +111,21 @@ class PersentaseController extends Controller
 
     /**
      * Calculate persentase based on catatan values.
+     * Safeguard: publish_link_youtube does NOT influence this calculation.
+     * Percentage is strictly derived from completed catatan stages.
      */
     private function calculatePersentase(array $data): float
     {
         $persentaseMap = [
-            1 => 10, 6 => 10, 7 => 10,
-            2 => 5, 8 => 5, 9 => 5, 10 => 5,
-            3 => 15, 4 => 15,
+            1 => 10,
+            6 => 10,
+            7 => 10,
+            2 => 5,
+            8 => 5,
+            9 => 5,
+            10 => 5,
+            3 => 15,
+            4 => 15,
             5 => 20,
         ];
 

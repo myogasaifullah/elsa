@@ -27,6 +27,7 @@ class ProgresController extends Controller
             'editor'
         ])
             ->where('keterangan', '!=', 'sudah terbit')
+            ->where('persentase', '!=', 100)
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -222,8 +223,9 @@ class ProgresController extends Controller
                 ], 404);
             }
 
-            // Determine progress status based on percentage
-            $persentaseValue = $persentase->persentase ?? 0;
+            // Safeguard: recalculate persentase from catatan fields to prevent
+            // automatic 100% solely due to publish_link_youtube presence
+            $persentaseValue = $this->recalculatePersentaseFromCatatan($persentase);
             $progresStatus = 'belum';
 
             if ($persentaseValue == 0) {
@@ -324,8 +326,9 @@ class ProgresController extends Controller
                 ], 404);
             }
 
-            // Determine progress status based on percentage
-            $persentaseValue = $persentase->persentase ?? 0;
+            // Safeguard: recalculate persentase from catatan fields to prevent
+            // automatic 100% solely due to publish_link_youtube presence
+            $persentaseValue = $this->recalculatePersentaseFromCatatan($persentase);
             $progresStatus = 'belum';
 
             if ($persentaseValue == 0) {
@@ -369,6 +372,36 @@ class ProgresController extends Controller
                 'message' => 'Gagal memindahkan data: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * Recalculate persentase from catatan fields to ensure accuracy
+     * and prevent automatic 100% due to publish_link_youtube presence.
+     */
+    private function recalculatePersentaseFromCatatan(Persentase $persentase): float
+    {
+        $persentaseMap = [
+            1 => 10,
+            6 => 10,
+            7 => 10,
+            2 => 5,
+            8 => 5,
+            9 => 5,
+            10 => 5,
+            3 => 15,
+            4 => 15,
+            5 => 20,
+        ];
+
+        $total = 0;
+        foreach ($persentaseMap as $key => $value) {
+            $field = 'catatan' . $key;
+            if (!empty($persentase->$field)) {
+                $total += $value;
+            }
+        }
+
+        return min($total, 100);
     }
 
     /**
