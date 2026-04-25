@@ -66,25 +66,25 @@
             <td>{{ $user->role ?? '-' }}</td>
             <td>
               @if($user->status == 'active')
-                <span class="badge bg-success">Aktif</span>
+              <span class="badge bg-success">Aktif</span>
               @elseif($user->status == 'pending')
-                <span class="badge bg-warning">Pending</span>
+              <span class="badge bg-warning">Pending</span>
               @else
-                <span class="badge bg-secondary">{{ $user->status }}</span>
+              <span class="badge bg-secondary">{{ $user->status }}</span>
               @endif
             </td>
             <td>
-              <button class="btn btn-sm btn-primary" 
-                      data-bs-toggle="modal" 
-                      data-bs-target="#modalEditUser"
-                      data-user-id="{{ $user->id }}"
-                      data-user-name="{{ $user->name }}"
-                      data-user-email="{{ $user->email }}"
-                      data-user-nomor-telepon="{{ $user->nomor_telepon }}"
-                      data-user-fakultas-id="{{ $user->fakultas_id }}"
-                      data-user-prodi-id="{{ $user->prodi_id }}"
-                      data-user-role="{{ $user->role }}"
-                      data-user-status="{{ $user->status }}">
+              <button class="btn btn-sm btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#modalEditUser"
+                data-user-id="{{ $user->id }}"
+                data-user-name="{{ $user->name }}"
+                data-user-email="{{ $user->email }}"
+                data-user-nomor-telepon="{{ $user->nomor_telepon }}"
+                data-user-fakultas-id="{{ $user->fakultas_id }}"
+                data-user-prodi-id="{{ $user->prodi_id }}"
+                data-user-role="{{ $user->role }}"
+                data-user-status="{{ $user->status }}">
                 Edit
               </button>
               <form action="{{ route('user.destroy', $user) }}" method="POST" class="d-inline">
@@ -121,7 +121,7 @@
               </div>
               <div class="col-md-6">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" name="email" class="form-control" required>
+                <input type="text" name="email" class="form-control" required>
               </div>
               <div class="col-md-6">
                 <label for="no_telp" class="form-label">No. Telp</label>
@@ -200,7 +200,7 @@
               </div>
               <div class="col-md-6">
                 <label for="edit_email" class="form-label">Email</label>
-                <input type="email" id="edit_email" name="email" class="form-control" required>
+                <input type="text" id="edit_email" name="email" class="form-control" required>
               </div>
               <div class="col-md-6">
                 <label for="edit_no_telp" class="form-label">No. Telp</label>
@@ -272,7 +272,7 @@
         const userProdiId = this.getAttribute('data-user-prodi-id');
         const userRole = this.getAttribute('data-user-role');
         const userStatus = this.getAttribute('data-user-status');
-        
+
         // Populate modal fields
         document.getElementById('edit_username').value = userName;
         document.getElementById('edit_email').value = userEmail;
@@ -281,13 +281,13 @@
         document.getElementById('edit_prodi').value = userProdiId;
         document.getElementById('edit_role').value = userRole;
         document.getElementById('edit_status').value = userStatus;
-        
+
         // Set form action
         const form = document.getElementById('editUserForm');
         form.action = `/user/${userId}`;
       });
     });
-    
+
     // Handle delete button click
     document.querySelectorAll('.btn-hapus').forEach(btn => {
       btn.addEventListener('click', function(e) {

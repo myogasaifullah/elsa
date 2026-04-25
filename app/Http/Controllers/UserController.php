@@ -73,7 +73,7 @@ class UserController extends Controller
         // Validation rules
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|string|max:255|unique:users',
             'nomor_telepon' => 'nullable|string|max:20',
             'fakultas_id' => 'nullable|exists:fakultas,id',
             'prodi_id' => 'nullable|exists:prodis,id',
@@ -160,7 +160,7 @@ class UserController extends Controller
             try {
                 $request->validate([
                     'name' => 'required|string|max:255',
-                    'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+                    'email' => 'required|string|max:255|unique:users,email,' . $user->id,
                     'nomor_telepon' => 'nullable|string|max:20',
                     'fakultas_id' => 'nullable|exists:fakultas,id',
                     'prodi_id' => 'nullable|exists:prodis,id',

@@ -119,7 +119,7 @@
               </div>
               <div class="col-md-6">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" name="email" class="form-control" required>
+                <input type="text" name="email" class="form-control" required>
               </div>
               <div class="col-md-6">
                 <label for="no_telp" class="form-label">No. Telp</label>
@@ -198,7 +198,7 @@
               </div>
               <div class="col-md-6">
                 <label for="edit_email" class="form-label">Email</label>
-                <input type="email" id="edit_email" name="email" class="form-control" required>
+                <input type="text" id="edit_email" name="email" class="form-control" required>
               </div>
               <div class="col-md-6">
                 <label for="edit_no_telp" class="form-label">No. Telp</label>

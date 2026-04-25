@@ -374,7 +374,9 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="catatan1_detail" class="form-label">Detail Catatan (Override checkbox)</label>
+                                <label for="catatan1_detail" class="form-label">Menerima brief dari dosen/pengampu;
+                                    Menyusun rencana editing;
+                                    Memastikan ketersediaan materi (video, audio, slide, dll</label>
                                 <input type="text" class="form-control @error('catatan1') is-invalid @enderror" id="catatan1_detail" placeholder="Edit detail (opsional)" value="{{ old('catatan1', $existingPersentase->catatan1 ?? '') }}">
                                 <div class="form-text">Checkbox quick-fill used default text; edit here to override.</div>
                                 @error('catatan1')
@@ -428,7 +430,8 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="catatan2_detail" class="form-label">Detail Catatan (Override checkbox)</label>
+                                <label for="catatan2_detail" class="form-label">Mengimpor footage, audio, dan bahan pendukung ke software;
+                                    Membuat folder kerja terstruktur (bining)</label>
                                 <input type="text" class="form-control @error('catatan2') is-invalid @enderror" id="catatan2_detail" placeholder="Edit detail (opsional)" value="{{ old('catatan2', $existingPersentase->catatan2 ?? '') }}">
                                 <div class="form-text">Checkbox quick-fill used default text; edit here to override.</div>
                                 @error('catatan2')
@@ -481,7 +484,9 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="catatan3_detail" class="form-label">Detail Catatan (Override checkbox)</label>
+                                <label for="catatan3_detail" class="form-label">Memilih bagian-bagian penting video;
+                                    Menyusun urutan sesuai alur pembelajaran;
+                                    Menghapus bagian yang tidak diperlukan</label>
                                 <input type="text" class="form-control @error('catatan3') is-invalid @enderror" id="catatan3_detail" placeholder="Edit detail (opsional)" value="{{ old('catatan3', $existingPersentase->catatan3 ?? '') }}">
                                 <div class="form-text">Checkbox quick-fill used default text; edit here to override.</div>
                                 @error('catatan3')
@@ -534,7 +539,9 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="catatan4_detail" class="form-label">Detail Catatan (Override checkbox)</label>
+                                <label for="catatan4_detail" class="form-label">Memperhalus transisi antar bagian;
+                                    Sinkronisasi audio dan video;
+                                    Koreksi durasi agar efisien</label>
                                 <input type="text" class="form-control @error('catatan4') is-invalid @enderror" id="catatan4_detail" placeholder="Edit detail (opsional)" value="{{ old('catatan4', $existingPersentase->catatan4 ?? '') }}">
                                 <div class="form-text">Checkbox quick-fill used default text; edit here to override.</div>
                                 @error('catatan4')
@@ -587,7 +594,9 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="catatan5_detail" class="form-label">Detail Catatan (Override checkbox)</label>
+                                <label for="catatan5_detail" class="form-label">Menambahkan judul, nama narasumber, transisi visual;
+                                    Menyisipkan gambar, ilustrasi, atau animasi penunjang materi
+                                    Menyisipkan bumper opening video</label>
                                 <input type="text" class="form-control @error('catatan5') is-invalid @enderror" id="catatan5_detail" placeholder="Edit detail (opsional)" value="{{ old('catatan5', $existingPersentase->catatan5 ?? '') }}">
                                 <div class="form-text">Checkbox quick-fill used default text; edit here to override.</div>
                                 @error('catatan5')
@@ -640,7 +649,9 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="catatan6_detail" class="form-label">Detail Catatan (Override checkbox)</label>
+                                <label for="catatan6_detail" class="form-label">Membersihkan noise;
+                                    Menyesuaikan level suara (voice over, musik latar);
+                                    Menambahkan sound effect jika dibutuhkan</label>
                                 <input type="text" class="form-control @error('catatan6') is-invalid @enderror" id="catatan6_detail" placeholder="Edit detail (opsional)" value="{{ old('catatan6', $existingPersentase->catatan6 ?? '') }}">
                                 <div class="form-text">Checkbox quick-fill used default text; edit here to override.</div>
                                 @error('catatan6')
@@ -693,7 +704,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="catatan7_detail" class="form-label">Detail Catatan (Override checkbox)</label>
+                                <label for="catatan7_detail" class="form-label">Menambahkan subtitle (bila diperlukan); Menyisipkan poin penting materi dalam bentuk teks visual</label>
                                 <input type="text" class="form-control @error('catatan7') is-invalid @enderror" id="catatan7_detail" placeholder="Edit detail (opsional)" value="{{ old('catatan7', $existingPersentase->catatan7 ?? '') }}">
                                 <div class="form-text">Checkbox quick-fill used default text; edit here to override.</div>
                                 @error('catatan7')
@@ -746,7 +757,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="catatan8_detail" class="form-label">Detail Catatan (Override checkbox)</label>
+                                <label for="catatan8_detail" class="form-label">Menonton ulang hasil edit untuk deteksi kesalahan; Menyesuaikan revisi dari dosen</label>
                                 <input type="text" class="form-control @error('catatan8') is-invalid @enderror" id="catatan8_detail" placeholder="Edit detail (opsional)" value="{{ old('catatan8', $existingPersentase->catatan8 ?? '') }}">
                                 <div class="form-text">Checkbox quick-fill used default text; edit here to override.</div>
                                 @error('catatan8')
@@ -799,7 +810,8 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="catatan9_detail" class="form-label">Detail Catatan (Override checkbox)</label>
+                                <label for="catatan9_detail" class="form-label">Mengekspor video dalam format dan resolusi sesuai kebutuhan;
+                                    Menyimpan arsip kerja</label>
                                 <input type="text" class="form-control @error('catatan9') is-invalid @enderror" id="catatan9_detail" placeholder="Edit detail (opsional)" value="{{ old('catatan9', $existingPersentase->catatan9 ?? '') }}">
                                 <div class="form-text">Checkbox quick-fill used default text; edit here to override.</div>
                                 @error('catatan9')
@@ -852,7 +864,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="catatan10_detail" class="form-label">Detail Catatan (Override checkbox)</label>
+                                <label for="catatan10_detail" class="form-label">Editor mengupload video dengan dilengkapi judul, caption, thumbnail, dan elemen lain yang sesuai dengan video</label>
                                 <input type="text" class="form-control @error('catatan10') is-invalid @enderror" id="catatan10_detail" placeholder="Edit detail (opsional)" value="{{ old('catatan10', $existingPersentase->catatan10 ?? '') }}">
                                 <div class="form-text">Checkbox quick-fill used default text; edit here to override.</div>
                                 @error('catatan10')
