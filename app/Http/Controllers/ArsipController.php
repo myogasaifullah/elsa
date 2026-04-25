@@ -59,6 +59,7 @@ class ArsipController extends Controller
             'tanggal_upload_youtube' => 'nullable|date',
             'publish_link_youtube' => 'nullable|url',
             'editor_id' => 'nullable|exists:editors,id',
+            'status' => 'nullable|string|max:255',
         ]);
 
         DB::transaction(function () use ($request) {
@@ -93,7 +94,7 @@ class ArsipController extends Controller
                 'kategori_mooc' => $request->kategori_mooc,
                 'nama_mata_kuliah' => $mataKuliah ? $mataKuliah->nama_mata_kuliah : $request->judul_course,
                 'judul_course' => $request->judul_course,
-                'status' => 'approved',
+                'status' => $request->status ?? 'belum shooting',
                 'user_id' => $user ? $user->id : null,
                 'dosen_id' => $dosen ? $dosen->id : null,
                 'studio_id' => $studio ? $studio->id : null,
@@ -186,6 +187,7 @@ class ArsipController extends Controller
             'tanggal_upload_youtube' => 'nullable|date',
             'publish_link_youtube' => 'nullable|url',
             'editor_id' => 'nullable|exists:editors,id',
+            'status' => 'nullable|string|max:255',
         ]);
 
         $progress = Progress::findOrFail($id);
@@ -200,6 +202,7 @@ class ArsipController extends Controller
                 'kategori_mooc' => $request->kategori_mooc,
                 'nama_mata_kuliah' => $request->mata_kuliah_id ? \App\Models\MataKuliah::find($request->mata_kuliah_id)->nama_mata_kuliah : $request->judul_course,
                 'judul_course' => $request->judul_course,
+                'status' => $request->status,
                 'studio_id' => $request->studio_id,
                 'dosen_id' => $request->dosen_id,
             ]);

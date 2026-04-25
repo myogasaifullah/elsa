@@ -1,18 +1,17 @@
-# TODO: Group Laporan Dosen & Progres by Fakultas + Export
+# TODO: Tambah Field Status (Sudah Shooting/Belum Shooting) di Import Arsip
 
-## Steps
+## Rencana (gunakan kolom `status` yang sudah ada di tabel `jadwal_bookings`)
 
-- [x] 1. Understand current code structure (controller, views, models)
-- [x] 2. Update `LaporanController::dosen()` to group data by fakultas
-- [x] 3. Update `resources/views/laporan/dosen.blade.php` to show tables per fakultas
-- [x] 4. Update `LaporanController::progres()` to group data by fakultas
-- [x] 5. Update `resources/views/laporan/progres.blade.php` to show tables per fakultas
-- [x] 6. Update `LaporanController::index()` to support grouped data in combined report page
-- [x] 7. Update `resources/views/laporan.blade.php` to pass grouped variables to includes
-- [x] 8. Update `resources/views/exports/rekap.blade.php` for grouped PDF/Excel export
-- [x] 9. Update `resources/views/exports/fakultas.blade.php` for grouped PDF/Excel export
-- [x] 10. Update `app/Exports/FakultasExport.php` to accept groupedByFakultas
-- [x] 11. Update `LaporanController::exportFakultasPdf()` to compute groupedByFakultas
-- [x] 12. Update `LaporanController::exportFakultasExcel()` to compute groupedByFakultas
-- [x] 13. Syntax validation passed for all modified files
-
+- [x]   1. Update `app/Imports/ArsipImport.php`
+    - Tambahkan validasi `status` di `rules()`
+    - Gunakan nilai `status` dari Excel saat membuat `JadwalBooking` (fallback: `belum shooting`)
+- [x]   2. Update `app/Http/Controllers/ArsipController.php`
+    - Tambahkan validasi `status` di `store()` dan `update()`
+    - Sertakan `status` saat create/update `JadwalBooking`
+- [x]   3. Update `resources/views/action_arsip.blade.php`
+    - Tambahkan dropdown `status` di modal Tambah Arsip
+    - Tambahkan penjelasan kolom `status` di info format import Excel
+- [x]   4. Update `resources/views/arsip.blade.php`
+    - Tampilkan status dinamis dari `$item->jadwalBooking->status`
+    - Tambahkan filter dropdown "Status Shooting"
+    - Tambahkan field `status` di modal Edit Arsip

@@ -85,6 +85,15 @@
                                     <li><a class="dropdown-item filter-keterangan" href="#" data-keterangan="all">Semua Keterangan</a></li>
                                     <li><a class="dropdown-item filter-keterangan" href="#" data-keterangan="belum_terbit">Belum Terbit</a></li>
                                     <li><a class="dropdown-item filter-keterangan" href="#" data-keterangan="sudah_terbit">Sudah Terbit</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li>
+                                        <h6 class="dropdown-header">Filter Berdasarkan Status Shooting</h6>
+                                    </li>
+                                    <li><a class="dropdown-item filter-status-shooting" href="#" data-status-shooting="all">Semua Status</a></li>
+                                    <li><a class="dropdown-item filter-status-shooting" href="#" data-status-shooting="sudah shooting">Sudah Shooting</a></li>
+                                    <li><a class="dropdown-item filter-status-shooting" href="#" data-status-shooting="belum shooting">Belum Shooting</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -347,7 +356,13 @@
 
                                         {{-- Status --}}
                                         <td class="text-center">
-                                            Sudah Shooting
+                                            <span class="badge
+                                                @if($item->jadwalBooking->status == 'sudah shooting') bg-success
+                                                @elseif($item->jadwalBooking->status == 'belum shooting') bg-warning text-dark
+                                                @else bg-secondary
+                                                @endif">
+                                                {{ ucfirst($item->jadwalBooking->status ?? 'belum shooting') }}
+                                            </span>
                                         </td>
 
                                         {{-- Actions --}}
@@ -603,6 +618,15 @@
                             <div class="mb-3">
                                 <label for="edit_tanggal_upload_youtube" class="form-label">Tanggal Upload YouTube</label>
                                 <input type="date" class="form-control" id="edit_tanggal_upload_youtube" name="tanggal_upload_youtube">
+                            </div>
+                            <!-- Data Status -->
+                            <div class="mb-3">
+                                <label for="edit_status" class="form-label">Status Shooting</label>
+                                <select class="form-select" id="edit_status" name="status">
+                                    <option value="">Pilih Status</option>
+                                    <option value="sudah shooting">Sudah Shooting</option>
+                                    <option value="belum shooting">Belum Shooting</option>
+                                </select>
                             </div>
                             <!-- Data Editor -->
                             <div class="mb-3">
@@ -882,6 +906,24 @@
                     $(this).addClass('active');
                 });
 
+                // Filter functionality for status shooting
+                $('.filter-status-shooting').on('click', function(e) {
+                    e.preventDefault();
+                    const statusShooting = $(this).data('status-shooting');
+
+                    if (statusShooting === 'all') {
+                        table.column(19).search('').draw(); // Clear filter for Status column
+                    } else if (statusShooting === 'sudah shooting') {
+                        table.column(19).search('Sudah Shooting').draw(); // Filter by status shooting
+                    } else if (statusShooting === 'belum shooting') {
+                        table.column(19).search('Belum Shooting').draw(); // Filter by status shooting
+                    }
+
+                    // Update active state
+                    $('.filter-status-shooting').removeClass('active');
+                    $(this).addClass('active');
+                });
+
                 // Combined filter functionality
                 function applyFilters() {
                     const selectedDate = $('#filterDate').val();
@@ -1020,6 +1062,7 @@
                 document.getElementById('edit_durasi').value = progress.durasi || '';
                 document.getElementById('edit_publish_link_youtube').value = progress.publish_link_youtube || '';
                 document.getElementById('edit_tanggal_upload_youtube').value = progress.tanggal_upload_youtube || '';
+                document.getElementById('edit_status').value = jadwalBooking?.status || '';
                 document.getElementById('edit_editor_id').value = progress.editor_id || '';
 
                 // Handle MOOC field visibility based on jenis_kategori

@@ -164,6 +164,15 @@
                                 <label for="tanggal_upload_youtube" class="form-label">Tanggal Upload YouTube</label>
                                 <input type="date" class="form-control" id="tanggal_upload_youtube" name="tanggal_upload_youtube">
                             </div>
+                            <!-- Data Status -->
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Status Shooting</label>
+                                <select class="form-select" id="status" name="status">
+                                    <option value="">Pilih Status</option>
+                                    <option value="sudah shooting">Sudah Shooting</option>
+                                    <option value="belum shooting">Belum Shooting</option>
+                                </select>
+                            </div>
                             <!-- Data Editor -->
                             <div class="mb-3">
                                 <label for="editor_id" class="form-label">Editor</label>
@@ -415,6 +424,7 @@
                             <li><strong>tanggal_upload_youtube</strong> - Tanggal upload YouTube (YYYY-MM-DD)</li>
                             <li><strong>publish_link_youtube</strong> - Link YouTube</li>
                             <li><strong>nama_editor</strong> - Nama editor</li>
+                            <li><strong>status</strong> - Status shooting (sudah shooting, belum shooting)</li>
                         </ol>
                     </div>
                 </div>

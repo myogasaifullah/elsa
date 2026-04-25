@@ -134,7 +134,7 @@ class ArsipImport implements ToCollection, WithHeadingRow, WithValidation
                         'kategori_mooc' => $row['kategori_mooc'] ?? null,
                         'nama_mata_kuliah' => $mataKuliah ? $mataKuliah->nama_mata_kuliah : ($row['judul_course'] ?? null),
                         'judul_course' => $row['judul_course'] ?? null,
-                        'status' => 'approved',
+                        'status' => $row['status'] ?? 'belum shooting',
                         'user_id' => $user ? $user->id : null,
                         'dosen_id' => $dosen ? $dosen->id : null,
                         'studio_id' => $studio ? $studio->id : null,
@@ -227,6 +227,7 @@ class ArsipImport implements ToCollection, WithHeadingRow, WithValidation
             'tanggal_upload_youtube' => 'nullable|string', // Changed to string to be more flexible
             'publish_link_youtube' => 'nullable|string', // Changed to string since URL validation might be too strict
             'nama_editor' => 'nullable|string|max:255',
+            'status' => 'nullable|string|max:255',
         ];
     }
 }
